@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bulk Upload Lessons - LearnioX Academy Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e2e2e2",
+                        "on-surface-variant": "#4c4546",
+                        "background": "#f9f9f9",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#1b1b1b",
+                        "on-secondary-container": "#626262",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary": "#000000",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "outline-variant": "#cfc4c5",
+                        "outline": "#7e7576",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eeeeee",
+                        "surface": "#f9f9f9",
+                        "on-background": "#1a1c1c",
+                        "tertiary": "#000000",
+                        "surface-bright": "#f9f9f9",
+                        "surface-tint": "#5e5e5e",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "tertiary-fixed": "#e3e2e2",
+                        "secondary-container": "#e1dfdf",
+                        "primary-fixed": "#e2e2e2",
+                        "tertiary-container": "#1a1c1c",
+                        "on-primary-container": "#848484",
+                        "inverse-primary": "#c6c6c6",
+                        "secondary": "#5e5e5e",
+                        "inverse-surface": "#2f3131",
+                        "surface-container-high": "#e8e8e8",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "secondary-fixed": "#e4e2e2",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-container-low": "#f3f3f4",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dadada",
+                        "on-surface": "#1a1c1c",
+                        "on-tertiary-container": "#838484",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-primary-fixed-variant": "#474747",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "spacing": {
+                        "xl": "48px",
+                        "sm": "8px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "container-max": "1440px",
+                        "xxl": "64px",
+                        "xs": "4px",
+                        "margin-desktop": "32px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Force strict architectural overrides for standard form elements */
+        * { border-radius: 0 !important; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .fill-icon { font-variation-settings: 'FILL' 1; }
+        
+        /* Custom minimalist form elements */
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23000000' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        /* Checkbox & Radio strict squares */
+        input[type="checkbox"], input[type="radio"] {
+            appearance: none;
+            background-color: transparent;
+            margin: 0;
+            display: grid;
+            place-content: center;
+        }
+        input[type="checkbox"]::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            background-color: black;
+        }
+        input[type="checkbox"]:checked::before { transform: scale(1); }
+        
+        input[type="radio"]::before {
+            content: "";
+            width: 0.5em;
+            height: 0.5em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            background-color: black;
+        }
+        input[type="radio"]:checked::before { transform: scale(1); }
+
+        /* Secondary Button Hover State explicitly via CSS to handle border-width jump gracefully */
+        .btn-secondary { transition: border-width 0.1s ease, padding 0.1s ease; border-width: 1px; padding: 15px 23px; }
+        .btn-secondary:hover { border-width: 2px; padding: 14px 22px; }
+    </style>
+</head>
+<body class="bg-surface text-primary font-body-md antialiased min-h-screen flex">
+<!-- SideNavBar Component -->
+<nav class="w-64 h-screen border-r border-primary bg-surface fixed left-0 top-0 flex flex-col z-40">
+<div class="p-lg border-b border-primary flex items-center gap-md">
+<div class="w-10 h-10 bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary fill-icon" data-icon="school">school</span>
+</div>
+<div>
+<div class="text-headline-md font-headline-md font-bold text-primary uppercase tracking-tighter leading-none">LearnioX</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant mt-xs">Academy Studio</div>
+</div>
+</div>
+<div class="flex-1 py-lg flex flex-col gap-unit overflow-y-auto">
+<!-- Inactive Tab -->
+<a class="flex items-center gap-md px-lg py-md text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Studio Home</span>
+</a>
+<!-- Active Tab (Courses) -->
+<a class="flex items-center gap-md px-lg py-md bg-primary text-on-primary font-bold border-none transition-colors duration-150" href="#">
+<span class="material-symbols-outlined fill-icon" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-label-md">Courses</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-md px-lg py-md text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="font-label-md text-label-md">Curriculum</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="font-label-md text-label-md">Doubts</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-primary hover:bg-surface-container-high transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+</div>
+<div class="p-lg border-t border-primary">
+<button class="w-full bg-primary text-on-primary py-md px-md text-center font-label-md uppercase tracking-wider hover:bg-surface-tint transition-colors duration-150">
+                Create New Course
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex-1 p-xl lg:p-xxl max-w-container-max mx-auto flex flex-col gap-xxl">
+<!-- Header & Selectors -->
+<header class="flex flex-col gap-lg md:flex-row md:items-end justify-between border-b border-primary pb-xl">
+<div>
+<div class="flex items-center gap-sm mb-md text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Courses</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Advanced Data Structures</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Bulk Upload Lessons</h1>
+</div>
+<div class="flex flex-col sm:flex-row gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-primary uppercase">Target Course</label>
+<select class="border border-outline bg-surface-container-lowest h-10 px-md font-body-sm text-primary min-w-[200px] focus:border-primary focus:ring-0 outline-none">
+<option>Advanced Data Structures</option>
+<option>Algorithms 101</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-primary uppercase">Target Module</label>
+<select class="border border-outline bg-surface-container-lowest h-10 px-md font-body-sm text-primary min-w-[200px] focus:border-primary focus:ring-0 outline-none">
+<option>Module 4: Trees &amp; Graphs</option>
+<option>Module 5: Dynamic Programming</option>
+</select>
+</div>
+</div>
+</header>
+<!-- Upload Dropzone -->
+<section class="border-[2px] border-dashed border-primary bg-surface-container-lowest p-xxl flex flex-col items-center justify-center gap-lg cursor-pointer hover:bg-surface-container-low transition-colors duration-200 group">
+<div class="w-16 h-16 rounded-full border border-primary flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors duration-200">
+<span class="material-symbols-outlined text-[32px]" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<div class="text-center">
+<p class="font-headline-sm text-headline-sm text-primary mb-xs">Drag &amp; Drop Files Here</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Supported formats: .mp4, .mov, .pdf (Max 2GB per file)</p>
+</div>
+<div class="flex items-center gap-md w-full max-w-sm my-md">
+<div class="h-px bg-outline-variant flex-1"></div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-widest">OR</span>
+<div class="h-px bg-outline-variant flex-1"></div>
+</div>
+<button class="btn-secondary font-label-md text-label-md uppercase tracking-wider bg-surface-container-lowest text-primary flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="folder_open">folder_open</span>
+                Browse Files
+            </button>
+</section>
+<!-- Grid Layout for Queue and Settings -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl">
+<!-- Upload Queue Table (Level 1 Container) -->
+<section class="lg:col-span-8 border border-primary bg-surface-container-lowest flex flex-col">
+<div class="p-lg border-b border-primary bg-surface flex justify-between items-center">
+<h2 class="font-headline-sm text-headline-sm text-primary">Upload Queue</h2>
+<span class="font-label-sm text-label-sm bg-primary text-on-primary px-sm py-xs">3 Files</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-primary">
+<th class="p-md font-label-md text-label-md text-primary uppercase whitespace-nowrap">File Details</th>
+<th class="p-md font-label-md text-label-md text-primary uppercase whitespace-nowrap w-1/4">Lesson Title</th>
+<th class="p-md font-label-md text-label-md text-primary uppercase whitespace-nowrap">Access</th>
+<th class="p-md font-label-md text-label-md text-primary uppercase whitespace-nowrap text-right">Action</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-primary divide-y divide-surface-variant">
+<!-- Row 1: Uploading -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-md align-top">
+<div class="flex items-start gap-md">
+<span class="material-symbols-outlined text-outline mt-xs" data-icon="movie">movie</span>
+<div class="flex flex-col w-full">
+<span class="font-body-sm text-body-sm font-medium truncate max-w-[200px]">binary_trees_intro_v2.mp4</span>
+<div class="flex items-center gap-md mt-xs">
+<span class="text-label-sm font-label-sm text-outline">450 MB</span>
+<span class="text-label-sm font-label-sm font-bold">Uploading 45%</span>
+</div>
+<!-- Progress Bar (Grayscale) -->
+<div class="w-full h-[6px] border border-primary bg-surface-container mt-sm">
+<div class="h-full bg-primary w-[45%]"></div>
+</div>
+</div>
+</div>
+</td>
+<td class="p-md align-top">
+<input class="w-full border border-outline-variant bg-surface-container-lowest p-sm font-body-sm focus:border-primary focus:outline-none placeholder-outline-variant" placeholder="Enter title" type="text" value="Binary Trees Introduction"/>
+</td>
+<td class="p-md align-top">
+<select class="w-full border border-outline-variant bg-surface-container-lowest p-sm font-body-sm focus:border-primary focus:outline-none">
+<option>Locked</option>
+<option>Free Preview</option>
+</select>
+</td>
+<td class="p-md align-top text-right">
+<button class="text-outline hover:text-primary transition-colors p-sm" title="Remove">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Ready -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-md align-top">
+<div class="flex items-start gap-md">
+<span class="material-symbols-outlined text-outline mt-xs" data-icon="picture_as_pdf">picture_as_pdf</span>
+<div class="flex flex-col w-full">
+<span class="font-body-sm text-body-sm font-medium truncate max-w-[200px]">tree_traversal_notes.pdf</span>
+<div class="flex items-center gap-md mt-xs">
+<span class="text-label-sm font-label-sm text-outline">2.4 MB</span>
+<span class="text-label-sm font-label-sm text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span> Ready
+                                                </span>
+</div>
+<!-- Progress Bar (Complete) -->
+<div class="w-full h-[6px] border border-primary bg-surface-container mt-sm hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+</div>
+</div>
+</td>
+<td class="p-md align-top">
+<input class="w-full border border-outline-variant bg-surface-container-lowest p-sm font-body-sm focus:border-primary focus:outline-none placeholder-outline-variant" placeholder="Enter title" type="text" value="Tree Traversal Cheat Sheet"/>
+</td>
+<td class="p-md align-top">
+<select class="w-full border border-outline-variant bg-surface-container-lowest p-sm font-body-sm focus:border-primary focus:outline-none">
+<option>Free Preview</option>
+<option>Locked</option>
+</select>
+</td>
+<td class="p-md align-top text-right">
+<button class="text-outline hover:text-primary transition-colors p-sm" title="Remove">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Bulk Settings Panel (Level 1 Container) -->
+<aside class="lg:col-span-4 border border-primary bg-surface-container-lowest flex flex-col h-fit">
+<div class="p-lg border-b border-primary bg-surface">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-sm">
+<span class="material-symbols-outlined" data-icon="settings_applications">settings_applications</span>
+                        Bulk Settings
+                    </h2>
+</div>
+<div class="p-lg flex flex-col gap-xl">
+<!-- Automation Toggles -->
+<div class="flex flex-col gap-md">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-sm">Automation</h3>
+<label class="flex items-start gap-md cursor-pointer group">
+<input checked="" class="w-5 h-5 border border-primary mt-xs shrink-0 focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-primary font-medium group-hover:underline decoration-1 underline-offset-4">Auto-generate titles</span>
+<span class="font-label-sm text-label-sm text-outline mt-xs">Derive clean titles from filenames automatically.</span>
+</div>
+</label>
+<label class="flex items-start gap-md cursor-pointer group">
+<input checked="" class="w-5 h-5 border border-primary mt-xs shrink-0 focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-primary font-medium group-hover:underline decoration-1 underline-offset-4 flex items-center gap-xs">
+                                    Trigger AI Summary
+                                    <span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span>
+</span>
+<span class="font-label-sm text-label-sm text-outline mt-xs">Generate text summaries for video uploads.</span>
+</div>
+</label>
+<label class="flex items-start gap-md cursor-pointer group">
+<input class="w-5 h-5 border border-primary mt-xs shrink-0 focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-primary font-medium group-hover:underline decoration-1 underline-offset-4 flex items-center gap-xs">
+                                    Trigger AI Quiz
+                                    <span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span>
+</span>
+<span class="font-label-sm text-label-sm text-outline mt-xs">Draft a 5-question quiz based on video transcript.</span>
+</div>
+</label>
+</div>
+<!-- Default Access -->
+<div class="flex flex-col gap-md">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-sm">Default Access</h3>
+<div class="flex flex-col gap-sm">
+<label class="flex items-center gap-md cursor-pointer group p-sm border border-transparent hover:border-surface-variant transition-colors">
+<input checked="" class="w-4 h-4 border border-primary shrink-0 focus:outline-none" name="default_access" type="radio"/>
+<span class="font-body-sm text-body-sm text-primary">Locked (Premium)</span>
+</label>
+<label class="flex items-center gap-md cursor-pointer group p-sm border border-transparent hover:border-surface-variant transition-colors">
+<input class="w-4 h-4 border border-primary shrink-0 focus:outline-none" name="default_access" type="radio"/>
+<span class="font-body-sm text-body-sm text-primary">Free (Preview)</span>
+</label>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Footer Actions -->
+<footer class="mt-auto pt-xl border-t border-primary flex flex-col sm:flex-row justify-between items-center gap-lg">
+<div class="text-label-sm font-label-sm text-outline">
+                Status: <span class="text-primary font-medium">Uploading 1 of 3 files...</span>
+</div>
+<div class="flex flex-wrap gap-md justify-end w-full sm:w-auto">
+<button class="btn-secondary font-label-md text-label-md uppercase tracking-wider bg-surface-container-lowest text-primary">
+                    Save as Draft
+                </button>
+<button class="bg-primary text-on-primary px-lg py-md font-label-md uppercase tracking-wider hover:bg-surface-tint transition-colors duration-200">
+                    Publish All Ready
+                </button>
+</div>
+</footer>
+</main>
+</body></html>

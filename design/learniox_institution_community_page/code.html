@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX Academy - Community</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-container": "#1b1b1b",
+                        "primary": "#000000",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#e1dfdf",
+                        "on-tertiary-container": "#838484",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f3f3f4",
+                        "error": "#ba1a1a",
+                        "surface": "#f9f9f9",
+                        "on-surface-variant": "#4c4546",
+                        "outline": "#7e7576",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-background": "#1a1c1c",
+                        "primary-fixed": "#e2e2e2",
+                        "secondary-fixed": "#e4e2e2",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#e3e2e2",
+                        "surface-container": "#eeeeee",
+                        "secondary": "#5e5e5e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-variant": "#e2e2e2",
+                        "background": "#f9f9f9",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-primary-container": "#848484",
+                        "inverse-on-surface": "#f0f1f1",
+                        "surface-bright": "#f9f9f9",
+                        "tertiary-container": "#1a1c1c",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#626262",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "outline-variant": "#cfc4c5",
+                        "inverse-primary": "#c6c6c6",
+                        "on-primary-fixed": "#1b1b1b",
+                        "inverse-surface": "#2f3131",
+                        "tertiary": "#000000",
+                        "surface-tint": "#5e5e5e",
+                        "surface-dim": "#dadada"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xl": "48px",
+                        "margin-mobile": "16px",
+                        "xxl": "64px",
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "container-max": "1440px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Force no rounded corners everywhere */
+        * { border-radius: 0 !important; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-background min-h-screen flex flex-col font-sans">
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest text-primary border-b border-primary w-full fixed top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-headline-sm" data-weight="fill">school</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary">LearnioX Academy</span>
+</div>
+<div class="hidden md:flex gap-lg font-label-md text-label-md">
+<a class="text-secondary font-medium hover:bg-surface-container-high transition-all duration-100 ease-in-out px-2 py-1" href="#">Courses</a>
+<a class="text-secondary font-medium hover:bg-surface-container-high transition-all duration-100 ease-in-out px-2 py-1" href="#">Teachers</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 hover:bg-surface-container-high transition-all duration-100 ease-in-out px-2 py-1" href="#">Community</a>
+<a class="text-secondary font-medium hover:bg-surface-container-high transition-all duration-100 ease-in-out px-2 py-1" href="#">Membership</a>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Layout -->
+<div class="flex flex-1 pt-16 max-w-container-max mx-auto w-full">
+<!-- SideNavBar (Left) -->
+<aside class="hidden md:flex flex-col w-64 border-r border-primary bg-surface-container-lowest pt-lg h-[calc(100vh-64px)] sticky top-16 shrink-0">
+<div class="px-md pb-lg border-b border-surface-variant mb-md">
+<div class="flex items-center gap-md mb-xs">
+<div class="w-10 h-10 border border-primary flex items-center justify-center bg-surface-container-lowest">
+<span class="material-symbols-outlined">domain</span>
+</div>
+<div>
+<h2 class="font-label-md text-label-md text-primary">Institution Hub</h2>
+<p class="font-label-sm text-label-sm text-secondary">Academic Community</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 font-label-md text-label-md px-sm flex flex-col gap-xs">
+<a class="flex items-center gap-2 text-primary p-md hover:bg-surface-container-highest transition-colors duration-75" href="#">
+<span class="material-symbols-outlined" data-icon="campaign">campaign</span>
+<span>Announcements</span>
+</a>
+<a class="flex items-center gap-2 text-primary p-md hover:bg-surface-container-highest transition-colors duration-75" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span>General Discussion</span>
+</a>
+<a class="flex items-center gap-2 text-primary p-md hover:bg-surface-container-highest transition-colors duration-75" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span>Course Spaces</span>
+</a>
+<a class="flex items-center gap-2 text-primary p-md hover:bg-surface-container-highest transition-colors duration-75" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Doubts</span>
+</a>
+<a class="flex items-center gap-2 text-primary p-md hover:bg-surface-container-highest transition-colors duration-75" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span>Events</span>
+</a>
+</nav>
+<div class="p-md mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-3 hover:bg-surface-tint transition-colors">
+                    Create Post
+                </button>
+</div>
+</aside>
+<!-- Center Feed -->
+<main class="flex-1 px-margin-mobile md:px-gutter py-xl">
+<header class="mb-xl border-b border-primary pb-md">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-xs">Community</h1>
+<p class="font-body-lg text-body-lg text-secondary">Announcements, discussions, and learner updates.</p>
+</header>
+<div class="flex flex-col gap-lg">
+<!-- Post 1 -->
+<article class="border border-primary bg-surface-container-lowest p-lg">
+<div class="flex items-center gap-md mb-md">
+<div class="w-12 h-12 border border-primary bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Dr. Sarah Mitchell</p>
+<p class="font-label-sm text-label-sm text-secondary">Instructor</p>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Final Exam Preparation Guide</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">
+                        I've uploaded the detailed preparation guide for the UI Architecture final. Please review the Cantor sections carefully.
+                    </p>
+<div class="flex items-center gap-sm mb-lg">
+<span class="border border-surface-variant px-2 py-1 font-label-sm text-label-sm text-secondary bg-surface-container-low">Advanced UI Architecture</span>
+</div>
+<div class="flex items-center justify-between border-t border-surface-variant pt-md">
+<div class="flex gap-md font-label-sm text-label-sm text-secondary">
+<span>24 Comments</span>
+<span>156 Likes</span>
+</div>
+<button class="border border-primary bg-surface-container-lowest text-primary font-label-md text-label-md px-4 py-2 hover:border-2 transition-all">
+                            Open Discussion
+                        </button>
+</div>
+</article>
+<!-- Post 2 -->
+<article class="border border-primary bg-surface-container-lowest p-lg">
+<div class="flex items-center gap-md mb-md">
+<div class="w-12 h-12 border border-primary bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Alex Chen</p>
+<p class="font-label-sm text-label-sm text-secondary">Learner</p>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Study Group for Design Systems</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">
+                        Anyone interested in a weekend study session for the Design Systems module? Looking for 3-4 people.
+                    </p>
+<div class="flex items-center gap-sm mb-lg">
+<span class="border border-surface-variant px-2 py-1 font-label-sm text-label-sm text-secondary bg-surface-container-low">Design Systems Mastery</span>
+</div>
+<div class="flex items-center justify-between border-t border-surface-variant pt-md">
+<div class="flex gap-md font-label-sm text-label-sm text-secondary">
+<span>12 Comments</span>
+<span>42 Likes</span>
+</div>
+<button class="border border-primary bg-surface-container-lowest text-primary font-label-md text-label-md px-4 py-2 hover:border-2 transition-all">
+                            Open Discussion
+                        </button>
+</div>
+</article>
+</div>
+</main>
+<!-- Right Sidebar -->
+<aside class="hidden xl:block w-80 px-gutter py-xl border-l border-primary h-full">
+<!-- Rules -->
+<section class="mb-xl">
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-primary pb-sm mb-md">Community Rules</h4>
+<ul class="font-body-sm text-body-sm text-secondary flex flex-col gap-sm">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] mt-0.5">check_box_outline_blank</span>
+<span>Be professional</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] mt-0.5">check_box_outline_blank</span>
+<span>No spam</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] mt-0.5">check_box_outline_blank</span>
+<span>Academic integrity</span>
+</li>
+</ul>
+</section>
+<!-- Upcoming Live Classes -->
+<section class="mb-xl border border-primary p-md bg-surface-container-lowest">
+<h4 class="font-label-md text-label-md text-primary border-b border-surface-variant pb-xs mb-sm">Upcoming Live Classes</h4>
+<div class="flex flex-col gap-sm font-body-sm text-body-sm">
+<div class="pb-sm border-b border-surface-variant last:border-0 last:pb-0">
+<p class="text-primary font-medium">Typography Masterclass</p>
+<p class="text-secondary">Oct 28, 10:00 AM</p>
+</div>
+<div class="pb-sm border-b border-surface-variant last:border-0 last:pb-0">
+<p class="text-primary font-medium">Interactive Prototypes</p>
+<p class="text-secondary">Oct 30, 2:00 PM</p>
+</div>
+</div>
+</section>
+<!-- Featured Posts -->
+<section class="mb-xl">
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-primary pb-sm mb-md">Featured Posts</h4>
+<ul class="font-body-sm text-body-sm text-primary flex flex-col gap-sm">
+<li><a class="hover:underline" href="#">Welcome to the Academy</a></li>
+<li><a class="hover:underline" href="#">Staff Picks: Best Portfolio Projects</a></li>
+</ul>
+</section>
+<!-- Membership Promo -->
+<div class="border-2 border-primary p-lg bg-surface-container-highest text-center">
+<p class="font-body-md text-body-md text-primary mb-md font-semibold">Unlock all community spaces. Join the Pro Membership.</p>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 w-full hover:bg-surface-tint transition-colors">
+                    Join Now
+                </button>
+</div>
+</aside>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest text-secondary border-t border-primary w-full mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-desktop py-lg max-w-container-max mx-auto font-label-sm text-label-sm gap-md">
+<span class="font-label-md text-label-md text-primary">© 2024 Educational Institution. All rights reserved.</span>
+<div class="flex gap-lg">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+</body></html>

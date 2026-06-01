@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX - Secure Checkout</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e8e8e8",
+                        "inverse-on-surface": "#f0f1f1",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "primary-fixed": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-primary-container": "#848484",
+                        "primary": "#000000",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-container-low": "#f3f3f4",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "tertiary-container": "#1a1c1c",
+                        "on-surface": "#1a1c1c",
+                        "secondary": "#5e5e5e",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#e4e2e2",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#1b1b1b",
+                        "surface-container": "#eeeeee",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5e5e5e",
+                        "surface-variant": "#e2e2e2",
+                        "inverse-surface": "#2f3131",
+                        "surface-dim": "#dadada",
+                        "outline-variant": "#cfc4c5",
+                        "background": "#f9f9f9",
+                        "secondary-container": "#e1dfdf",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#c6c6c6",
+                        "outline": "#7e7576",
+                        "on-primary-fixed": "#1b1b1b",
+                        "surface-bright": "#f9f9f9",
+                        "on-surface-variant": "#4c4546",
+                        "on-secondary-container": "#626262",
+                        "tertiary": "#000000",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-tertiary-container": "#838484",
+                        "on-secondary-fixed-variant": "#464747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "xl": "48px",
+                        "container-max": "1440px",
+                        "margin-desktop": "32px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xxl": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Strict aesthetic overrides */
+        body { background-color: #ffffff; }
+        input[type="radio"]:checked { background-image: none; background-color: #000; border-color: #000; }
+        input[type="checkbox"]:checked { background-image: none; background-color: #000; border-color: #000; }
+        input[type="text"], input[type="email"] { border-color: #cccccc; border-width: 1px; outline: none; }
+        input[type="text"]:focus, input[type="email"]:focus { border-color: #000000; box-shadow: none; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface min-h-screen flex flex-col font-body-md">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-background border-b border-primary dark:border-on-background w-full">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-md max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="text-headline-md font-headline-md font-black text-primary dark:text-on-background uppercase tracking-tighter">LearnioX</span>
+</div>
+<div class="hidden md:flex flex-1 justify-center">
+<span class="text-headline-sm font-headline-sm text-primary">Secure Checkout</span>
+</div>
+<div class="flex items-center gap-md text-primary dark:text-on-background">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-xl">
+<div class="mb-lg md:hidden">
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-primary border-b border-primary pb-sm">Secure Checkout</h1>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Left Column: Forms -->
+<div class="md:col-span-8 flex flex-col gap-lg">
+<!-- Product Summary -->
+<section class="border border-primary p-lg bg-surface-container-lowest">
+<h2 class="text-label-md font-label-md text-secondary uppercase mb-md">Product Summary</h2>
+<div class="flex flex-col gap-xs">
+<h3 class="text-headline-sm font-headline-sm text-primary">Advanced Systems Architecture</h3>
+<p class="text-body-md font-body-md text-secondary">Tech Institute</p>
+<p class="text-body-sm font-body-sm text-primary mt-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">verified</span> Lifetime Access + Certification
+                        </p>
+</div>
+</section>
+<!-- Billing Details -->
+<section class="border border-primary p-lg bg-surface-container-lowest">
+<h2 class="text-label-md font-label-md text-secondary uppercase mb-md">Billing Details</h2>
+<form class="flex flex-col gap-md">
+<div class="flex flex-col gap-xs">
+<label class="text-label-md font-label-md text-primary uppercase" for="fullName">Full Name</label>
+<input class="p-sm text-body-md font-body-md w-full bg-surface-container-lowest" id="fullName" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-md font-label-md text-primary uppercase" for="email">Email Address</label>
+<input class="p-sm text-body-md font-body-md w-full bg-surface-container-lowest" id="email" required="" type="email"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-md font-label-md text-primary uppercase" for="country">Country</label>
+<input class="p-sm text-body-md font-body-md w-full bg-surface-container-lowest" id="country" required="" type="text"/>
+</div>
+</form>
+</section>
+<!-- Payment Method -->
+<section class="border border-primary p-lg bg-surface-container-lowest">
+<h2 class="text-label-md font-label-md text-secondary uppercase mb-md">Payment Method</h2>
+<div class="flex flex-col gap-sm">
+<label class="flex items-center gap-sm p-sm border border-outline-variant cursor-pointer hover:border-primary transition-colors">
+<input checked="" class="w-4 h-4 text-primary focus:ring-primary border-primary" name="payment" type="radio" value="card"/>
+<span class="text-body-md font-body-md text-primary flex-grow">Credit/Debit Card</span>
+<span class="material-symbols-outlined text-secondary">credit_card</span>
+</label>
+<label class="flex items-center gap-sm p-sm border border-outline-variant cursor-pointer hover:border-primary transition-colors">
+<input class="w-4 h-4 text-primary focus:ring-primary border-primary" name="payment" type="radio" value="netbanking"/>
+<span class="text-body-md font-body-md text-primary flex-grow">Net Banking</span>
+<span class="material-symbols-outlined text-secondary">account_balance</span>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: Sticky Summary -->
+<div class="md:col-span-4">
+<div class="sticky top-xl flex flex-col gap-lg">
+<!-- Order Summary Card -->
+<section class="border border-primary p-lg bg-surface-container-lowest flex flex-col gap-md">
+<h2 class="text-headline-sm font-headline-sm text-primary border-b border-surface-variant pb-sm">Order Summary</h2>
+<div class="flex flex-col gap-sm text-body-md font-body-md border-b border-surface-variant pb-md">
+<div class="flex justify-between">
+<span class="text-secondary">Base Price</span>
+<span class="text-primary">$499.00</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Discount (COUPON10)</span>
+<span>-$49.90</span>
+</div>
+<div class="flex justify-between text-secondary">
+<span>Tax (GST 18%)</span>
+<span>$80.84</span>
+</div>
+</div>
+<div class="flex justify-between items-center text-headline-sm font-headline-sm text-primary pt-sm">
+<span>Total</span>
+<span>$529.94</span>
+</div>
+<!-- Coupon Input (moved here for better flow in right column) -->
+<div class="mt-sm flex gap-xs">
+<input class="p-sm text-body-sm font-body-sm border border-outline-variant flex-grow bg-surface-container-lowest placeholder:text-outline focus:border-primary" placeholder="Coupon Code" type="text"/>
+<button class="bg-surface-container-lowest border border-primary text-primary px-sm py-xs text-label-md font-label-md hover:bg-surface-container-high transition-colors uppercase" type="button">Apply</button>
+</div>
+<div class="mt-md flex items-start gap-sm">
+<input class="mt-1 w-4 h-4 text-primary border-primary focus:ring-primary cursor-pointer" id="terms" type="checkbox"/>
+<label class="text-label-sm font-label-sm text-secondary cursor-pointer leading-tight" for="terms">I agree to the Terms of Service and Privacy Policy</label>
+</div>
+<button class="mt-sm w-full bg-primary text-on-primary py-md text-headline-sm font-headline-sm hover:bg-secondary transition-colors uppercase tracking-widest" type="button">PAY NOW</button>
+</section>
+<!-- Trust Indicators -->
+<div class="flex flex-col gap-sm border border-outline-variant p-sm bg-surface">
+<p class="text-label-sm font-label-sm text-secondary flex items-start gap-xs">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                            Refund Policy: Full refund within 7 days if course is not started.
+                        </p>
+<p class="text-label-sm font-label-sm text-secondary flex items-start gap-xs">
+<span class="material-symbols-outlined text-[14px]">enhanced_encryption</span>
+                            Secure Payment: 256-bit SSL encrypted transaction.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface dark:bg-background border-t border-primary dark:border-on-background w-full mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-lg max-w-container-max mx-auto gap-sm md:gap-0">
+<span class="text-label-sm font-label-sm text-primary">© 2024 EDU_PLATFORM. SECURE ARCHITECTURE.</span>
+<div class="flex gap-md">
+<a class="text-label-sm font-label-sm text-secondary hover:text-primary transition-opacity underline" href="#">Terms</a>
+<a class="text-label-sm font-label-sm text-secondary hover:text-primary transition-opacity underline" href="#">Privacy</a>
+<a class="text-label-sm font-label-sm text-secondary hover:text-primary transition-opacity underline" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+</body></html>

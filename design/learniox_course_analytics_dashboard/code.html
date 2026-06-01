@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX Academy Studio - Course Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#5e5e5e",
+                        "on-secondary-container": "#626262",
+                        "outline": "#7e7576",
+                        "on-secondary-fixed-variant": "#464747",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#e1dfdf",
+                        "primary-fixed": "#e2e2e2",
+                        "inverse-surface": "#2f3131",
+                        "tertiary-fixed": "#e3e2e2",
+                        "primary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "tertiary": "#000000",
+                        "inverse-on-surface": "#f0f1f1",
+                        "surface-bright": "#f9f9f9",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "surface-container": "#eeeeee",
+                        "surface-container-highest": "#e2e2e2",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#4c4546",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#1a1c1c",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3f4",
+                        "on-primary-container": "#848484",
+                        "inverse-primary": "#c6c6c6",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-dim": "#dadada",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#cfc4c5",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "background": "#ffffff", /* Forced to pure white for contrast */
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#000000",
+                        "secondary-fixed": "#e4e2e2",
+                        "secondary": "#5e5e5e",
+                        "primary-container": "#1b1b1b",
+                        "on-tertiary-container": "#838484",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface": "#ffffff", /* Forced to pure white for contrast */
+                        "on-surface": "#000000",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "xs": "4px",
+                        "xxl": "64px",
+                        "xl": "48px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Base overrides to ensure strict black and white */
+        body { background-color: #ffffff; color: #000000; font-family: 'Inter', sans-serif; }
+        * { border-radius: 0 !important; box-shadow: none !important; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Grayscale placeholder patterns */
+        .chart-placeholder-line {
+            background-image: linear-gradient(to top right, transparent 49%, #000000 49%, #000000 51%, transparent 51%);
+            background-size: 100% 100%;
+            background-color: #f9f9f9;
+        }
+        .chart-placeholder-bar {
+            background-image: repeating-linear-gradient(90deg, #e2e2e2 0px, #e2e2e2 20px, transparent 20px, transparent 40px);
+            background-color: #ffffff;
+        }
+        .chart-placeholder-funnel {
+            background: conic-gradient(from 180deg at 50% 50%, #e2e2e2 0deg, #000000 180deg, #e2e2e2 360deg);
+        }
+    </style>
+</head>
+<body class="flex min-h-screen bg-surface">
+<!-- SideNavBar (Predicted) -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-primary bg-surface text-primary sticky top-0 shrink-0 z-10">
+<div class="p-lg border-b border-primary">
+<h1 class="font-headline-sm text-headline-sm font-black">Course Performance</h1>
+<p class="font-label-md text-label-md mt-sm text-secondary">Staff Analytics</p>
+</div>
+<div class="flex-grow flex flex-col py-md overflow-y-auto">
+<!-- Active Tab: Analytics matches best with Intent -->
+<a class="flex items-center px-lg py-md text-primary bg-surface hover:bg-secondary-container transition-none border-l-4 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined mr-md">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center px-lg py-md text-primary bg-surface hover:bg-secondary-container transition-none border-l-4 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined mr-md">bar_chart</span>
+<span class="font-label-md text-label-md">Engagement</span>
+</a>
+<a class="flex items-center px-lg py-md text-primary bg-surface hover:bg-secondary-container transition-none border-l-4 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined mr-md">payments</span>
+<span class="font-label-md text-label-md">Revenue</span>
+</a>
+<a class="flex items-center px-lg py-md text-primary bg-surface hover:bg-secondary-container transition-none border-l-4 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined mr-md">task_alt</span>
+<span class="font-label-md text-label-md">Completion</span>
+</a>
+<a class="flex items-center px-lg py-md text-primary bg-surface hover:bg-secondary-container transition-none border-l-4 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined mr-md">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="flex items-center px-lg py-md bg-primary text-on-primary font-bold transition-none border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined mr-md">psychology</span>
+<span class="font-label-md text-label-md">AI Insights</span>
+</a>
+</div>
+<div class="border-t border-primary p-md mt-auto">
+<a class="flex items-center px-md py-sm text-primary bg-surface hover:bg-secondary-container transition-none" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">help</span>
+<span class="font-label-md text-label-md">Help</span>
+</a>
+<a class="flex items-center px-md py-sm mt-xs text-primary bg-surface hover:bg-secondary-container transition-none" href="#">
+<span class="material-symbols-outlined mr-sm text-[18px]">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col min-w-0 bg-surface">
+<!-- TopNavBar (Predicted) -->
+<header class="w-full border-b border-primary bg-surface text-primary sticky top-0 z-10 flex flex-col">
+<div class="flex justify-between items-center px-lg py-sm w-full max-w-container-max mx-auto">
+<div class="flex items-center">
+<span class="font-headline-sm text-headline-sm font-bold text-primary mr-xl">LearnioX Academy Studio</span>
+<!-- Mobile Nav Trigger -->
+<button class="md:hidden p-xs border border-primary mr-sm hover:bg-secondary-container">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Nav Links -->
+<nav class="hidden md:flex items-center space-x-lg">
+<a class="font-label-md text-label-md text-secondary hover:text-primary underline transition-none" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-secondary hover:text-primary underline transition-none" href="#">Curriculum</a>
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1 transition-none" href="#">Analytics</a>
+<a class="font-label-md text-label-md text-secondary hover:text-primary underline transition-none" href="#">Students</a>
+<a class="font-label-md text-label-md text-secondary hover:text-primary underline transition-none" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center space-x-md">
+<!-- Date Range Secondary Action -->
+<button class="font-label-md text-label-md bg-surface border border-primary px-md py-sm text-primary hover:border-[2px] transition-all flex items-center h-[36px]">
+<span class="material-symbols-outlined text-[16px] mr-xs">calendar_today</span>
+                        Date Range
+                    </button>
+<!-- Export Report Primary Action -->
+<button class="font-label-md text-label-md bg-primary text-on-primary px-lg py-sm hover:bg-[#666666] transition-colors h-[36px]">
+                        Export Report
+                    </button>
+</div>
+</div>
+<!-- Sub-header for Course Context -->
+<div class="border-t border-surface-variant px-lg py-md bg-surface-bright flex justify-between items-end max-w-container-max mx-auto w-full">
+<div>
+<h2 class="font-headline-md text-headline-md">Advanced Python for Data Science</h2>
+<p class="font-body-md text-body-md text-secondary mt-xs">Course Analytics</p>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Status</span>
+<div class="flex items-center mt-xs justify-end">
+<div class="w-2 h-2 bg-primary mr-sm"></div>
+<span class="font-label-md text-label-md">Published &amp; Active</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-grow p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full space-y-xxl pb-xxl">
+<!-- Metrics Grid -->
+<section aria-label="Key Metrics">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-md">
+<!-- Metric 1 -->
+<div class="border border-primary p-md bg-surface flex flex-col justify-between min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase">Course Views</span>
+<div>
+<div class="font-headline-sm text-headline-sm">12,450</div>
+<div class="font-label-sm text-label-sm text-primary mt-xs border border-primary inline-block px-xs py-[2px]">+5%</div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="border border-primary p-md bg-surface flex flex-col justify-between min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase">Enrollments</span>
+<div>
+<div class="font-headline-sm text-headline-sm">1,200</div>
+<div class="font-label-sm text-label-sm text-primary mt-xs border border-primary inline-block px-xs py-[2px]">+2%</div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="border border-primary p-md bg-primary text-on-primary flex flex-col justify-between min-h-[120px]">
+<span class="font-label-md text-label-md text-[#c6c6c6] uppercase">Revenue</span>
+<div>
+<div class="font-headline-sm text-headline-sm">$238,800</div>
+<div class="font-label-sm text-label-sm text-on-primary mt-xs border border-on-primary inline-block px-xs py-[2px] opacity-80">YTD</div>
+</div>
+</div>
+<!-- Metric 4 -->
+<div class="border border-primary p-md bg-surface flex flex-col justify-between min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase">Completion Rate</span>
+<div>
+<div class="font-headline-sm text-headline-sm">68%</div>
+<div class="w-full bg-surface-variant h-1 mt-sm">
+<div class="bg-primary h-1" style="width: 68%"></div>
+</div>
+</div>
+</div>
+<!-- Metric 5 -->
+<div class="border border-primary p-md bg-surface flex flex-col justify-between min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase">Avg. Watch %</span>
+<div>
+<div class="font-headline-sm text-headline-sm">74%</div>
+</div>
+</div>
+<!-- Metric 6 -->
+<div class="border border-primary p-md bg-surface flex flex-col justify-between min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase">Doubts Asked</span>
+<div>
+<div class="font-headline-sm text-headline-sm">142</div>
+<div class="font-label-sm text-label-sm text-secondary mt-xs">Active Q&amp;A</div>
+</div>
+</div>
+<!-- Metric 7 -->
+<div class="border border-primary p-md bg-surface flex flex-col justify-between min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase">Quiz Avg Score</span>
+<div>
+<div class="font-headline-sm text-headline-sm">82%</div>
+</div>
+</div>
+<!-- Metric 8 -->
+<div class="border border-primary p-md bg-surface flex flex-col justify-between min-h-[120px] relative overflow-hidden">
+<span class="font-label-md text-label-md text-secondary uppercase relative z-10">Drop-off Rate</span>
+<div class="relative z-10">
+<div class="font-headline-sm text-headline-sm">12%</div>
+</div>
+<!-- Decorative high-contrast background element -->
+<div class="absolute bottom-0 right-0 w-16 h-16 bg-surface-variant opacity-30 origin-bottom-right transform rotate-45 translate-x-4 translate-y-4"></div>
+</div>
+</div>
+</section>
+<!-- Charts Section -->
+<section aria-label="Visual Analytics" class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Enrollment Trend -->
+<div class="border border-primary bg-surface p-lg">
+<div class="flex justify-between items-center mb-md border-b border-surface-variant pb-sm">
+<h3 class="font-label-md text-label-md uppercase tracking-wider">Enrollment Trend</h3>
+<span class="material-symbols-outlined text-secondary text-[20px]">show_chart</span>
+</div>
+<div class="h-48 w-full chart-placeholder-line border border-surface-variant relative">
+<div class="absolute bottom-0 left-0 w-full h-px bg-primary"></div>
+<div class="absolute top-0 left-0 w-px h-full bg-primary"></div>
+</div>
+</div>
+<!-- Revenue Trend -->
+<div class="border border-primary bg-surface p-lg">
+<div class="flex justify-between items-center mb-md border-b border-surface-variant pb-sm">
+<h3 class="font-label-md text-label-md uppercase tracking-wider">Revenue Trend</h3>
+<span class="material-symbols-outlined text-secondary text-[20px]">bar_chart</span>
+</div>
+<div class="h-48 w-full chart-placeholder-bar border border-surface-variant flex items-end justify-between px-md py-sm">
+<!-- Simulated bar chart visual -->
+<div class="w-8 bg-primary h-1/4"></div>
+<div class="w-8 bg-primary h-1/3"></div>
+<div class="w-8 bg-primary h-1/2"></div>
+<div class="w-8 bg-primary h-3/4"></div>
+<div class="w-8 bg-primary h-2/3"></div>
+<div class="w-8 bg-primary h-full"></div>
+</div>
+</div>
+<!-- Completion Funnel -->
+<div class="border border-primary bg-surface p-lg">
+<div class="flex justify-between items-center mb-md border-b border-surface-variant pb-sm">
+<h3 class="font-label-md text-label-md uppercase tracking-wider">Completion Funnel</h3>
+<span class="material-symbols-outlined text-secondary text-[20px]">filter_list</span>
+</div>
+<div class="h-48 w-full flex flex-col items-center justify-center space-y-sm">
+<div class="w-[80%] h-8 bg-primary text-on-primary flex items-center justify-center font-label-sm text-label-sm">Started (1,200)</div>
+<div class="w-[60%] h-8 bg-surface-tint text-on-tertiary flex items-center justify-center font-label-sm text-label-sm">Halfway (940)</div>
+<div class="w-[40%] h-8 bg-surface-variant text-on-surface flex items-center justify-center font-label-sm text-label-sm border border-primary">Completed (816)</div>
+</div>
+</div>
+<!-- Lesson Drop-off -->
+<div class="border border-primary bg-surface p-lg">
+<div class="flex justify-between items-center mb-md border-b border-surface-variant pb-sm">
+<h3 class="font-label-md text-label-md uppercase tracking-wider">Lesson Drop-off</h3>
+<span class="material-symbols-outlined text-secondary text-[20px]">trending_down</span>
+</div>
+<div class="h-48 w-full relative border-l border-b border-primary p-sm flex items-end">
+<!-- Scatter/Line plot placeholder -->
+<div class="absolute left-[10%] bottom-[80%] w-2 h-2 bg-primary"></div>
+<div class="absolute left-[30%] bottom-[60%] w-2 h-2 bg-primary"></div>
+<div class="absolute left-[50%] bottom-[40%] w-2 h-2 bg-primary"></div>
+<!-- Alert Point -->
+<div class="absolute left-[70%] bottom-[10%] w-3 h-3 bg-primary border-2 border-surface-variant ring-1 ring-primary z-10"></div>
+<div class="absolute left-[70%] bottom-[10%] w-px h-[90%] bg-surface-variant border-dashed border-l border-primary -z-10"></div>
+<div class="absolute left-[90%] bottom-[5%] w-2 h-2 bg-primary"></div>
+<svg class="absolute top-0 left-0 w-full h-full -z-20" preserveaspectratio="none">
+<polyline fill="none" points="0,40 60,100 120,150 180,250 240,260" stroke="#e2e2e2" stroke-width="2"></polyline>
+</svg>
+</div>
+</div>
+</section>
+<!-- AI Insight Panel -->
+<section aria-label="AI Insights" class="border-[2px] border-primary bg-surface-bright p-xl relative overflow-hidden">
+<!-- Background Pattern -->
+<div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="relative z-10">
+<div class="flex items-center mb-lg">
+<div class="bg-primary text-on-primary p-sm mr-md">
+<span class="material-symbols-outlined text-[24px]">psychology</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm uppercase font-bold tracking-tight">AI Insights &amp; Optimization</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Insight 1: Improvement -->
+<div class="border border-primary bg-surface p-md">
+<div class="flex items-center mb-sm text-primary">
+<span class="material-symbols-outlined mr-xs text-[18px]">lightbulb</span>
+<span class="font-label-md text-label-md uppercase">Suggestion</span>
+</div>
+<p class="font-body-sm text-body-sm">Add a summary quiz after Module 3 to improve retention. Current retention drops significantly post-Module 3.</p>
+<button class="mt-md font-label-sm text-label-sm border border-primary px-sm py-xs hover:bg-primary hover:text-on-primary transition-colors">Apply Fix</button>
+</div>
+<!-- Insight 2: Alert -->
+<div class="border-2 border-primary bg-surface p-md relative">
+<!-- High priority marker -->
+<div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+<div class="flex items-center mb-sm text-primary">
+<span class="material-symbols-outlined mr-xs text-[18px]">warning</span>
+<span class="font-label-md text-label-md uppercase font-bold">Alert</span>
+</div>
+<p class="font-body-sm text-body-sm font-semibold">Lesson 4 has a 25% drop-off rate—consider re-editing the intro.</p>
+<a class="inline-block mt-md font-label-sm text-label-sm underline hover:text-secondary" href="#">View Lesson 4 Stats</a>
+</div>
+<!-- Insight 3: Optimization -->
+<div class="border border-primary bg-surface p-md">
+<div class="flex items-center mb-sm text-primary">
+<span class="material-symbols-outlined mr-xs text-[18px]">search</span>
+<span class="font-label-md text-label-md uppercase">SEO Optimization</span>
+</div>
+<p class="font-body-sm text-body-sm">Suggested title improvement for SEO visibility based on current search trends.</p>
+<div class="mt-sm p-sm bg-surface-container-low border border-surface-variant font-label-sm text-label-sm line-through text-secondary">Advanced Python for Data Science</div>
+<div class="mt-xs p-sm bg-primary text-on-primary font-label-sm text-label-sm">Python for Data Science: Master Advanced Techniques</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Data Tables Section -->
+<section aria-label="Detailed Tabular Data" class="space-y-xl">
+<!-- Lesson Performance Table -->
+<div class="border border-primary bg-surface">
+<div class="p-md border-b border-primary bg-surface-container-low flex justify-between items-center">
+<h3 class="font-label-md text-label-md uppercase font-bold">Lesson Performance</h3>
+<button class="material-symbols-outlined text-[20px] hover:text-secondary">more_vert</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[600px]">
+<thead>
+<tr class="bg-surface-bright border-b border-surface-variant font-label-sm text-label-sm text-secondary uppercase">
+<th class="p-md font-medium w-[40%]">Lesson Title</th>
+<th class="p-md font-medium text-right">Views</th>
+<th class="p-md font-medium text-right">Completion Rate</th>
+<th class="p-md font-medium text-right">Avg Watch Time</th>
+<th class="p-md font-medium text-right">Doubts</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+<td class="p-md font-medium border-l-[3px] border-transparent">1. Introduction to Pandas</td>
+<td class="p-md text-right font-mono text-[13px]">12,400</td>
+<td class="p-md text-right">98%</td>
+<td class="p-md text-right text-secondary">14:20</td>
+<td class="p-md text-right">12</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+<td class="p-md font-medium border-l-[3px] border-transparent">2. Data Cleaning Techniques</td>
+<td class="p-md text-right font-mono text-[13px]">11,850</td>
+<td class="p-md text-right">92%</td>
+<td class="p-md text-right text-secondary">22:15</td>
+<td class="p-md text-right">34</td>
+</tr>
+<tr class="border-b border-surface-variant bg-surface-container-low hover:bg-surface-bright transition-colors">
+<td class="p-md font-medium border-l-[3px] border-primary">3. Advanced Merging (Focus Area)</td>
+<td class="p-md text-right font-mono text-[13px]">9,200</td>
+<td class="p-md text-right font-bold">75%</td>
+<td class="p-md text-right text-secondary">18:40</td>
+<td class="p-md text-right font-bold">89</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-md font-medium border-l-[3px] border-transparent">4. Time Series Analysis Intro</td>
+<td class="p-md text-right font-mono text-[13px]">6,890</td>
+<td class="p-md text-right">88%</td>
+<td class="p-md text-right text-secondary">25:10</td>
+<td class="p-md text-right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Student Progress Table -->
+<div class="border border-primary bg-surface">
+<div class="p-md border-b border-primary bg-surface-container-low flex justify-between items-center">
+<h3 class="font-label-md text-label-md uppercase font-bold">Recent Student Progress</h3>
+<a class="font-label-sm text-label-sm underline hover:text-secondary" href="#">View All</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-bright border-b border-surface-variant font-label-sm text-label-sm text-secondary uppercase">
+<th class="p-md font-medium">Student</th>
+<th class="p-md font-medium">Last Active</th>
+<th class="p-md font-medium text-right">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<tr class="border-b border-surface-variant">
+<td class="p-md flex items-center">
+<div class="w-6 h-6 bg-surface-variant text-center leading-6 font-label-sm mr-sm border border-primary">JS</div>
+                                            Jane Smith
+                                        </td>
+<td class="p-md text-secondary">2 hours ago</td>
+<td class="p-md text-right">
+<span class="border border-primary px-sm py-[2px] font-label-sm text-[10px] uppercase">In Progress (45%)</span>
+</td>
+</tr>
+<tr class="border-b border-surface-variant">
+<td class="p-md flex items-center">
+<div class="w-6 h-6 bg-primary text-on-primary text-center leading-6 font-label-sm mr-sm">MR</div>
+                                            Mark Riley
+                                        </td>
+<td class="p-md text-secondary">5 hours ago</td>
+<td class="p-md text-right">
+<span class="bg-primary text-on-primary px-sm py-[2px] font-label-sm text-[10px] uppercase">Completed</span>
+</td>
+</tr>
+<tr>
+<td class="p-md flex items-center">
+<div class="w-6 h-6 bg-surface-variant text-center leading-6 font-label-sm mr-sm border border-primary border-dashed">AT</div>
+                                            Alice Trenton
+                                        </td>
+<td class="p-md text-secondary">3 days ago</td>
+<td class="p-md text-right">
+<span class="border border-surface-variant text-secondary px-sm py-[2px] font-label-sm text-[10px] uppercase">Inactive</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Quiz Performance Table -->
+<div class="border border-primary bg-surface">
+<div class="p-md border-b border-primary bg-surface-container-low flex justify-between items-center">
+<h3 class="font-label-md text-label-md uppercase font-bold">Quiz Averages</h3>
+<span class="material-symbols-outlined text-[20px] text-secondary">assignment_turned_in</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-bright border-b border-surface-variant font-label-sm text-label-sm text-secondary uppercase">
+<th class="p-md font-medium">Quiz Module</th>
+<th class="p-md font-medium text-right">Avg Score</th>
+<th class="p-md font-medium w-[30%]">Distribution</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<tr class="border-b border-surface-variant">
+<td class="p-md">Module 1: Basics</td>
+<td class="p-md text-right font-mono text-[13px]">92%</td>
+<td class="p-md">
+<div class="w-full h-2 bg-surface-variant flex">
+<div class="h-full bg-primary" style="width: 80%"></div>
+<div class="h-full bg-[#888888]" style="width: 15%"></div>
+</div>
+</td>
+</tr>
+<tr class="border-b border-surface-variant">
+<td class="p-md">Module 2: Cleaning</td>
+<td class="p-md text-right font-mono text-[13px]">85%</td>
+<td class="p-md">
+<div class="w-full h-2 bg-surface-variant flex">
+<div class="h-full bg-primary" style="width: 60%"></div>
+<div class="h-full bg-[#888888]" style="width: 30%"></div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="p-md">Module 3: Merging</td>
+<td class="p-md text-right font-mono text-[13px]">68%</td>
+<td class="p-md">
+<div class="w-full h-2 bg-surface-variant flex border border-primary p-[1px]">
+<div class="h-full bg-primary" style="width: 30%"></div>
+<div class="h-full bg-[#888888]" style="width: 40%"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

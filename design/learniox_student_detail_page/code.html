@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Detail - LearnioX Academy Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#5e5e5e",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#c6c6c6",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-container-highest": "#e2e2e2",
+                        "tertiary": "#000000",
+                        "surface-container-low": "#f3f3f4",
+                        "on-surface-variant": "#4c4546",
+                        "primary-fixed": "#e2e2e2",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-background": "#1a1c1c",
+                        "surface-bright": "#f9f9f9",
+                        "outline-variant": "#cfc4c5",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-error": "#ffffff",
+                        "outline": "#7e7576",
+                        "secondary": "#5e5e5e",
+                        "on-secondary-fixed-variant": "#464747",
+                        "secondary-fixed": "#e4e2e2",
+                        "surface-dim": "#dadada",
+                        "on-tertiary-container": "#838484",
+                        "primary": "#000000",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e1dfdf",
+                        "surface-container": "#eeeeee",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f9f9f9",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "tertiary-container": "#1a1c1c",
+                        "surface": "#f9f9f9",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#1b1b1b",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "inverse-on-surface": "#f0f1f1",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-secondary-container": "#626262",
+                        "inverse-surface": "#2f3131",
+                        "on-primary-container": "#848484"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0rem",
+                        "lg": "0rem",
+                        "xl": "0rem",
+                        "full": "0rem"
+                    },
+                    "spacing": {
+                        "xl": "48px",
+                        "container-max": "1440px",
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xxl": "64px",
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface-lowest text-on-surface h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full border-r border-primary overflow-y-auto bg-surface-lowest docked left-0 w-64 rounded-none shrink-0 transition-all duration-75 ease-in-out">
+<div class="px-lg py-xl border-b border-primary">
+<div class="font-headline-sm text-headline-sm font-bold tracking-tight text-primary mb-xs">LearnioX Academy</div>
+<div class="font-label-sm text-label-sm text-secondary uppercase">Studio Owner</div>
+</div>
+<div class="flex-1 py-md">
+<a class="flex items-center gap-md px-lg py-md text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md bg-primary text-on-primary rounded-none" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">school</span>
+<span class="font-label-md text-label-md">Studio</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu_book</span>
+<span class="font-label-md text-label-md">Courses</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">group</span>
+<span class="font-label-md text-label-md">Team</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="p-lg border-t border-primary mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md rounded-none hover:bg-surface-tint transition-colors">
+                Invite Member
+            </button>
+</div>
+</nav>
+<!-- Main Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- TopNavBar / Header Context -->
+<header class="flex justify-between items-center w-full px-lg py-md h-20 border-b border-primary bg-surface-lowest sticky top-0 z-40 shrink-0">
+<div class="flex items-center gap-lg">
+<div class="flex flex-col">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Alexander Pierce</h1>
+<div class="flex items-center gap-md mt-xs">
+<span class="font-body-sm text-body-sm text-secondary">alexander.p@example.com</span>
+<span class="w-xs h-xs bg-primary rounded-none"></span>
+<span class="font-label-sm text-label-sm text-primary uppercase">Status: Active</span>
+<span class="w-xs h-xs bg-primary rounded-none"></span>
+<span class="font-body-sm text-body-sm text-secondary">Last Active: 2h ago</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="bg-surface-lowest border border-primary text-primary font-label-md text-label-md py-sm px-md rounded-none hover:border-[2px] transition-all">Send Message</button>
+<button class="bg-surface-lowest border border-primary text-primary font-label-md text-label-md py-sm px-md rounded-none hover:border-[2px] transition-all">Add Note</button>
+<button class="bg-primary text-on-primary font-label-md text-label-md py-sm px-md rounded-none hover:bg-surface-tint transition-colors">Manage Access</button>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-surface-lowest p-lg lg:p-margin-desktop">
+<div class="max-w-container-max mx-auto space-y-xl">
+<!-- Profile Summary Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left: Profile Identity -->
+<div class="lg:col-span-4 border border-primary p-lg flex gap-md">
+<div class="w-[100px] h-[100px] bg-surface-container shrink-0 border border-primary overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover grayscale" data-alt="A strict, black-and-white, high-contrast, professional headshot of a young male student looking directly at the camera. The lighting is harsh and architectural, casting sharp geometric shadows. The background is pure white. The mood is serious, focused, and aligned with a minimalist enterprise design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKIPOVk7VHaLYaXeChqz70uAD4cxS6_hDDSMq2o_HW4zkHb_ipkrqTgbLM9yVjRGgnY7K6JgQ9IPM243HiFkhwOKOMJwO_huWqxUdqFP3RSdUWUTSP9XtFAIL4LVQUFH3xPJnDc5C12XhgDFYtt5nQXpMRlBooyMigJmGvS_Xxf38JBs9aS9ojkFLbkakzJBEtE_NgC-uZ7C4l9FL_fkIIPi_JbEggQacLh463SbPXyOwKLMufl7oPp7PEzY3njlzIacVT8yLCtP3B"/>
+</div>
+<div class="flex flex-col justify-center gap-sm">
+<div class="font-headline-sm text-headline-sm font-bold">Student Profile</div>
+<div class="font-body-sm text-body-sm text-secondary">Joined: Oct 12, 2023</div>
+<div class="font-body-sm text-body-sm text-secondary">ID: LAX-84729-AP</div>
+</div>
+</div>
+<!-- Right: Metrics Bento -->
+<div class="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-sm">
+<div class="border border-primary p-lg flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Active Courses</span>
+<span class="font-headline-lg text-headline-lg font-bold mt-md">3</span>
+</div>
+<div class="border border-primary p-lg flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Membership</span>
+<span class="font-headline-lg text-headline-lg font-bold mt-md">Pro</span>
+</div>
+<div class="border border-primary p-lg flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Avg. Progress</span>
+<span class="font-headline-lg text-headline-lg font-bold mt-md">68%</span>
+</div>
+<div class="border border-primary p-lg flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Certificates</span>
+<span class="font-headline-lg text-headline-lg font-bold mt-md">2</span>
+</div>
+</div>
+</section>
+<!-- Navigation Tabs -->
+<section class="border-b border-primary flex overflow-x-auto hide-scrollbar">
+<button class="font-label-md text-label-md px-md py-md border-b-2 border-primary text-primary whitespace-nowrap">Courses</button>
+<button class="font-label-md text-label-md px-md py-md text-secondary hover:text-primary whitespace-nowrap">Progress</button>
+<button class="font-label-md text-label-md px-md py-md text-secondary hover:text-primary whitespace-nowrap">Doubts</button>
+<button class="font-label-md text-label-md px-md py-md text-secondary hover:text-primary whitespace-nowrap">Quizzes</button>
+<button class="font-label-md text-label-md px-md py-md text-secondary hover:text-primary whitespace-nowrap">Assignments</button>
+<button class="font-label-md text-label-md px-md py-md text-secondary hover:text-primary whitespace-nowrap">Certificates</button>
+<button class="font-label-md text-label-md px-md py-md text-secondary hover:text-primary whitespace-nowrap">Payments</button>
+<button class="font-label-md text-label-md px-md py-md text-secondary hover:text-primary whitespace-nowrap">Staff Notes</button>
+</section>
+<!-- Active Tab Content: Courses Table -->
+<section class="border border-primary">
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-primary">
+<th class="font-label-md text-label-md py-md px-lg w-1/3">Course Title</th>
+<th class="font-label-md text-label-md py-md px-lg w-1/4">Progress</th>
+<th class="font-label-md text-label-md py-md px-lg">Completed</th>
+<th class="font-label-md text-label-md py-md px-lg">Last Watched</th>
+<th class="font-label-md text-label-md py-md px-lg text-right">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+<td class="py-md px-lg font-body-md text-body-md font-medium">Advanced UI Architecture</td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-md">
+<span class="font-body-sm text-body-sm w-8">85%</span>
+<div class="flex-1 h-2 bg-surface-variant border border-primary">
+<div class="h-full bg-primary" style="width: 85%"></div>
+</div>
+</div>
+</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-secondary">34 / 40 Lessons</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-secondary">Oct 24, 2023</td>
+<td class="py-md px-lg text-right">
+<span class="inline-block border border-primary px-sm py-xs font-label-sm text-label-sm uppercase tracking-wider">In Progress</span>
+</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors">
+<td class="py-md px-lg font-body-md text-body-md font-medium">Design Systems Mastery</td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-md">
+<span class="font-body-sm text-body-sm w-8">100%</span>
+<div class="flex-1 h-2 bg-surface-variant border border-primary">
+<div class="h-full bg-primary" style="width: 100%"></div>
+</div>
+</div>
+</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-secondary">28 / 28 Lessons</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-secondary">Sep 15, 2023</td>
+<td class="py-md px-lg text-right">
+<span class="inline-block bg-primary text-on-primary px-sm py-xs font-label-sm text-label-sm uppercase tracking-wider">Completed</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-md px-lg font-body-md text-body-md font-medium">Typography Fundamentals</td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-md">
+<span class="font-body-sm text-body-sm w-8">12%</span>
+<div class="flex-1 h-2 bg-surface-variant border border-primary">
+<div class="h-full bg-primary" style="width: 12%"></div>
+</div>
+</div>
+</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-secondary">2 / 16 Lessons</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-secondary">Oct 26, 2023</td>
+<td class="py-md px-lg text-right">
+<span class="inline-block border border-primary px-sm py-xs font-label-sm text-label-sm uppercase tracking-wider">In Progress</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Additional Context: Recent Doubts Preview -->
+<section>
+<h2 class="font-headline-sm text-headline-sm font-bold mb-md">Recent Doubts</h2>
+<div class="border border-primary">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-primary">
+<th class="font-label-md text-label-md py-md px-lg">Question Summary</th>
+<th class="font-label-md text-label-md py-md px-lg">Course</th>
+<th class="font-label-md text-label-md py-md px-lg">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-surface-variant">
+<td class="py-md px-lg font-body-sm text-body-sm">Clarification on structural grid behavior in mobile views.</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-secondary">Advanced UI Architecture</td>
+<td class="py-md px-lg">
+<span class="inline-block border border-primary px-sm py-xs font-label-sm text-label-sm uppercase tracking-wider">Open</span>
+</td>
+</tr>
+<tr>
+<td class="py-md px-lg font-body-sm text-body-sm">When to use tonal layers over borders?</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-secondary">Design Systems Mastery</td>
+<td class="py-md px-lg">
+<span class="inline-block bg-primary text-on-primary px-sm py-xs font-label-sm text-label-sm uppercase tracking-wider">Resolved</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

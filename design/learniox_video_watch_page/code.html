@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX - Video Player</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#1b1b1b",
+                        "secondary": "#5e5e5e",
+                        "tertiary": "#000000",
+                        "on-tertiary-container": "#838484",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeeee",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#5e5e5e",
+                        "on-secondary-container": "#626262",
+                        "secondary-container": "#e1dfdf",
+                        "on-surface-variant": "#4c4546",
+                        "surface-container-high": "#e8e8e8",
+                        "inverse-on-surface": "#f0f1f1",
+                        "outline": "#7e7576",
+                        "surface-dim": "#dadada",
+                        "primary-container": "#1b1b1b",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "tertiary-container": "#1a1c1c",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "background": "#f9f9f9",
+                        "surface-container-low": "#f3f3f4",
+                        "on-primary-container": "#848484",
+                        "surface-variant": "#e2e2e2",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed-variant": "#464747",
+                        "inverse-primary": "#c6c6c6",
+                        "inverse-surface": "#2f3131",
+                        "secondary-fixed": "#e4e2e2",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#f9f9f9",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e3e2e2",
+                        "primary-fixed": "#e2e2e2",
+                        "on-surface": "#1a1c1c",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e2e2e2",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-background": "#1a1c1c",
+                        "primary": "#000000",
+                        "outline-variant": "#cfc4c5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "xl": "48px",
+                        "container-max": "1440px",
+                        "margin-desktop": "32px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "xxl": "64px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "headline-sm": ["Inter", "sans-serif"],
+                        "headline-xl": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-md min-h-screen">
+<!-- Top Navigation -->
+<header class="bg-surface-container-lowest border-b border-outline px-lg h-16 flex items-center justify-between sticky top-0 z-50">
+<div class="flex items-center gap-md">
+<img alt="LearnioX Brand Logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0ujz4qsi_j8Rh1ZkfgMQMjZ8Iw-RaHM6cHYI3hyF8Ccd82G4Kjnfq0livPftLk7xPssp1K8-FObPWN22rQLw-N37g6TB_YOYePSDpXiLzmoUpR9jdettkjX-32xwqKwMMJojTSmkKsWdbZWxcfWudQL8NPL_MICH8ayVu4EyPbya-cTBm5HO-HIXAsoFNKtKCrqTEnvJqbtd1SJUSN_KbVFscpSzQE7rOgARAyQk9AcuTYAWZtwQaeJRwMY"/>
+<div class="h-4 w-px bg-outline hidden md:block"></div>
+<span class="font-label-md text-label-md text-on-surface-variant hidden md:block">Course: Advanced Python for Data Science</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-xs hover:bg-surface-container-high transition-colors text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined" data-icon="search" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+<button class="border border-primary px-md py-sm font-label-md text-label-md hover:border-[2px] transition-all">My Learning</button>
+<button class="p-xs hover:bg-surface-container-high transition-colors text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined" data-icon="notifications" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<div class="w-8 h-8 border border-primary overflow-hidden flex items-center justify-center bg-surface-container">
+<span class="material-symbols-outlined text-secondary" data-icon="person">person</span>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<div class="max-w-container-max mx-auto w-full flex flex-col md:flex-row gap-0">
+<!-- Left Area (70%) -->
+<main class="w-full md:w-[70%] border-r border-outline border-b md:border-b-0">
+<!-- Video Player Area -->
+<div class="p-lg bg-surface border-b border-outline">
+<div class="w-full aspect-video border border-primary bg-surface-container-lowest relative flex items-center justify-center group cursor-pointer overflow-hidden">
+<img alt="A high-contrast black and white shot of intricate code displayed on a computer screen, representing deep technical concepts. The lighting is sterile and precise, matching the stark minimalist design language. Clean lines and sharp text dominate the frame." class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-10 transition-opacity" data-alt="A high-contrast black and white shot of intricate code displayed on a computer screen, representing deep technical concepts. The lighting is sterile and precise, matching the stark minimalist design language. Clean lines and sharp text dominate the frame." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk4utPWLTxsShbMfSfRWdwkh0OiwZoltqi5KNLFdwEDisdRasRGaBwOeFoBX9a4bVWN5KBx8yU2htf4KJzxSXWksPkPoHtvyeUF6p2t58vx6AqA6PkIESP2pA9ey7_Rr3znabh3BRC_UGvzYStl97cT6skktr8I9VCnh7FbJRMLmRjMpDveq6S2ogrvpQWGGYvxZwz-3YAe0BI9SvWl5qgvtlmRDEixnymY8LGTToJMj4XHENV9Ekhzb1FIZ9ZNOfczmresq5Z2wqI"/>
+<div class="w-16 h-16 border-[2px] border-primary bg-surface-container-lowest flex items-center justify-center z-10 group-hover:bg-primary group-hover:text-surface-container-lowest transition-colors">
+<span class="material-symbols-outlined text-[32px]" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<!-- Mock Progress Bar -->
+<div class="absolute bottom-0 left-0 w-full h-1 bg-surface-container">
+<div class="h-full bg-primary w-[15%]"></div>
+</div>
+</div>
+<div class="mt-lg">
+<h1 class="font-headline-lg text-headline-lg mb-sm">1.2 Memory Management Deep Dive</h1>
+<div class="flex flex-wrap items-center gap-md font-body-sm text-body-sm text-on-surface-variant border-b border-outline pb-lg mb-lg">
+<span>Instructor: Dr. Sarah Chen</span>
+<span class="w-1 h-1 bg-outline block"></span>
+<span>15 min</span>
+<span class="w-1 h-1 bg-outline block"></span>
+<span>Module 1: Introduction</span>
+<span class="w-1 h-1 bg-outline block"></span>
+<span>15% Course Completed</span>
+</div>
+<!-- Action Row -->
+<div class="flex flex-wrap gap-md">
+<button class="bg-primary text-on-primary px-lg py-sm font-label-md text-label-md hover:bg-[#666666] transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="check" style="font-variation-settings: 'FILL' 0;">check</span>
+                            Mark as Complete
+                        </button>
+<button class="bg-surface-container-lowest border border-primary text-primary px-lg py-sm font-label-md text-label-md hover:border-[2px] transition-all flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="bookmark" style="font-variation-settings: 'FILL' 0;">bookmark</span>
+                            Save Note
+                        </button>
+<button class="bg-surface-container-lowest border border-primary text-primary px-lg py-sm font-label-md text-label-md hover:border-[2px] transition-all flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="help" style="font-variation-settings: 'FILL' 0;">help</span>
+                            Ask Doubt
+                        </button>
+</div>
+</div>
+</div>
+<!-- Tabbed Content Below Video -->
+<div class="bg-surface-container-lowest">
+<!-- Tabs -->
+<div class="flex border-b border-outline overflow-x-auto hide-scrollbar px-lg pt-md">
+<button class="px-md py-sm font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap border-b-2 border-transparent">Overview</button>
+<button class="px-md py-sm font-label-md text-label-md text-primary border-b-2 border-primary font-bold whitespace-nowrap">Notes</button>
+<button class="px-md py-sm font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap border-b-2 border-transparent">Doubts</button>
+<button class="px-md py-sm font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap border-b-2 border-transparent">Resources</button>
+<button class="px-md py-sm font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap border-b-2 border-transparent">Transcript</button>
+</div>
+<!-- Active Tab Content: Notes -->
+<div class="p-lg">
+<!-- Note Input -->
+<div class="border border-outline p-md bg-surface mb-lg focus-within:border-primary transition-colors">
+<textarea class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-sm text-body-sm resize-none" placeholder="Take a new note at 05:24..." rows="3"></textarea>
+<div class="flex justify-end mt-sm">
+<button class="bg-primary text-on-primary px-md py-xs font-label-md text-label-md hover:bg-[#666666] transition-colors">Save Note</button>
+</div>
+</div>
+<!-- Saved Notes List -->
+<div class="space-y-0">
+<div class="border-b border-outline py-md flex gap-md items-start">
+<span class="bg-surface-container px-sm py-xs font-label-sm text-label-sm font-mono border border-outline mt-1">01:15</span>
+<div>
+<p class="font-body-sm text-body-sm">Explanation of Garbage Collection</p>
+<div class="flex gap-sm mt-xs">
+<button class="text-on-surface-variant hover:text-primary font-label-sm text-label-sm underline">Edit</button>
+<button class="text-on-surface-variant hover:text-primary font-label-sm text-label-sm underline">Delete</button>
+</div>
+</div>
+</div>
+<div class="border-b border-outline py-md flex gap-md items-start">
+<span class="bg-surface-container px-sm py-xs font-label-sm text-label-sm font-mono border border-outline mt-1">03:45</span>
+<div>
+<p class="font-body-sm text-body-sm">Reference Counting vs. Generational GC</p>
+<div class="flex gap-sm mt-xs">
+<button class="text-on-surface-variant hover:text-primary font-label-sm text-label-sm underline">Edit</button>
+<button class="text-on-surface-variant hover:text-primary font-label-sm text-label-sm underline">Delete</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sidebar (30%) -->
+<aside class="w-full md:w-[30%] bg-surface-container-lowest h-[calc(100vh-64px)] overflow-y-auto sticky top-16 border-l border-outline">
+<div class="p-lg border-b border-outline bg-surface sticky top-0 z-10">
+<h2 class="font-headline-sm text-headline-sm">Course Curriculum</h2>
+</div>
+<div class="flex flex-col">
+<!-- Expanded Module -->
+<div class="border-b border-outline">
+<button class="w-full p-md flex items-center justify-between hover:bg-surface-container transition-colors bg-surface-container-low border-b border-outline">
+<span class="font-label-md text-label-md text-left">Module 1: Introduction to Advanced Python</span>
+<span class="material-symbols-outlined" data-icon="expand_less">expand_less</span>
+</button>
+<div class="flex flex-col">
+<!-- Lesson 1.1 -->
+<div class="px-lg py-md border-b border-outline flex items-center justify-between hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant line-through">1.1 The Anatomy of High-Performance Python</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">10:05</span>
+</div>
+<!-- Lesson 1.2 (Active) -->
+<div class="px-lg py-md border-l-[4px] border-l-primary border-b border-outline border-t border-t-outline bg-surface flex items-center justify-between cursor-pointer font-bold relative -mt-px -mb-px z-10" style="box-shadow: inset 0 0 0 1px #000;">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="play_circle" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span class="font-body-sm text-body-sm text-primary">1.2 Memory Management Deep Dive</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary">15:00</span>
+</div>
+<!-- Lesson 1.3 -->
+<div class="px-lg py-md border-b border-outline flex items-center justify-between hover:bg-surface-container transition-colors cursor-pointer opacity-70">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock" style="font-variation-settings: 'FILL' 0;">lock</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">1.3 Profiling Tools and Techniques</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">22:30</span>
+</div>
+</div>
+</div>
+<!-- Collapsed Module -->
+<div class="border-b border-outline">
+<button class="w-full p-md flex items-center justify-between hover:bg-surface-container transition-colors bg-surface-container-lowest">
+<span class="font-label-md text-label-md text-left text-on-surface-variant">Module 2: High-Performance Computing</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<!-- Collapsed Module -->
+<div class="border-b border-outline">
+<button class="w-full p-md flex items-center justify-between hover:bg-surface-container transition-colors bg-surface-container-lowest">
+<span class="font-label-md text-label-md text-left text-on-surface-variant">Module 3: Concurrency and Parallelism</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+<style>
+        /* Hide scrollbar for tabs */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

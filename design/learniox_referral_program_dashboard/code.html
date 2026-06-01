@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX Academy Studio - Referral Program</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed-variant": "#474747",
+                      "surface-container": "#eeeeee",
+                      "on-background": "#1a1c1c",
+                      "secondary-container": "#e1dfdf",
+                      "inverse-on-surface": "#f0f1f1",
+                      "surface-container-highest": "#e2e2e2",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed": "#e4e2e2",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "on-primary-container": "#848484",
+                      "inverse-surface": "#2f3131",
+                      "surface-container-low": "#f3f3f4",
+                      "on-secondary-fixed-variant": "#464747",
+                      "on-primary-fixed": "#1b1b1b",
+                      "on-error": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-container": "#1b1b1b",
+                      "on-secondary-container": "#626262",
+                      "surface-tint": "#5e5e5e",
+                      "surface-variant": "#e2e2e2",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "background": "#f9f9f9",
+                      "tertiary": "#000000",
+                      "primary-fixed": "#e2e2e2",
+                      "secondary": "#5e5e5e",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "tertiary-container": "#1a1c1c",
+                      "on-tertiary-container": "#838484",
+                      "tertiary-fixed": "#e3e2e2",
+                      "on-tertiary-fixed-variant": "#464747",
+                      "on-surface-variant": "#4c4546",
+                      "tertiary-fixed-dim": "#c6c6c6",
+                      "surface": "#f9f9f9",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "outline": "#7e7576",
+                      "surface-bright": "#f9f9f9",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#1a1c1c",
+                      "surface-container-high": "#e8e8e8",
+                      "surface-dim": "#dadada",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "inverse-primary": "#c6c6c6",
+                      "primary": "#000000",
+                      "outline-variant": "#cfc4c5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0px",
+                      "lg": "0px",
+                      "xl": "0px",
+                      "full": "0px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "xxl": "64px",
+                      "container-max": "1440px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "xl": "48px",
+                      "xs": "4px",
+                      "sm": "8px",
+                      "margin-desktop": "32px",
+                      "margin-mobile": "16px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Inter", "sans-serif"
+                      ],
+                      "body-md": [
+                              "Inter", "sans-serif"
+                      ],
+                      "headline-xl": [
+                              "Inter", "sans-serif"
+                      ],
+                      "body-lg": [
+                              "Inter", "sans-serif"
+                      ],
+                      "headline-md": [
+                              "Inter", "sans-serif"
+                      ],
+                      "headline-lg": [
+                              "Inter", "sans-serif"
+                      ],
+                      "headline-sm": [
+                              "Inter", "sans-serif"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter", "sans-serif"
+                      ],
+                      "label-sm": [
+                              "Inter", "sans-serif"
+                      ],
+                      "body-sm": [
+                              "Inter", "sans-serif"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        /* Specific overrides to enforce strict no-border-radius policy */
+        * {
+            border-radius: 0 !important;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-primary dark:border-outline-variant rounded-none bg-surface dark:bg-background py-lg px-0 shrink-0 z-20 sticky top-0">
+<div class="px-md mb-xl">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-on-background mb-xs">STUDIO NAVIGATOR</h1>
+<p class="font-label-md text-label-md text-secondary uppercase tracking-wider">Enterprise Edition</p>
+</div>
+<ul class="flex flex-col w-full">
+<li>
+<a class="flex items-center gap-md px-md py-sm text-primary dark:text-on-background hover:bg-surface-container-low transition-none w-full font-label-md text-label-md uppercase tracking-wider group" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-primary dark:text-on-background hover:bg-surface-container-low transition-none w-full font-label-md text-label-md uppercase tracking-wider group" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="campaign">campaign</span>
+<span>Campaigns</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm bg-primary text-on-primary dark:bg-on-background dark:text-background font-bold transition-none w-full font-label-md text-label-md uppercase tracking-wider scale-100" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="group">group</span>
+<span>Referrals</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-primary dark:text-on-background hover:bg-surface-container-low transition-none w-full font-label-md text-label-md uppercase tracking-wider group" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="card_giftcard">card_giftcard</span>
+<span>Rewards</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-primary dark:text-on-background hover:bg-surface-container-low transition-none w-full font-label-md text-label-md uppercase tracking-wider group" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="bar_chart">bar_chart</span>
+<span>Analytics</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto px-md pt-lg border-t border-primary dark:border-outline-variant">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 bg-surface-variant border border-primary shrink-0 overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary">Institution Owner</span>
+<span class="font-label-sm text-label-sm text-secondary">admin@learniox.com</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Wrapper -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-xxl bg-surface dark:bg-background border-b border-primary dark:border-outline-variant rounded-none shrink-0 sticky top-0 z-10">
+<div class="flex items-center gap-xl">
+<span class="font-headline-sm text-headline-sm font-black text-primary dark:text-on-background uppercase">REFERRAL MANAGEMENT</span>
+<div class="hidden lg:flex items-center h-full">
+<nav class="flex h-full">
+<a class="h-full flex items-center px-md text-secondary dark:text-on-secondary-container hover:underline decoration-2 underline-offset-4 font-label-md text-label-md uppercase" href="#">PROGRAM OVERVIEW</a>
+<a class="h-full flex items-center px-md text-primary border-b-2 border-primary font-bold font-label-md text-label-md uppercase" href="#">ACTIVE REFERRALS</a>
+</nav>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-primary" data-icon="search">search</span>
+<input class="pl-xl pr-sm py-sm border border-outline w-64 bg-surface text-primary font-body-sm focus:border-primary focus:ring-0 focus:outline-none placeholder:text-secondary rounded-none" placeholder="Search Referrals..." type="text"/>
+</div>
+<button class="bg-surface text-primary border border-primary px-lg py-sm font-label-md text-label-md hover:border-2 transition-all rounded-none uppercase tracking-wider">
+                    EXPORT
+                </button>
+<button class="bg-primary text-on-primary px-lg py-sm font-label-md text-label-md hover:bg-surface-tint transition-colors rounded-none uppercase tracking-wider">
+                    NEW CAMPAIGN
+                </button>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 overflow-auto p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full flex flex-col gap-xl">
+<!-- Stats Section -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="border border-primary bg-surface p-lg flex flex-col gap-sm hover:border-2 transition-all">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Total Referrals</span>
+<span class="font-headline-xl text-headline-xl text-primary font-bold">1,248</span>
+<div class="mt-auto pt-sm border-t border-surface-variant flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary">+12% vs last month</span>
+<span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div class="border border-primary bg-surface p-lg flex flex-col gap-sm hover:border-2 transition-all">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Conversions</span>
+<span class="font-headline-xl text-headline-xl text-primary font-bold">342</span>
+<div class="mt-auto pt-sm border-t border-surface-variant flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary">27.4% Conv. Rate</span>
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div class="border border-primary bg-surface p-lg flex flex-col gap-sm hover:border-2 transition-all">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Pending Rewards</span>
+<span class="font-headline-xl text-headline-xl text-primary font-bold">12</span>
+<div class="mt-auto pt-sm border-t border-surface-variant flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary">Awaiting Approval</span>
+<span class="material-symbols-outlined text-primary" data-icon="hourglass_empty">hourglass_empty</span>
+</div>
+</div>
+<div class="border border-primary bg-surface p-lg flex flex-col gap-sm hover:border-2 transition-all">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Referral Revenue</span>
+<span class="font-headline-xl text-headline-xl text-primary font-bold">$14,250</span>
+<div class="mt-auto pt-sm border-t border-surface-variant flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary">Net generated</span>
+<span class="material-symbols-outlined text-primary" data-icon="payments">payments</span>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-xl">
+<!-- Main Column: Campaigns & Leaderboard -->
+<div class="xl:col-span-2 flex flex-col gap-xl">
+<!-- Campaign Section -->
+<section class="flex flex-col gap-md border border-primary p-lg bg-surface">
+<div class="flex justify-between items-end border-b border-surface-variant pb-sm">
+<h2 class="font-headline-md text-headline-md text-primary font-semibold uppercase">Active Campaigns</h2>
+<button class="font-label-md text-label-md text-primary underline hover:no-underline uppercase tracking-wider">VIEW ALL</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md mt-sm">
+<!-- Campaign Card 1 -->
+<div class="border border-primary p-md flex flex-col gap-md bg-background relative overflow-hidden group hover:border-2 transition-all">
+<div class="absolute top-0 right-0 bg-primary text-on-primary px-sm py-xs font-label-sm text-label-sm uppercase tracking-widest z-10">
+                                    ACTIVE
+                                </div>
+<div class="flex flex-col gap-xs pt-sm border-b border-surface-variant pb-md">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Campaign</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary truncate">Q4 Growth</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Reward</span>
+<span class="font-body-md text-body-md text-primary font-medium">15% Discount</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Eligible</span>
+<span class="font-body-md text-body-md text-primary">All Courses</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Duration</span>
+<span class="font-body-md text-body-md text-primary">Oct 1 - Dec 31</span>
+</div>
+<div class="mt-auto pt-md flex gap-sm border-t border-surface-variant">
+<button class="flex-1 bg-surface border border-primary text-primary font-label-sm text-label-sm py-xs hover:border-2 uppercase tracking-wider">EDIT</button>
+<button class="flex-1 bg-surface border border-primary text-primary font-label-sm text-label-sm py-xs hover:border-2 uppercase tracking-wider">PAUSE</button>
+<button aria-label="End Campaign" class="bg-surface border border-primary text-primary px-sm py-xs hover:border-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<!-- Campaign Card 2 (Placeholder) -->
+<div class="border border-primary p-md flex flex-col gap-md bg-background relative overflow-hidden group hover:border-2 transition-all opacity-70">
+<div class="absolute top-0 right-0 bg-surface-variant text-primary border-b border-l border-primary px-sm py-xs font-label-sm text-label-sm uppercase tracking-widest z-10">
+                                    DRAFT
+                                </div>
+<div class="flex flex-col gap-xs pt-sm border-b border-surface-variant pb-md">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Campaign</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary truncate">Alumni Reactivation</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Reward</span>
+<span class="font-body-md text-body-md text-primary font-medium">$50 Credit</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Eligible</span>
+<span class="font-body-md text-body-md text-primary">Graduates Only</span>
+</div>
+<div class="mt-auto pt-md flex gap-sm border-t border-surface-variant">
+<button class="flex-1 bg-primary text-on-primary font-label-sm text-label-sm py-xs hover:bg-surface-tint uppercase tracking-wider">PUBLISH</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Leaderboard Table -->
+<section class="flex flex-col border border-primary bg-surface overflow-hidden">
+<div class="p-lg border-b border-primary bg-background">
+<h2 class="font-headline-md text-headline-md text-primary font-semibold uppercase">Referral Leaderboard</h2>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low font-label-md text-label-md text-primary uppercase tracking-wider border-b border-primary">
+<tr>
+<th class="p-md border-r border-surface-variant w-1/3">Student Name</th>
+<th class="p-md border-r border-surface-variant">Total Referrals</th>
+<th class="p-md border-r border-surface-variant">Conversions</th>
+<th class="p-md text-right">Rewards Earned</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-primary divide-y divide-surface-variant">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-md border-r border-surface-variant font-semibold">Alex Mercer</td>
+<td class="p-md border-r border-surface-variant">142</td>
+<td class="p-md border-r border-surface-variant">45</td>
+<td class="p-md text-right font-medium">$2,250</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-md border-r border-surface-variant font-semibold">Sarah Chen</td>
+<td class="p-md border-r border-surface-variant">98</td>
+<td class="p-md border-r border-surface-variant">32</td>
+<td class="p-md text-right font-medium">$1,600</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-md border-r border-surface-variant font-semibold">Marcus Johnson</td>
+<td class="p-md border-r border-surface-variant">76</td>
+<td class="p-md border-r border-surface-variant">28</td>
+<td class="p-md text-right font-medium">$1,400</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-md border-r border-surface-variant font-semibold">Elena Rodriguez</td>
+<td class="p-md border-r border-surface-variant">64</td>
+<td class="p-md border-r border-surface-variant">19</td>
+<td class="p-md text-right font-medium">$950</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="p-md border-r border-surface-variant font-semibold">David Kim</td>
+<td class="p-md border-r border-surface-variant">51</td>
+<td class="p-md border-r border-surface-variant">15</td>
+<td class="p-md text-right font-medium">$750</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Side Column: Settings & Links -->
+<div class="flex flex-col gap-xl">
+<!-- Reward Settings Panel -->
+<section class="border border-primary bg-surface p-lg flex flex-col gap-md">
+<div class="flex justify-between items-center border-b border-surface-variant pb-sm mb-sm">
+<h2 class="font-headline-sm text-headline-sm text-primary font-semibold uppercase">Default Reward Logic</h2>
+<button class="material-symbols-outlined text-primary hover:text-secondary" data-icon="settings">settings</button>
+</div>
+<div class="border border-surface-variant p-md flex flex-col gap-xs bg-background">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="person_add">person_add</span>
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider">Inviter Reward</span>
+</div>
+<p class="font-body-md text-body-md text-primary font-medium">10% recurring commission or $50 flat credit</p>
+</div>
+<div class="border border-surface-variant p-md flex flex-col gap-xs bg-background">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="redeem">redeem</span>
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider">Invitee Reward</span>
+</div>
+<p class="font-body-md text-body-md text-primary font-medium">15% discount on first enrollment</p>
+</div>
+<div class="border border-surface-variant p-md flex flex-col gap-xs bg-background mt-sm">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="rule">rule</span>
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider">Approval Rule</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Reward issued after 30 days of active enrollment.</p>
+</div>
+</section>
+<!-- Referral Links Table -->
+<section class="border border-primary bg-surface flex flex-col flex-1">
+<div class="p-md border-b border-primary bg-background">
+<h2 class="font-headline-sm text-headline-sm text-primary font-semibold uppercase">Tracking Links</h2>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low font-label-sm text-label-sm text-secondary uppercase tracking-widest border-b border-surface-variant">
+<tr>
+<th class="p-sm border-r border-surface-variant">Link ID</th>
+<th class="p-sm border-r border-surface-variant">Source</th>
+<th class="p-sm border-r border-surface-variant text-right">Clicks</th>
+<th class="p-sm text-right">Conv.</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-primary divide-y divide-surface-variant">
+<tr>
+<td class="p-sm border-r border-surface-variant font-mono">REF-A1B2</td>
+<td class="p-sm border-r border-surface-variant">Email Newsletter</td>
+<td class="p-sm border-r border-surface-variant text-right">1,204</td>
+<td class="p-sm text-right">45</td>
+</tr>
+<tr>
+<td class="p-sm border-r border-surface-variant font-mono">REF-X9Y8</td>
+<td class="p-sm border-r border-surface-variant">Dashboard Banner</td>
+<td class="p-sm border-r border-surface-variant text-right">856</td>
+<td class="p-sm text-right">22</td>
+</tr>
+<tr>
+<td class="p-sm border-r border-surface-variant font-mono">REF-M4N5</td>
+<td class="p-sm border-r border-surface-variant">Course Completion</td>
+<td class="p-sm border-r border-surface-variant text-right">620</td>
+<td class="p-sm text-right">38</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-md border-t border-surface-variant mt-auto">
+<button class="w-full bg-surface border border-primary text-primary font-label-md text-label-md py-sm hover:border-2 uppercase tracking-wider transition-all">GENERATE NEW LINK</button>
+</div>
+</section>
+</div>
+</div>
+<!-- Bottom spacing -->
+<div class="h-xl w-full shrink-0"></div>
+</main>
+</div>
+</body></html>

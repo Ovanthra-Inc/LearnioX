@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Instructor Profile - Dr. Sarah Jenkins</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e1dfdf",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#f0f1f1",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "outline": "#7e7576",
+                    "background": "#f9f9f9",
+                    "primary-container": "#1b1b1b",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "surface-container-highest": "#e2e2e2",
+                    "primary": "#000000",
+                    "on-surface-variant": "#4c4546",
+                    "tertiary-fixed": "#e3e2e2",
+                    "on-tertiary-container": "#838484",
+                    "on-primary-fixed": "#1b1b1b",
+                    "primary-fixed": "#e2e2e2",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#c6c6c6",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#5e5e5e",
+                    "secondary-fixed": "#e4e2e2",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#dadada",
+                    "surface-container-high": "#e8e8e8",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "outline-variant": "#cfc4c5",
+                    "on-tertiary-fixed-variant": "#464747",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e2e2e2",
+                    "on-secondary-container": "#626262",
+                    "on-background": "#1a1c1c",
+                    "surface": "#f9f9f9",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "inverse-primary": "#c6c6c6",
+                    "surface-tint": "#5e5e5e",
+                    "tertiary": "#000000",
+                    "on-primary-container": "#848484",
+                    "inverse-surface": "#2f3131",
+                    "on-secondary-fixed-variant": "#464747",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "tertiary-container": "#1a1c1c",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f9f9f9",
+                    "surface-container": "#eeeeee",
+                    "surface-container-low": "#f3f3f4",
+                    "on-surface": "#1a1c1c",
+                    "on-primary-fixed-variant": "#474747"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "0px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "sm": "8px",
+                    "container-max": "1440px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "xl": "48px",
+                    "gutter": "24px",
+                    "xxl": "64px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                    "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                    "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                    "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                    "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                    "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                    "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                    "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-primary w-full sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-lg">
+<a class="text-headline-md font-headline-md font-black tracking-tighter text-primary" href="#">ACADEMIA</a>
+<div class="hidden md:flex items-center border border-primary h-10 px-sm w-64 bg-surface-container-lowest">
+<span class="material-symbols-outlined text-primary text-[20px] mr-sm">search</span>
+<input class="w-full bg-transparent border-none outline-none text-body-sm font-body-sm text-primary placeholder-on-surface-variant p-0 focus:ring-0" placeholder="Search..." type="text"/>
+</div>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Courses</a>
+<a class="text-label-md font-label-md text-primary font-bold border-b-2 border-primary pb-1" href="#">Instructors</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Institutions</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Resources</a>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="p-sm hover:bg-surface-container-highest transition-colors duration-200">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+<button class="p-sm hover:bg-surface-container-highest transition-colors duration-200">
+<span class="material-symbols-outlined text-primary">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-desktop py-xl">
+<!-- Profile Hero -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-xl border border-primary bg-surface-container-lowest p-lg">
+<div class="md:col-span-3">
+<img alt="Professional headshot of a female data science professor in a minimalist, black and white aesthetic. She is wearing a structured dark blazer over a crisp white shirt, looking directly at the camera with a confident, academic expression. The lighting is high-contrast, casting distinct shadows to emphasize a serious, trustworthy tone. The background is a stark, pure white." class="w-full aspect-square object-cover border border-primary grayscale filter" data-alt="Professional headshot of a female data science professor in a minimalist, black and white aesthetic. She is wearing a structured dark blazer over a crisp white shirt, looking directly at the camera with a confident, academic expression. The lighting is high-contrast, casting distinct shadows to emphasize a serious, trustworthy tone. The background is a stark, pure white." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgac3mS8x2hiVDAlyOyGVHWAqFSFDAPD6DXFqaXZP_87n7KjdYz150Qkbk-g0MYTG2f7vLLMpRYha6-PuaQbNRnyUX3znVCWWsU8UsHrkBF1mIJspOD-7kDaNMALDj44IqIgy1vj-gC5cLAfc7iF39D_H6YR0me2bpvRFhT331mKgqAjNWyhW8RG4rjfDAhJkUc-glXxIY_996lZUkfY-5F-G1fsB0choV5U0wsa-XniqA0kZTV58kdRhf1NrjUJ8CGnLMycMME3bq"/>
+</div>
+<div class="md:col-span-9 flex flex-col justify-center">
+<h1 class="text-headline-xl font-headline-xl text-primary mb-sm">Dr. Sarah Jenkins</h1>
+<h2 class="text-headline-sm font-headline-sm text-secondary mb-md">Senior Professor of Data Science at Global Tech Institute</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mb-lg max-w-3xl">Pioneering researcher in applied machine learning and algorithmic ethics. Dedicated to translating complex statistical models into accessible, production-ready curriculum for next-generation engineers.</p>
+<div class="flex flex-wrap items-center gap-lg mb-lg">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-md font-label-md text-primary">4.9 Instructor Rating</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary">group</span>
+<span class="text-label-md font-label-md text-primary">145,000+ Learners Taught</span>
+</div>
+</div>
+<div class="mt-auto flex items-center gap-md">
+<button class="bg-primary text-on-primary text-label-md font-label-md py-sm px-lg border border-primary hover:bg-secondary transition-colors duration-200">FOLLOW INSTRUCTOR</button>
+<button class="bg-surface-container-lowest text-primary text-label-md font-label-md py-sm px-lg border border-primary hover:border-2 transition-all duration-200">MESSAGE</button>
+</div>
+</div>
+</section>
+<!-- Stats Row -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-xl">
+<div class="border border-primary p-lg text-center bg-surface-container-lowest">
+<span class="block text-headline-xl font-headline-xl text-primary mb-xs">12</span>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-widest">Active Courses</span>
+</div>
+<div class="border border-primary p-lg text-center bg-surface-container-lowest">
+<span class="block text-headline-xl font-headline-xl text-primary mb-xs">145k</span>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-widest">Total Students</span>
+</div>
+<div class="border border-primary p-lg text-center bg-surface-container-lowest">
+<span class="block text-headline-xl font-headline-xl text-primary mb-xs">18k</span>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-widest">Reviews</span>
+</div>
+<div class="border border-primary p-lg text-center bg-surface-container-lowest">
+<span class="block text-headline-xl font-headline-xl text-primary mb-xs">15</span>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-widest">Years Exp.</span>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Left Column: Main Content -->
+<div class="md:col-span-8 flex flex-col gap-xxl">
+<!-- About -->
+<section>
+<h3 class="text-headline-md font-headline-md border-b border-surface-variant pb-xs mb-md">About Instructor</h3>
+<div class="text-body-md font-body-md text-on-surface-variant space-y-md">
+<p>Dr. Jenkins holds a Ph.D. in Computer Science from MIT, specializing in probabilistic graphical models. Her pedagogical approach emphasizes rigorous mathematical foundations paired immediately with practical Python implementation.</p>
+<p>Before entering academia full-time, she spent a decade as a Lead Data Scientist at major tech conglomerates, architecting recommendation systems that operate at a global scale. She brings this enterprise-level pragmatism into every lecture.</p>
+</div>
+</section>
+<!-- Courses -->
+<section>
+<h3 class="text-headline-md font-headline-md border-b border-surface-variant pb-xs mb-md">Courses by this Instructor</h3>
+<div class="grid grid-cols-1 gap-lg">
+<article class="border border-primary p-md flex flex-col sm:flex-row gap-lg bg-surface-container-lowest hover:border-2 transition-all duration-150 group">
+<div class="w-full sm:w-48 aspect-video bg-surface-variant border border-surface-dim relative overflow-hidden">
+<img alt="Abstract visualization of data science concepts in black and white. Complex network graphs and data nodes are displayed on a stark white background with sharp black lines connecting various data points. The aesthetic is strictly monochromatic, minimal, and highly technical, reflecting an advanced academic setting without any color or rounded forms." class="w-full h-full object-cover grayscale filter mix-blend-multiply opacity-80" data-alt="Abstract visualization of data science concepts in black and white. Complex network graphs and data nodes are displayed on a stark white background with sharp black lines connecting various data points. The aesthetic is strictly monochromatic, minimal, and highly technical, reflecting an advanced academic setting without any color or rounded forms." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYOrAy33yhWTlQ5uJg0jv0TYWpL1oZmWXo9ihyuabjHi4yaD4hW0WSond7949ofrsDATEk28pu8snX3zuYZFBz48ZSPnAteD3Fj2UYuiYL_i5mx7BFHIDFxrUqLuYQ-aqss3jO7hOZmsD-MVkimgaEixGQ2qYx10ZktPh9JLa411iFa3F8xnvLm_bDZ12E4KdMJocPoBvEh8Dq_sc_5rczZhJmHTFB4_g7EQVMt-FLz7sV_BUX1Q2PaEaSvVlV4JlBU1QJPymV5wNJ"/>
+<span class="absolute top-sm left-sm bg-primary text-on-primary text-label-sm px-xs py-xs font-bold">$99</span>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="text-label-sm font-label-sm text-secondary uppercase mb-xs">Global Tech Institute</span>
+<h4 class="text-headline-sm font-headline-sm text-primary mb-sm">Advanced Machine Learning Architecture</h4>
+<div class="flex items-center gap-md text-label-sm font-label-sm text-on-surface-variant mb-md">
+<span>Advanced Level</span>
+<span>•</span>
+<span>48 Hours</span>
+</div>
+<div class="mt-auto">
+<button class="text-label-md font-label-md text-primary border-b border-primary pb-[1px] hover:text-secondary hover:border-secondary transition-colors duration-200">VIEW COURSE</button>
+</div>
+</div>
+</article>
+<article class="border border-primary p-md flex flex-col sm:flex-row gap-lg bg-surface-container-lowest hover:border-2 transition-all duration-150 group">
+<div class="w-full sm:w-48 aspect-video bg-surface-variant border border-surface-dim relative overflow-hidden">
+<img alt="Monochromatic close-up of computer code on a screen. Sharp, high-contrast black text on a pure white background displaying Python scripting for data analysis. The image is devoid of color, utilizing only stark black and white to emphasize logic, structure, and professional software engineering principles." class="w-full h-full object-cover grayscale filter mix-blend-multiply opacity-80" data-alt="Monochromatic close-up of computer code on a screen. Sharp, high-contrast black text on a pure white background displaying Python scripting for data analysis. The image is devoid of color, utilizing only stark black and white to emphasize logic, structure, and professional software engineering principles." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAafCvlGD6h4mIbVY8__fEnyQlBGjpgUpAITgA-vmXyE1Xe9-Q42qtSGYNLFIm_VKuvBGDR8A3c6WS7aLOQx9D2BJHSV6COxmLh6Fw7uPJugCGT20AVwhlSkBegpGUGBJwt5oKFOpwSIUs1Ws71PT3QbqQYJvHMjtWpdJ8xN4V5Yu0d_oBa5gnWKljuGrdgbEQEljsVZYKeKodiZ2B_3fmHPedjGsddR-eRCX9-Mhhw_nbMSIOcFMroP935J7KnrXSzOKHOpYyQXAnl"/>
+<span class="absolute top-sm left-sm bg-primary text-on-primary text-label-sm px-xs py-xs font-bold">FREE</span>
+</div>
+<div class="flex-1 flex flex-col">
+<span class="text-label-sm font-label-sm text-secondary uppercase mb-xs">LearnioX Originals</span>
+<h4 class="text-headline-sm font-headline-sm text-primary mb-sm">Python for Statistical Inference</h4>
+<div class="flex items-center gap-md text-label-sm font-label-sm text-on-surface-variant mb-md">
+<span>Intermediate Level</span>
+<span>•</span>
+<span>12 Hours</span>
+</div>
+<div class="mt-auto">
+<button class="text-label-md font-label-md text-primary border-b border-primary pb-[1px] hover:text-secondary hover:border-secondary transition-colors duration-200">VIEW COURSE</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- Reviews -->
+<section>
+<h3 class="text-headline-md font-headline-md border-b border-surface-variant pb-xs mb-md">Selected Reviews</h3>
+<div class="space-y-lg">
+<div class="border-t border-surface-variant pt-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="block text-label-md font-label-md text-primary">M. Anderson</span>
+<span class="block text-label-sm font-label-sm text-secondary">Advanced Machine Learning Architecture</span>
+</div>
+<div class="flex text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 16px;">star</span>
+</div>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">"Dr. Jenkins breaks down incredibly dense architectural concepts into manageable, structural components. The focus on raw mathematics before code implementation completely changed how I approach ML engineering."</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Sidebar -->
+<aside class="md:col-span-4 flex flex-col gap-xl">
+<!-- Associated Institutions -->
+<div class="border border-primary p-lg bg-surface-container-lowest">
+<h3 class="text-label-md font-label-md text-primary uppercase tracking-widest border-b border-primary pb-xs mb-md">Associated Institutions</h3>
+<ul class="space-y-md">
+<li class="flex items-center gap-sm">
+<div class="w-8 h-8 border border-primary flex items-center justify-center bg-primary text-on-primary">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+</div>
+<span class="text-body-sm font-body-sm text-primary">Global Tech Institute</span>
+</li>
+<li class="flex items-center gap-sm">
+<div class="w-8 h-8 border border-primary flex items-center justify-center bg-surface-container-highest">
+<span class="material-symbols-outlined text-primary text-[16px]">science</span>
+</div>
+<span class="text-body-sm font-body-sm text-primary">MIT Data Lab</span>
+</li>
+</ul>
+</div>
+<!-- Upcoming Live Classes -->
+<div class="border border-primary p-lg bg-surface-container-lowest">
+<h3 class="text-label-md font-label-md text-primary uppercase tracking-widest border-b border-primary pb-xs mb-md">Upcoming Live Classes</h3>
+<ul class="space-y-md">
+<li class="flex flex-col border-l-2 border-primary pl-sm">
+<span class="text-label-sm font-label-sm text-secondary">OCT 24 • 14:00 EST</span>
+<a class="text-body-sm font-body-sm text-primary hover:underline" href="#">Q&amp;A: Neural Network Optimization</a>
+</li>
+<li class="flex flex-col border-l-2 border-surface-variant pl-sm">
+<span class="text-label-sm font-label-sm text-secondary">NOV 02 • 10:00 EST</span>
+<a class="text-body-sm font-body-sm text-primary hover:underline" href="#">Guest Lecture: Ethical AI Design</a>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container w-full border-t border-primary mt-xxl">
+<div class="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto">
+<div class="mb-md md:mb-0">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">ACADEMIA</span>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-xs">© 2024 ACADEMIA ED-TECH. ALL RIGHTS RESERVED.</p>
+</div>
+<nav class="flex gap-lg">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all duration-150" href="#">Privacy Policy</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all duration-150" href="#">Terms of Service</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all duration-150" href="#">Accessibility</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all duration-150" href="#">Contact</a>
+</nav>
+</div>
+</footer>
+</body></html>

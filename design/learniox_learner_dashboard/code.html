@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX - Learner Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#dadada",
+                      "outline": "#7e7576",
+                      "tertiary-fixed-dim": "#c6c6c6",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "tertiary-container": "#1a1c1c",
+                      "primary-container": "#1b1b1b",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "background": "#f9f9f9",
+                      "surface-variant": "#e2e2e2",
+                      "surface": "#f9f9f9",
+                      "on-secondary-fixed-variant": "#464747",
+                      "inverse-primary": "#c6c6c6",
+                      "surface-container-low": "#f3f3f4",
+                      "on-primary-container": "#848484",
+                      "tertiary-fixed": "#e3e2e2",
+                      "surface-bright": "#f9f9f9",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#e4e2e2",
+                      "error-container": "#ffdad6",
+                      "inverse-surface": "#2f3131",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "surface-container-highest": "#e2e2e2",
+                      "primary-fixed": "#e2e2e2",
+                      "on-surface": "#1a1c1c",
+                      "on-error": "#ffffff",
+                      "outline-variant": "#cfc4c5",
+                      "primary": "#000000",
+                      "on-background": "#1a1c1c",
+                      "secondary": "#5e5e5e",
+                      "on-primary-fixed": "#1b1b1b",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary": "#000000",
+                      "surface-container": "#eeeeee",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-container": "#838484",
+                      "on-primary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed-variant": "#474747",
+                      "on-tertiary-fixed-variant": "#464747",
+                      "on-secondary-container": "#626262",
+                      "surface-tint": "#5e5e5e",
+                      "on-error-container": "#93000a",
+                      "secondary-container": "#e1dfdf",
+                      "inverse-on-surface": "#f0f1f1",
+                      "surface-container-high": "#e8e8e8",
+                      "on-surface-variant": "#4c4546"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0px",
+                      "lg": "0px",
+                      "xl": "0px",
+                      "full": "0px"
+              },
+              "spacing": {
+                      "xxl": "64px",
+                      "gutter": "24px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "xs": "4px",
+                      "xl": "48px",
+                      "container-max": "1440px",
+                      "margin-desktop": "32px",
+                      "unit": "4px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        /* Strict flat, sharp edges for enterprise look */
+        * { border-radius: 0 !important; }
+      </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen overflow-hidden flex selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar -->
+<nav class="hidden md:flex w-64 h-full border-r border-primary bg-surface flex-col p-lg transition-all duration-200 ease-in-out shrink-0 z-50 relative">
+<div class="mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">LearnioX</h1>
+<p class="font-label-md text-label-md text-secondary mt-xs">Enterprise Learning</p>
+</div>
+<div class="flex-1 overflow-y-auto pr-sm custom-scrollbar flex flex-col gap-sm">
+<!-- Active Item -->
+<a class="flex items-center gap-md p-md bg-primary text-on-primary font-bold group" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">My Courses</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">play_circle</span>
+<span class="font-label-md text-label-md">Continue Learning</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-md text-label-md">Saved Courses</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">notes</span>
+<span class="font-label-md text-label-md">Notes</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">help_center</span>
+<span class="font-label-md text-label-md">Doubts</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="font-label-md text-label-md">Tests</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">verified</span>
+<span class="font-label-md text-label-md">Certificates</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">card_membership</span>
+<span class="font-label-md text-label-md">Memberships</span>
+</a>
+</div>
+<div class="mt-auto pt-lg border-t border-primary flex flex-col gap-sm">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-md px-lg hover:bg-secondary transition-colors duration-200">
+                Upgrade Plan
+            </button>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-surface hover:bg-surface-container hover:border-2 border-primary transition-all duration-200 ease-in-out border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-background">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 flex justify-between items-center px-lg py-sm w-full h-16 border-b border-primary bg-surface transition-all duration-100">
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden p-sm text-primary hover:bg-surface-container-low transition-colors duration-100 border border-transparent">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search Bar -->
+<div class="flex-1 max-w-md mx-md hidden md:block">
+<div class="relative group flex items-center border border-[#CCCCCC] focus-within:border-primary bg-surface-container-lowest transition-colors">
+<span class="material-symbols-outlined absolute left-sm text-secondary">search</span>
+<input class="w-full pl-[40px] pr-sm py-sm bg-transparent border-none focus:ring-0 font-body-sm text-body-sm placeholder:text-secondary h-10 outline-none" placeholder="Search my courses" type="text"/>
+</div>
+</div>
+<div class="md:hidden flex-1 px-md">
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary truncate">LearnioX</h2>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-md">
+<button class="p-xs text-secondary hover:text-primary hover:bg-surface-container-low transition-all duration-100 border border-transparent flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs text-secondary hover:text-primary hover:bg-surface-container-low transition-all duration-100 border border-transparent flex items-center justify-center">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="w-8 h-8 border border-primary bg-surface-container-high overflow-hidden cursor-pointer hover:border-2 transition-all">
+<img alt="User Profile Avatar" class="w-full h-full object-cover grayscale" data-alt="A high-contrast black and white professional headshot of a person looking directly at the camera. The lighting is crisp and even, highlighting sharp features against a clean, minimal white background. The image has zero saturation, adhering strictly to a grayscale enterprise aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq4LyG_Ah1Otymovp7a0_ySVDnV9sRbIpZgr3X-oZW5DsBGykZFWiPCuFDItAQKRAqYlJyimcjtp1_2Ajo3yQbSGNk8xzOVvKpTHUSEmHddkT0dD5j3f3SBNbZ35Kgp6RQRzPCvuY937HUY3U0OehSBt7Y-wJAwbeCgyMN_9vI0kl_tWB7v343bg7lAuSFgKnUoOsqXoYaLlugPIKsx6PAvHNjAtI0O465Uy2mq0cb5I6rdYf1KyZHHGV1EisZULLXilQ94zgPJsme"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop custom-scrollbar pb-xxl">
+<div class="max-w-container-max mx-auto flex flex-col gap-xl">
+<!-- Welcome & Summary -->
+<section>
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary mb-xs">Welcome back, Alex.</h2>
+<p class="font-body-md text-body-md text-secondary">You have 2 classes scheduled today and 1 assignment due.</p>
+</section>
+<!-- Stats Row -->
+<section class="grid grid-cols-2 md:grid-cols-5 gap-md">
+<!-- Stat Card 1 -->
+<div class="border border-primary bg-surface p-lg flex flex-col justify-between hover:border-2 transition-all group min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest">Enrolled</span>
+<div class="flex items-end justify-between mt-md">
+<span class="font-headline-xl text-headline-xl font-bold text-primary">12</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">school</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="border border-[#E5E5E5] bg-surface p-lg flex flex-col justify-between hover:border-primary hover:border-2 transition-all group min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest">Completed</span>
+<div class="flex items-end justify-between mt-md">
+<span class="font-headline-xl text-headline-xl font-bold text-primary">48</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">task_alt</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="border border-[#E5E5E5] bg-surface p-lg flex flex-col justify-between hover:border-primary hover:border-2 transition-all group min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest">Certificates</span>
+<div class="flex items-end justify-between mt-md">
+<span class="font-headline-xl text-headline-xl font-bold text-primary">03</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">workspace_premium</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="border border-[#E5E5E5] bg-surface p-lg flex flex-col justify-between hover:border-primary hover:border-2 transition-all group min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest">Memberships</span>
+<div class="flex items-end justify-between mt-md">
+<span class="font-headline-xl text-headline-xl font-bold text-primary">01</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">card_membership</span>
+</div>
+</div>
+<!-- Stat Card 5 -->
+<div class="border border-[#E5E5E5] bg-surface p-lg flex flex-col justify-between hover:border-primary hover:border-2 transition-all group min-h-[120px]">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest">Pending Doubts</span>
+<div class="flex items-end justify-between mt-md">
+<span class="font-headline-xl text-headline-xl font-bold text-primary">02</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">help_center</span>
+</div>
+</div>
+</section>
+<!-- Main Content Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Left Column (Wider) -->
+<div class="lg:col-span-2 flex flex-col gap-xl">
+<!-- Continue Learning (Hero Card) -->
+<section>
+<div class="flex justify-between items-end mb-md border-b border-[#E5E5E5] pb-xs">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">Continue Learning</h3>
+<a class="font-label-md text-label-md text-secondary hover:text-primary hover:underline uppercase tracking-widest" href="#">View All</a>
+</div>
+<div class="border border-primary bg-surface flex flex-col md:flex-row group hover:border-2 transition-all">
+<div class="md:w-2/5 aspect-video md:aspect-auto border-b md:border-b-0 md:border-r border-primary relative overflow-hidden bg-surface-container-high">
+<img alt="Code on screen" class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-500" data-alt="A crisp, high-contrast black and white photograph of lines of code displayed on a modern computer monitor. The image is stark and minimalist, utilizing deep blacks and bright whites to emphasize the structural nature of software development. The lighting is cold and clinical, perfectly aligning with a stark enterprise aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuvz58DS0FA9ocG7en_j34Yf5XlLuIXEl_RwbEOpLa7sixHBVDKk5NVSemW_pHp3y6uTq9Q8-JTWcyDCiW7JYn9mwUMR3si1EE1m7DxAgRQ1wDvvDKfIf-_OiGsLkZWxz2SkLVwp77FElv0kVp34I3CBeUbo2ruIYgjW9riqNEaXokY-9a1vfF7VXE4P25Qz5k3YEO9xVgPKPplM1PtcAaU7C0O1Tcq12gG_tEGJIhSgwQQWvIRlFFp20aJjJt0LcOG0LLkwErarOe"/>
+</div>
+<div class="p-lg flex-1 flex flex-col justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-xs">TechGlobal Institute</p>
+<h4 class="font-headline-sm text-headline-sm font-bold text-primary mb-sm line-clamp-2">Advanced Python for Data Science</h4>
+<p class="font-body-sm text-body-sm text-secondary mb-md">Last watched: 1.2 Memory Management</p>
+</div>
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-xs">
+<span class="text-primary font-bold">65% Completed</span>
+<span class="text-secondary">3h 45m left</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high border border-primary mb-lg">
+<div class="h-full bg-primary" style="width: 65%;"></div>
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md py-sm px-lg hover:bg-secondary transition-colors border border-primary w-fit uppercase tracking-widest">
+                                            Resume Course
+                                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Enrolled Courses Grid -->
+<section>
+<div class="flex justify-between items-end mb-md border-b border-[#E5E5E5] pb-xs">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">My Enrolled Courses</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Course Card 1 -->
+<div class="border border-[#E5E5E5] bg-surface p-md hover:border-primary hover:border-2 transition-all flex flex-col">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-xs">Quantum Logic</p>
+<h4 class="font-body-lg text-body-lg font-bold text-primary mb-sm line-clamp-2 leading-tight">Enterprise Architecture Patterns</h4>
+<div class="mt-auto pt-md border-t border-[#E5E5E5] flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-label-sm text-label-sm text-secondary">12h Total</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold">0%</span>
+</div>
+</div>
+<!-- Course Card 2 -->
+<div class="border border-[#E5E5E5] bg-surface p-md hover:border-primary hover:border-2 transition-all flex flex-col">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-xs">DataSys</p>
+<h4 class="font-body-lg text-body-lg font-bold text-primary mb-sm line-clamp-2 leading-tight">Machine Learning Operations (MLOps)</h4>
+<div class="mt-auto pt-md border-t border-[#E5E5E5] flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-label-sm text-label-sm text-secondary">24h Total</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold">12%</span>
+</div>
+</div>
+<!-- Course Card 3 -->
+<div class="border border-[#E5E5E5] bg-surface p-md hover:border-primary hover:border-2 transition-all flex flex-col">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-xs">UX Academy</p>
+<h4 class="font-body-lg text-body-lg font-bold text-primary mb-sm line-clamp-2 leading-tight">Design Systems for Scale</h4>
+<div class="mt-auto pt-md border-t border-[#E5E5E5] flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-label-sm text-label-sm text-secondary">8h Total</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold">89%</span>
+</div>
+</div>
+<!-- Course Card 4 -->
+<div class="border border-[#E5E5E5] bg-surface p-md hover:border-primary hover:border-2 transition-all flex flex-col">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-xs">CyberSec Institute</p>
+<h4 class="font-body-lg text-body-lg font-bold text-primary mb-sm line-clamp-2 leading-tight">Zero Trust Network Architecture</h4>
+<div class="mt-auto pt-md border-t border-[#E5E5E5] flex justify-between items-center">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-label-sm text-label-sm text-secondary">40h Total</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold">45%</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column (Sidebar-esque) -->
+<div class="flex flex-col gap-xl">
+<!-- Upcoming Live Classes -->
+<section>
+<div class="flex justify-between items-end mb-md border-b border-[#E5E5E5] pb-xs">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">Upcoming Classes</h3>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="border border-[#E5E5E5] p-sm hover:border-primary transition-colors flex gap-md items-center group cursor-pointer bg-surface">
+<div class="w-12 h-12 border border-primary flex flex-col justify-center items-center bg-primary text-on-primary shrink-0">
+<span class="font-label-sm text-label-sm uppercase leading-none">Oct</span>
+<span class="font-headline-sm text-headline-sm font-bold leading-none mt-xs">12</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-secondary mb-xs">10:00 AM - 11:30 AM</p>
+<h5 class="font-body-md text-body-md font-bold text-primary group-hover:underline">System Design Q&amp;A</h5>
+</div>
+</div>
+<div class="border border-[#E5E5E5] p-sm hover:border-primary transition-colors flex gap-md items-center group cursor-pointer bg-surface">
+<div class="w-12 h-12 border border-[#E5E5E5] group-hover:border-primary flex flex-col justify-center items-center bg-surface-container text-primary shrink-0 transition-colors">
+<span class="font-label-sm text-label-sm uppercase leading-none">Oct</span>
+<span class="font-headline-sm text-headline-sm font-bold leading-none mt-xs">15</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-secondary mb-xs">02:00 PM - 04:00 PM</p>
+<h5 class="font-body-md text-body-md font-bold text-primary group-hover:underline">Advanced React Patterns Lab</h5>
+</div>
+</div>
+</div>
+</section>
+<!-- Certificates -->
+<section>
+<div class="flex justify-between items-end mb-md border-b border-[#E5E5E5] pb-xs">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">Certificates</h3>
+<a class="font-label-md text-label-md text-secondary hover:text-primary hover:underline uppercase tracking-widest" href="#">All</a>
+</div>
+<div class="border border-[#E5E5E5] bg-surface p-md hover:border-primary transition-colors cursor-pointer group flex items-start gap-md">
+<div class="w-10 h-10 border border-primary flex justify-center items-center shrink-0">
+<span class="material-symbols-outlined text-primary">workspace_premium</span>
+</div>
+<div>
+<h5 class="font-body-md text-body-md font-bold text-primary group-hover:underline line-clamp-1">AWS Solutions Architect</h5>
+<p class="font-label-sm text-label-sm text-secondary mt-xs">Issued: Sep 2023</p>
+</div>
+</div>
+</section>
+<!-- Notes & Doubts (Bento-ish split) -->
+<section class="grid grid-cols-2 gap-sm">
+<div class="border border-[#E5E5E5] bg-surface p-md hover:border-primary transition-colors flex flex-col cursor-pointer group">
+<div class="flex justify-between items-center mb-md pb-xs border-b border-[#E5E5E5]">
+<h3 class="font-label-md text-label-md font-bold text-primary uppercase tracking-widest">Notes</h3>
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:text-primary">notes</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-3 group-hover:text-primary transition-colors">Review binary tree inversion logic for upcoming technical screen. Need to optimize space complexity.</p>
+</div>
+<div class="border border-[#E5E5E5] bg-surface p-md hover:border-primary transition-colors flex flex-col cursor-pointer group">
+<div class="flex justify-between items-center mb-md pb-xs border-b border-[#E5E5E5]">
+<h3 class="font-label-md text-label-md font-bold text-primary uppercase tracking-widest">Doubts</h3>
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:text-primary">help_center</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-3 group-hover:text-primary transition-colors"><span class="font-bold text-primary">Pending:</span> Clarification needed on Docker volume persistence in module 4.2.</p>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

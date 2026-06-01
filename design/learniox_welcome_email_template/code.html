@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX - Welcome Email</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "surface": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "surface-container-low": "#f3f3f4",
+                        "surface-dim": "#dadada",
+                        "surface-bright": "#f9f9f9",
+                        "on-background": "#1a1c1c",
+                        "tertiary": "#000000",
+                        "inverse-on-surface": "#f0f1f1",
+                        "secondary": "#5e5e5e",
+                        "outline": "#7e7576",
+                        "on-surface": "#1a1c1c",
+                        "surface-container": "#eeeeee",
+                        "inverse-primary": "#c6c6c6",
+                        "background": "#f9f9f9",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-primary-fixed-variant": "#474747",
+                        "inverse-surface": "#2f3131",
+                        "secondary-container": "#e1dfdf",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed": "#e4e2e2",
+                        "on-tertiary-container": "#838484",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#cfc4c5",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#e3e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-container": "#626262",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#5e5e5e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-surface-variant": "#4c4546",
+                        "primary-fixed": "#e2e2e2",
+                        "tertiary-container": "#1a1c1c",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#1b1b1b",
+                        "primary-container": "#1b1b1b",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-primary-container": "#848484"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "unit": "4px",
+                        "xl": "48px",
+                        "margin-desktop": "32px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "container-max": "1440px",
+                        "xxl": "64px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "24px"
+                    },
+                    fontFamily: {
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    fontSize: {
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-container font-body-md text-body-md text-on-surface antialiased min-h-screen flex items-center justify-center p-md sm:p-xl">
+<!-- Transactional Email Wrapper (Mimicking email client view) -->
+<div class="w-full max-w-[640px] bg-surface-container-lowest border border-primary flex flex-col mx-auto shadow-none">
+<!-- TopNavBar (Adapted as Header) -->
+<header class="bg-surface text-primary w-full border-b border-primary flex justify-between items-center px-lg py-md">
+<div class="font-headline-md text-headline-md font-bold text-primary uppercase tracking-tighter">LearnioX</div>
+</header>
+<!-- Main Email Canvas -->
+<main class="flex flex-col px-lg py-xxl gap-xl">
+<!-- Hero Section -->
+<section class="flex flex-col gap-md">
+<h1 class="font-headline-xl text-headline-xl text-primary m-0">Welcome to LearnioX</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant m-0">
+                    We're glad to have you on board. Start exploring professional courses today.
+                </p>
+</section>
+<!-- User Details Table (Structural Grouping) -->
+<section class="w-full border border-surface-variant">
+<div class="bg-surface px-md py-sm border-b border-surface-variant">
+<h2 class="font-label-md text-label-md text-primary uppercase">Account Details</h2>
+</div>
+<div class="flex flex-col">
+<!-- Row 1 -->
+<div class="flex flex-col sm:flex-row border-b border-surface-variant last:border-b-0">
+<div class="sm:w-1/3 bg-surface-container-lowest px-md py-sm font-label-md text-label-md text-secondary uppercase flex items-center">
+                            Name
+                        </div>
+<div class="sm:w-2/3 bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm text-on-surface">
+                            Jane Doe
+                        </div>
+</div>
+<!-- Row 2 -->
+<div class="flex flex-col sm:flex-row border-b border-surface-variant last:border-b-0">
+<div class="sm:w-1/3 bg-surface-container-lowest px-md py-sm font-label-md text-label-md text-secondary uppercase flex items-center">
+                            Email
+                        </div>
+<div class="sm:w-2/3 bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm text-on-surface">
+                            jane.doe@enterprise-corp.com
+                        </div>
+</div>
+<!-- Row 3 -->
+<div class="flex flex-col sm:flex-row border-b border-surface-variant last:border-b-0">
+<div class="sm:w-1/3 bg-surface-container-lowest px-md py-sm font-label-md text-label-md text-secondary uppercase flex items-center">
+                            Account Type
+                        </div>
+<div class="sm:w-2/3 bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm text-on-surface">
+                            Professional Tier
+                        </div>
+</div>
+</div>
+</section>
+<!-- Call to Action -->
+<section class="pt-sm">
+<a class="inline-block bg-primary text-on-primary font-label-md text-label-md px-xl py-md uppercase text-center transition-none hover:bg-surface-tint" href="#">
+                    Get Started
+                </a>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface text-primary w-full border-t border-primary flex flex-col items-center gap-sm px-lg py-xl">
+<div class="font-label-md text-label-md font-bold uppercase tracking-tighter">LearnioX</div>
+<nav class="flex flex-wrap justify-center gap-md font-label-sm text-label-sm text-secondary">
+<a class="hover:text-primary transition-none text-secondary" href="#">Support</a>
+<a class="hover:text-primary transition-none text-secondary" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-none text-secondary" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-none text-secondary" href="#">Unsubscribe</a>
+</nav>
+<div class="font-label-sm text-label-sm text-secondary mt-sm">
+                © 2024 LearnioX Ed-Tech. All rights reserved.
+            </div>
+</footer>
+</div>
+</body></html>

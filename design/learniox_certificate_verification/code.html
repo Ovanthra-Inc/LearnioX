@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify Certificate - LearnioX</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#1b1b1b",
+                        "secondary-fixed": "#e4e2e2",
+                        "primary-fixed": "#e2e2e2",
+                        "inverse-on-surface": "#f0f1f1",
+                        "surface-tint": "#5e5e5e",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#626262",
+                        "error-container": "#ffdad6",
+                        "on-background": "#1a1c1c",
+                        "inverse-primary": "#c6c6c6",
+                        "secondary": "#5e5e5e",
+                        "outline": "#7e7576",
+                        "surface-variant": "#e2e2e2",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-container": "#eeeeee",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "surface-dim": "#dadada",
+                        "surface-container-low": "#f3f3f4",
+                        "tertiary-container": "#1a1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#000000",
+                        "surface-bright": "#f9f9f9",
+                        "inverse-surface": "#2f3131",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-primary-container": "#848484",
+                        "on-tertiary-container": "#838484",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#000000",
+                        "outline-variant": "#cfc4c5",
+                        "background": "#f9f9f9",
+                        "secondary-container": "#e1dfdf",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-surface-variant": "#4c4546",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-container-high": "#e8e8e8",
+                        "primary-container": "#1b1b1b",
+                        "surface": "#f9f9f9",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "48px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xxl": "64px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: #000000; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Enforce minimalist strict styles */
+        * { border-radius: 0 !important; box-shadow: none !important; }
+        .btn-primary { background-color: #000000; color: #ffffff; border: 1px solid #000000; transition: background-color 0.2s; }
+        .btn-primary:hover { background-color: #666666; }
+        .btn-outline { background-color: transparent; color: #000000; border: 1px solid #000000; transition: border-width 0.2s; }
+        .btn-outline:hover { border-width: 2px; }
+        .input-strict { border: 1px solid #CCCCCC; background-color: #ffffff; }
+        .input-strict:focus { border: 1px solid #000000; outline: none; box-shadow: none; }
+        .container-strict { border: 1px solid #E5E5E5; }
+        .card-strict { border: 1px solid #000000; }
+        
+        /* Utility for hiding sections for demo purposes */
+        .hidden-demo { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-surface-container-lowest">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface docked full-width top-0 border-b border-primary dark:border-on-surface flat no shadows transition-none duration-0 z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-16">
+<div class="flex items-center">
+<a class="text-headline-md font-headline-md font-black text-primary dark:text-on-surface uppercase tracking-tighter" href="#">LearnioX</a>
+</div>
+<div class="hidden md:flex gap-gutter items-center font-headline-sm text-headline-sm font-label-md text-label-md">
+<a class="text-primary dark:text-on-surface font-bold border-b-2 border-primary dark:border-on-surface pb-1" href="#">Verify Certificate</a>
+<a class="text-secondary dark:text-on-surface-variant hover:bg-primary hover:text-on-primary dark:hover:bg-on-surface dark:hover:text-surface px-2 py-1" href="#">Explore Courses</a>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center justify-start pt-xxl pb-xxl px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto gap-xl">
+<!-- Header Section -->
+<section class="text-center flex flex-col gap-sm w-full max-w-2xl">
+<h1 class="font-headline-xl text-headline-xl uppercase text-primary tracking-tight">Verify a Certificate</h1>
+<p class="font-body-lg text-body-lg text-secondary">Enter the certificate verification code to confirm authenticity.</p>
+</section>
+<!-- Verification Form -->
+<section class="w-full max-w-md">
+<form class="flex flex-col gap-lg" id="verifyForm">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md uppercase text-primary" for="certificateCode">Verification Code</label>
+<input class="input-strict font-body-md text-body-md p-md w-full" id="certificateCode" name="certificateCode" placeholder="e.g. LNX-9482-ABC" required="" type="text"/>
+</div>
+<button class="btn-primary font-label-md text-label-md uppercase py-md px-lg w-full tracking-wider" onclick="simulateVerification()" type="button">Verify</button>
+</form>
+</section>
+<!-- Dynamic Results Area -->
+<div class="w-full max-w-3xl mt-xl hidden-demo flex-col gap-xl" id="resultsArea">
+<!-- Verified Result State -->
+<section class="card-strict p-lg flex flex-col gap-lg bg-surface-container-lowest hidden-demo" id="verifiedState">
+<div class="flex items-center gap-sm border-b border-surface-container p-sm pb-md">
+<span class="material-symbols-outlined text-headline-lg font-bold" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<h2 class="font-headline-lg text-headline-lg uppercase text-primary tracking-tight">Verified</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg border-b border-surface-container pb-lg">
+<div class="flex flex-col gap-unit">
+<span class="font-label-md text-label-md text-secondary uppercase">Learner Name</span>
+<span class="font-body-lg text-body-lg font-semibold text-primary">Jane Doe</span>
+</div>
+<div class="flex flex-col gap-unit">
+<span class="font-label-md text-label-md text-secondary uppercase">Course Name</span>
+<span class="font-body-lg text-body-lg font-semibold text-primary">Advanced Architecture Principles</span>
+</div>
+<div class="flex flex-col gap-unit">
+<span class="font-label-md text-label-md text-secondary uppercase">Institution Name</span>
+<span class="font-body-lg text-body-lg font-semibold text-primary">Global Design Institute</span>
+</div>
+<div class="flex flex-col gap-unit">
+<span class="font-label-md text-label-md text-secondary uppercase">Completion Date</span>
+<span class="font-body-lg text-body-lg font-semibold text-primary">October 12, 2023</span>
+</div>
+<div class="flex flex-col gap-unit">
+<span class="font-label-md text-label-md text-secondary uppercase">Certificate ID</span>
+<span class="font-body-lg text-body-lg font-semibold text-primary font-mono">LNX-9482-ABC</span>
+</div>
+<div class="flex flex-col gap-unit">
+<span class="font-label-md text-label-md text-secondary uppercase">Issued Date</span>
+<span class="font-body-lg text-body-lg font-semibold text-primary">October 15, 2023</span>
+</div>
+</div>
+<div class="flex justify-end pt-sm">
+<button class="btn-outline font-label-md text-label-md uppercase py-md px-lg tracking-wider">View Certificate</button>
+</div>
+</section>
+<!-- Invalid Result State -->
+<section class="card-strict p-lg flex flex-col gap-lg bg-surface-container-lowest hidden-demo" id="invalidState">
+<div class="flex items-center gap-sm border-b border-surface-container p-sm pb-md">
+<span class="material-symbols-outlined text-headline-lg font-bold" data-icon="error" data-weight="fill" style="font-variation-settings: 'FILL' 1;">error</span>
+<h2 class="font-headline-lg text-headline-lg uppercase text-primary tracking-tight">Not Found</h2>
+</div>
+<div class="pb-lg">
+<p class="font-body-lg text-body-lg text-primary">We could not find a certificate matching the code provided. Please check the code and try again.</p>
+</div>
+<div class="flex justify-start">
+<button class="btn-primary font-label-md text-label-md uppercase py-md px-lg tracking-wider" onclick="resetVerification()">Try Again</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface dark:bg-surface full-width bottom-0 border-t border-primary dark:border-on-surface flat no shadows transition-none">
+<div class="w-full py-lg px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md max-w-container-max mx-auto font-body-sm text-body-sm font-label-sm text-label-sm text-primary dark:text-on-surface">
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-on-surface">
+                LearnioX
+            </div>
+<div>
+                © 2024 LearnioX. All rights reserved. Official Certification Authority.
+            </div>
+<div class="flex gap-md">
+<a class="text-secondary dark:text-on-surface-variant hover:underline hover:text-primary dark:hover:text-on-surface" href="#">Privacy Policy</a>
+<a class="text-secondary dark:text-on-surface-variant hover:underline hover:text-primary dark:hover:text-on-surface" href="#">Terms of Service</a>
+<a class="text-secondary dark:text-on-surface-variant hover:underline hover:text-primary dark:hover:text-on-surface" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+<script>
+        function simulateVerification() {
+            const codeInput = document.getElementById('certificateCode').value.trim();
+            const resultsArea = document.getElementById('resultsArea');
+            const verifiedState = document.getElementById('verifiedState');
+            const invalidState = document.getElementById('invalidState');
+
+            if (!codeInput) return;
+
+            // Reset view
+            resultsArea.classList.remove('hidden-demo');
+            verifiedState.classList.add('hidden-demo');
+            invalidState.classList.add('hidden-demo');
+            resultsArea.style.display = 'flex';
+
+            // Simple mock logic: if it contains 'LNX', show verified, else invalid
+            if (codeInput.toUpperCase().includes('LNX')) {
+                verifiedState.classList.remove('hidden-demo');
+            } else {
+                invalidState.classList.remove('hidden-demo');
+            }
+        }
+
+        function resetVerification() {
+            document.getElementById('certificateCode').value = '';
+            document.getElementById('resultsArea').style.display = 'none';
+            document.getElementById('verifiedState').classList.add('hidden-demo');
+            document.getElementById('invalidState').classList.add('hidden-demo');
+        }
+    </script>
+</body></html>

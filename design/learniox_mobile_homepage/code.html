@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX - Master Your Future</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#626262",
+                    "on-background": "#1a1c1c",
+                    "background": "#f9f9f9",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "surface-tint": "#5e5e5e",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-tertiary-container": "#838484",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f9f9f9",
+                    "surface-container-high": "#e8e8e8",
+                    "on-primary-fixed-variant": "#474747",
+                    "on-surface": "#1a1c1c",
+                    "surface-container": "#eeeeee",
+                    "on-surface-variant": "#4c4546",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#c6c6c6",
+                    "surface-variant": "#e2e2e2",
+                    "primary-container": "#1b1b1b",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#e2e2e2",
+                    "tertiary-container": "#1a1c1c",
+                    "surface-container-low": "#f3f3f4",
+                    "primary": "#000000",
+                    "surface-bright": "#f9f9f9",
+                    "secondary-container": "#e1dfdf",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "secondary-fixed": "#e4e2e2",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#cfc4c5",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#7e7576",
+                    "on-primary-container": "#848484",
+                    "secondary": "#5e5e5e",
+                    "on-primary-fixed": "#1b1b1b",
+                    "inverse-surface": "#2f3131",
+                    "primary-fixed-dim": "#c6c6c6",
+                    "on-secondary-fixed-variant": "#464747",
+                    "tertiary-fixed": "#e3e2e2",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "tertiary": "#000000",
+                    "inverse-on-surface": "#f0f1f1",
+                    "surface-dim": "#dadada",
+                    "on-tertiary-fixed-variant": "#464747"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "0px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "margin-desktop": "32px",
+                    "unit": "4px",
+                    "xxl": "64px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "xl": "48px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "headline-xl": [
+                            "Inter"
+                    ],
+                    "headline-sm": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "letterSpacing": "0",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-sm": [
+                            "11px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "label-md": [
+                            "12px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-xl": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "letterSpacing": "0",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "letterSpacing": "0",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        /* Strict minimal scrollbar for horizontal scrolling areas */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Ensure zero rounding globally */
+        * {
+            border-radius: 0 !important;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md md:hidden pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-primary flex justify-between items-center w-full px-margin-mobile h-16 sticky top-0 z-40">
+<button aria-label="Menu" class="text-primary hover:bg-secondary-container p-sm flex items-center justify-center transition-none">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm-mobile font-black tracking-tighter text-primary">LEARN_PRO</h1>
+<button aria-label="Search" class="text-primary hover:bg-secondary-container p-sm flex items-center justify-center transition-none">
+<span class="material-symbols-outlined text-[24px]">search</span>
+</button>
+</header>
+<main class="w-full flex flex-col">
+<!-- Search Bar -->
+<section class="px-margin-mobile py-md bg-surface border-b border-surface-container-highest">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-secondary text-[20px]">search</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant py-sm pl-xl pr-sm font-body-sm text-body-sm text-on-background focus:outline-none focus:border-primary focus:ring-0 placeholder-secondary transition-none" placeholder="Search courses, academies, subjects..." type="text"/>
+</div>
+</section>
+<!-- Hero Section -->
+<section class="px-margin-mobile py-xxl bg-surface border-b border-primary flex flex-col gap-lg items-start">
+<div class="flex flex-col gap-sm">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Master Your Future</h2>
+<p class="font-body-md text-body-md text-secondary max-w-[280px]">The OS for professional academies.</p>
+</div>
+<div class="w-full flex flex-col gap-sm mt-md">
+<button class="w-full bg-primary text-on-primary border border-primary py-md px-lg font-label-md text-label-md hover:bg-[#666666] transition-none flex justify-center items-center">
+                    Explore Courses
+                </button>
+<button class="w-full bg-surface-container-lowest text-primary border border-primary py-md px-lg font-label-md text-label-md hover:border-[2px] transition-none flex justify-center items-center">
+                    For Institutions
+                </button>
+</div>
+</section>
+<!-- Trending Courses (Horizontal Scroll) -->
+<section class="py-xl border-b border-surface-container-highest">
+<div class="px-margin-mobile mb-md flex justify-between items-end">
+<h3 class="font-headline-sm text-headline-sm-mobile text-primary">Trending Courses</h3>
+<a class="font-label-sm text-label-sm text-secondary uppercase hover:underline" href="#">See All</a>
+</div>
+<div class="w-full overflow-x-auto hide-scrollbar pl-margin-mobile pr-margin-mobile pb-sm">
+<div class="flex gap-md w-max">
+<!-- Card 1 -->
+<div class="w-[260px] bg-surface-container-lowest border border-primary flex flex-col group cursor-pointer hover:border-[2px] transition-all duration-75">
+<div class="h-[140px] w-full bg-surface-container border-b border-primary relative overflow-hidden" data-alt="A high-contrast black and white photograph of a modern software development workspace. The scene features a sleek laptop on a minimalist desk, surrounded by subtle geometric architectural lines. The lighting is harsh and dramatic, emphasizing the strict monochromatic aesthetic. The mood is intense, focused, and professional, perfectly aligning with an architectural UI design." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCoaRnahu9LnlB_DtO7xCwTjFJBpdy9HSvFHPQjFxFHVyz3VyIFXaG9B9xDdhqE8DSTDxIE7OEDpFIBS03apwT3ef3yqGgcqZJLrjeIMRnq93ONrrPbCcDRDAPB3iXkYFkNzXtQMgkHizpttwcjDJDNuvSArnxtdjyMHRIRFJg6cGcqL65RZwoDRDRj93l5q723U3-AECORH19tsnQ2JSBf8Wk-PSr84j9_f6HbcMa2QN9xOUEcRMIvfSqRTcWTBoJBSq206CP_TXlf'); background-size: cover; background-position: center; filter: grayscale(100%);">
+<div class="absolute top-sm right-sm bg-primary text-on-primary px-sm py-xs font-label-sm text-label-sm border border-on-primary">
+                                 Bestseller
+                             </div>
+</div>
+<div class="p-md flex flex-col gap-sm flex-grow">
+<span class="font-label-sm text-label-sm text-secondary uppercase">Tech Academy</span>
+<h4 class="font-headline-sm text-body-lg text-primary leading-tight line-clamp-2">Advanced Systems Design &amp; Architecture</h4>
+<div class="mt-auto pt-md flex justify-between items-center">
+<span class="font-headline-sm text-headline-sm-mobile text-primary">₹2,499</span>
+<button class="bg-surface-container-lowest border border-primary px-sm py-xs font-label-sm text-label-sm text-primary group-hover:bg-primary group-hover:text-on-primary transition-none">
+                                    View
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="w-[260px] bg-surface-container-lowest border border-primary flex flex-col group cursor-pointer hover:border-[2px] transition-all duration-75">
+<div class="h-[140px] w-full bg-surface-container border-b border-primary relative overflow-hidden" data-alt="A strict black and white image of a complex data visualization dashboard on a large monitor. The lines of the graphs are sharp and distinct against a dark background. The lighting is stark and minimal, reflecting an environment of serious data analysis and enterprise workflow. The overall feel is highly structural and purely functional." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCF7biyPK-uex_IPWtp3ktIiYkMYwgJTCH35yrbrPaSu9Fi5xA4KhszXsfQZw7TvtXN60Q7iD9MBofSWUCgWD5iC3NrA27v72oldSgeRm4ppq6NCKwvwWELrkdy_QbRMpAOws76grAXxQgPb8KpekopvxuNQDR4KPMnGIm5mjJxnpQgzi8BkPEKcD6Z_pgikFe5bndmaI2BpfixA6CljFe1E7jvI8iAm8XrCttdCA7pheSKtDFMPxBXNKkAvTGISmVxQgO3D1aMYyfS'); background-size: cover; background-position: center; filter: grayscale(100%);">
+</div>
+<div class="p-md flex flex-col gap-sm flex-grow">
+<span class="font-label-sm text-label-sm text-secondary uppercase">Data Institute</span>
+<h4 class="font-headline-sm text-body-lg text-primary leading-tight line-clamp-2">Mastering Data Analytics for Enterprise</h4>
+<div class="mt-auto pt-md flex justify-between items-center">
+<span class="font-headline-sm text-headline-sm-mobile text-primary">₹3,999</span>
+<button class="bg-surface-container-lowest border border-primary px-sm py-xs font-label-sm text-label-sm text-primary group-hover:bg-primary group-hover:text-on-primary transition-none">
+                                    View
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories List -->
+<section class="py-xl px-margin-mobile border-b border-surface-container-highest bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm-mobile text-primary mb-md">Categories</h3>
+<ul class="flex flex-col border border-primary bg-surface-container-lowest">
+<li class="border-b border-surface-container-highest last:border-b-0">
+<a class="flex justify-between items-center p-md hover:bg-surface-container-highest transition-none group" href="#">
+<span class="font-label-md text-label-md text-primary uppercase">Coding &amp; Engineering</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-none">arrow_forward</span>
+</a>
+</li>
+<li class="border-b border-surface-container-highest last:border-b-0">
+<a class="flex justify-between items-center p-md hover:bg-surface-container-highest transition-none group" href="#">
+<span class="font-label-md text-label-md text-primary uppercase">Product Design</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-none">arrow_forward</span>
+</a>
+</li>
+<li class="border-b border-surface-container-highest last:border-b-0">
+<a class="flex justify-between items-center p-md hover:bg-surface-container-highest transition-none group" href="#">
+<span class="font-label-md text-label-md text-primary uppercase">Growth Marketing</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-none">arrow_forward</span>
+</a>
+</li>
+</ul>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 bg-surface border-t border-primary">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary text-on-primary h-full w-full transition-none" href="#">
+<span class="material-symbols-outlined text-[24px] mb-xs" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<!-- Search -->
+<a class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-highest h-full w-full transition-none" href="#">
+<span class="material-symbols-outlined text-[24px] mb-xs">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</a>
+<!-- Courses -->
+<a class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-highest h-full w-full transition-none" href="#">
+<span class="material-symbols-outlined text-[24px] mb-xs">school</span>
+<span class="font-label-sm text-label-sm">Courses</span>
+</a>
+<!-- My Learning -->
+<a class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-highest h-full w-full transition-none" href="#">
+<span class="material-symbols-outlined text-[24px] mb-xs">import_contacts</span>
+<span class="font-label-sm text-label-sm">My Learning</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-highest h-full w-full transition-none" href="#">
+<span class="material-symbols-outlined text-[24px] mb-xs">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</body></html>

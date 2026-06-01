@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Institution Teachers - LearnioX</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-variant": "#cfc4c5",
+                      "on-surface": "#1a1c1c",
+                      "tertiary-container": "#1a1c1c",
+                      "on-tertiary-container": "#838484",
+                      "on-error": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "surface-container-lowest": "#ffffff",
+                      "on-background": "#1a1c1c",
+                      "primary": "#000000",
+                      "surface-container-high": "#e8e8e8",
+                      "secondary": "#5e5e5e",
+                      "on-tertiary-fixed-variant": "#464747",
+                      "surface-container": "#eeeeee",
+                      "surface-bright": "#f9f9f9",
+                      "surface-container-low": "#f3f3f4",
+                      "surface-tint": "#5e5e5e",
+                      "outline": "#7e7576",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#f0f1f1",
+                      "tertiary-fixed": "#e3e2e2",
+                      "surface-dim": "#dadada",
+                      "on-primary-container": "#848484",
+                      "tertiary-fixed-dim": "#c6c6c6",
+                      "on-primary-fixed": "#1b1b1b",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#000000",
+                      "primary-fixed": "#e2e2e2",
+                      "on-secondary-container": "#626262",
+                      "inverse-surface": "#2f3131",
+                      "on-surface-variant": "#4c4546",
+                      "on-primary-fixed-variant": "#474747",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "on-secondary-fixed-variant": "#464747",
+                      "secondary-fixed": "#e4e2e2",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#e2e2e2",
+                      "background": "#f9f9f9",
+                      "secondary-container": "#e1dfdf",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "primary-container": "#1b1b1b",
+                      "inverse-primary": "#c6c6c6",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#e2e2e2",
+                      "surface": "#f9f9f9"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0",
+                      "lg": "0",
+                      "xl": "0",
+                      "full": "0"
+              },
+              "spacing": {
+                      "xxl": "64px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "xl": "48px",
+                      "unit": "4px",
+                      "container-max": "1440px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "lg": "24px",
+                      "margin-desktop": "32px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+      </style>
+</head>
+<body class="bg-surface-container-lowest text-primary min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="w-full h-xxl bg-surface dark:bg-on-surface border-b border-on-surface dark:border-surface text-primary dark:text-on-primary font-headline-sm text-headline-sm dark:font-headline-sm dark:text-headline-sm transition-none">
+<div class="flex justify-between items-center px-margin-desktop max-w-container-max mx-auto h-full">
+<div class="flex items-center gap-gutter">
+<img alt="LearnioX" class="h-8 object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0ujz4qsi_j8Rh1ZkfgMQMjZ8Iw-RaHM6cHYI3hyF8Ccd82G4Kjnfq0livPftLk7xPssp1K8-FObPWN22rQLw-N37g6TB_YOYePSDpXiLzmoUpR9jdettkjX-32xwqKwMMJojTSmkKsWdbZWxcfWudQL8NPL_MICH8ayVu4EyPbya-cTBm5HO-HIXAsoFNKtKCrqTEnvJqbtd1SJUSN_KbVFscpSzQE7rOgARAyQk9AcuTYAWZtwQaeJRwMY"/>
+<span class="font-headline-md text-headline-md font-black tracking-tighter text-on-surface dark:text-surface ml-sm hidden md:block">INSTITUTION</span>
+</div>
+<nav class="hidden md:flex gap-gutter items-center">
+<a class="text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-primary-fixed hover:underline" href="#">Home</a>
+<a class="text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-primary-fixed hover:underline" href="#">Courses</a>
+<a class="text-on-surface dark:text-surface font-bold border-b-2 border-on-surface dark:border-surface pb-1 transition-none hover:text-primary dark:hover:text-primary-fixed hover:underline" href="#">Teachers</a>
+<a class="text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-primary-fixed hover:underline" href="#">Membership</a>
+<a class="text-secondary dark:text-on-secondary-container hover:text-primary dark:hover:text-primary-fixed hover:underline" href="#">Reviews</a>
+</nav>
+<div class="flex items-center gap-md">
+<div class="hidden lg:flex items-center border border-on-surface px-md py-sm">
+<span class="material-symbols-outlined mr-sm text-on-surface">search</span>
+<input class="bg-transparent border-none outline-none text-body-sm font-body-sm text-on-surface placeholder:text-secondary focus:ring-0 w-48" placeholder="Search..." type="text"/>
+</div>
+<a class="font-label-md text-label-md text-on-surface dark:text-surface hover:underline" href="#">LOGIN</a>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-xl flex flex-col gap-xl">
+<!-- Header Section -->
+<section class="flex flex-col gap-md">
+<div>
+<h1 class="font-headline-xl text-headline-xl font-bold uppercase tracking-tight">Teachers</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-sm">Learn from experienced instructors at this academy.</p>
+</div>
+<!-- Filter Bar -->
+<div class="w-full border border-primary grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-primary bg-surface-container-lowest mt-md">
+<div class="p-sm flex flex-col">
+<label class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-xs">Subject</label>
+<select class="w-full bg-transparent border-none text-body-md font-body-md focus:ring-0 p-0 cursor-pointer appearance-none">
+<option>All Subjects</option>
+<option>Computer Science</option>
+<option>Mathematics</option>
+<option>Design</option>
+</select>
+</div>
+<div class="p-sm flex flex-col">
+<label class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-xs">Experience</label>
+<select class="w-full bg-transparent border-none text-body-md font-body-md focus:ring-0 p-0 cursor-pointer appearance-none">
+<option>Any Experience</option>
+<option>5+ Years</option>
+<option>10+ Years</option>
+</select>
+</div>
+<div class="p-sm flex flex-col">
+<label class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-xs">Course Count</label>
+<select class="w-full bg-transparent border-none text-body-md font-body-md focus:ring-0 p-0 cursor-pointer appearance-none">
+<option>Any Count</option>
+<option>1-5 Courses</option>
+<option>5+ Courses</option>
+</select>
+</div>
+<div class="p-sm flex flex-col">
+<label class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-xs">Language</label>
+<select class="w-full bg-transparent border-none text-body-md font-body-md focus:ring-0 p-0 cursor-pointer appearance-none">
+<option>English</option>
+<option>Spanish</option>
+<option>Mandarin</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Teacher Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<article class="border border-primary bg-surface-container-lowest flex flex-col group hover:bg-surface-container-low transition-colors duration-200">
+<div class="w-full aspect-square border-b border-primary bg-surface-variant relative overflow-hidden" data-alt="A striking black and white studio portrait of a professional female academic wearing a structured blazer. The lighting is high-contrast, casting sharp but clean shadows against a stark white backdrop, emphasizing a serious, intellectual mood. The image has a crisp, modern aesthetic suitable for a high-end corporate or academic profile." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCAGPA755l0DtqQTROg8M0qM8curQhIprkebYVh9QB1aLnWQoXVEDcI4yJoVOcv4wB-m-z7jqTXTEpaciFe9bFLvCeI23qIMcx0AuGT1s7RVoEHlr44ko7QtuXP2pqohdcYH1Px3pJ74zVEX4Jpqc1MXPtddRm4ISFtoW0CaYoyoc3rOlg6LJln_9VcMYdZk-76L8vd_K1N8AW12HcI-W-sOihKKv8ROS5lpSjqCYBGM0mBXCmKJmtrjflDFFxSEDTUo3TI_V4DtUgB'); background-size: cover; background-position: center;">
+</div>
+<div class="p-lg flex flex-col flex-grow gap-md">
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold">Dr. Eleanor Vance</h2>
+<p class="font-body-sm text-body-sm text-secondary uppercase tracking-wider mt-xs">Computer Science</p>
+</div>
+<div class="grid grid-cols-2 gap-sm border-t border-b border-surface-variant py-md my-auto">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">EXPERIENCE</span>
+<span class="font-body-sm text-body-sm font-medium">15 Years Exp</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">COURSES</span>
+<span class="font-body-sm text-body-sm font-medium">12 Courses</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">LEARNERS</span>
+<span class="font-body-sm text-body-sm font-medium">45k Learners</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">RATING</span>
+<span class="font-body-sm text-body-sm font-medium flex items-center gap-xs">
+                                4.9 <span class="material-symbols-outlined text-[14px]">star</span>
+</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md font-bold py-md uppercase tracking-widest hover:bg-surface-tint transition-colors duration-200 mt-auto">
+                        View Profile
+                    </button>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="border border-primary bg-surface-container-lowest flex flex-col group hover:bg-surface-container-low transition-colors duration-200">
+<div class="w-full aspect-square border-b border-primary bg-surface-variant relative overflow-hidden" data-alt="A stark, minimalist black and white photograph of a male instructor with glasses, looking directly at the camera. The background is a flat, bright white wall, creating intense contrast with his dark suit. The lighting is even and sharp, reflecting a rigorous, authoritative tone consistent with high-end academic styling." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLYIeOfq5nxoBFRJ8-oq-yo0LOg-ukCkgBb_nL14bdkvNgN_lc-3H9s6d8cywmn1Zu9b8AE6jn6B91-GqzFt095B8MNl-hw6zObELpvqbe_hTmsfvo-riYgQwQywZDHa6PUNpQa01enAUHKulPVyRJlQ2d0MH6WwkL9mMfR-k5kUE__unaKDm93YyQCrTzZTptcGdnKNiwNTplV6qj_h7vfxveVa94G5CHPxHS4yhQU2QqHZYZLMnzBWyk4gaBsivBbrUGJLY9juBD'); background-size: cover; background-position: center;">
+</div>
+<div class="p-lg flex flex-col flex-grow gap-md">
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold">Prof. Marcus Sterling</h2>
+<p class="font-body-sm text-body-sm text-secondary uppercase tracking-wider mt-xs">Data Science</p>
+</div>
+<div class="grid grid-cols-2 gap-sm border-t border-b border-surface-variant py-md my-auto">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">EXPERIENCE</span>
+<span class="font-body-sm text-body-sm font-medium">10 Years Exp</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">COURSES</span>
+<span class="font-body-sm text-body-sm font-medium">8 Courses</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">LEARNERS</span>
+<span class="font-body-sm text-body-sm font-medium">22k Learners</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">RATING</span>
+<span class="font-body-sm text-body-sm font-medium flex items-center gap-xs">
+                                4.8 <span class="material-symbols-outlined text-[14px]">star</span>
+</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md font-bold py-md uppercase tracking-widest hover:bg-surface-tint transition-colors duration-200 mt-auto">
+                        View Profile
+                    </button>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="border border-primary bg-surface-container-lowest flex flex-col group hover:bg-surface-container-low transition-colors duration-200">
+<div class="w-full aspect-square border-b border-primary bg-surface-variant relative overflow-hidden" data-alt="High-contrast black and white portrait of a female design professor standing in a modern, structural hallway. The architectural lines in the background are sharp and out of focus. The subject exudes confidence and precision. The overall aesthetic is minimalist, rejecting color to focus on form and lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDeK1noRgQ_Ps0mV-13Gm9weXCBrQ7jqMG88l7tO_2Go40so2oxKVwrs8oqoJsuNkT5wBdhPD3PUM2pKP6o4R9HR6XiW026Usd6L191M9zc-Rt-OhcAw5HUgWjhoO3TP54vRd0PmbZXuyG9s6pHkvdndLNj-9560Sj-9QJdrhAw95m968DupwUg7TxxaBMph0o7ks1V9vIf271ZjAiWeSaZdz2Qi88cGNAPpTh-F5D0xQuntE2tienBaRQEbqu_pmFWLpFJNdlTqWtt'); background-size: cover; background-position: center;">
+</div>
+<div class="p-lg flex flex-col flex-grow gap-md">
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold">Sarah Jenkins, MFA</h2>
+<p class="font-body-sm text-body-sm text-secondary uppercase tracking-wider mt-xs">UI/UX Design</p>
+</div>
+<div class="grid grid-cols-2 gap-sm border-t border-b border-surface-variant py-md my-auto">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">EXPERIENCE</span>
+<span class="font-body-sm text-body-sm font-medium">8 Years Exp</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">COURSES</span>
+<span class="font-body-sm text-body-sm font-medium">5 Courses</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">LEARNERS</span>
+<span class="font-body-sm text-body-sm font-medium">18k Learners</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">RATING</span>
+<span class="font-body-sm text-body-sm font-medium flex items-center gap-xs">
+                                5.0 <span class="material-symbols-outlined text-[14px]">star</span>
+</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md font-bold py-md uppercase tracking-widest hover:bg-surface-tint transition-colors duration-200 mt-auto">
+                        View Profile
+                    </button>
+</div>
+</article>
+</section>
+<!-- Teacher Detail Preview Section -->
+<section class="mt-xxl pt-xl border-t border-primary">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xxl">
+<!-- Left: Selected Teacher Info -->
+<div class="lg:col-span-5 flex flex-col gap-lg">
+<h2 class="font-headline-lg text-headline-lg font-bold uppercase tracking-tight mb-md">Featured Instructor</h2>
+<div class="flex gap-lg items-start">
+<img alt="Dr. Eleanor Vance" class="w-32 h-32 object-cover border border-primary grayscale" data-alt="A highly detailed black and white crop of a professional woman's face, focusing on a serious, intelligent expression. The lighting is stark and directional, highlighting the textures of her structured clothing against a pure white background. The mood is authoritative and strictly minimalist." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqv9pQHLfWfEcMheFuPQ2ll5JnVEqMcmC9SRhCi_TEJNy_fGor36bSzebDLJ8U_cHf4lhCfDtyTRDW6Yq-82RrE3sOYgcAeijZSt2X1YdtXR5LtZV1otq5_HlQR1T8lOWXopVQjGHXtGvZZ-rcd_WudJ9c35LofoK12l8mQDWIOjdpBX9Qay1yMAxB5SJcHAzmUBjC8Vgyygj421WnE7bK-oh7bqeLwTNS3cgqdFunMmLYSrc1DnC3LuYsvO_etQksu8Wdrlp8pvsp"/>
+<div class="flex flex-col gap-sm">
+<h3 class="font-headline-md text-headline-md font-bold">Dr. Eleanor Vance</h3>
+<p class="font-body-sm text-body-sm text-secondary uppercase tracking-widest">Lead Instructor, Computer Science</p>
+<p class="font-body-md text-body-md mt-sm leading-relaxed text-on-surface-variant">
+                                Dr. Vance holds a Ph.D. from MIT and has over 15 years of industry experience building scalable distributed systems. She bridges the gap between rigorous academic theory and practical engineering application.
+                            </p>
+</div>
+</div>
+</div>
+<!-- Right: Courses & Classes -->
+<div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-xl">
+<!-- Courses List -->
+<div class="flex flex-col gap-md">
+<h4 class="font-label-md text-label-md font-bold uppercase tracking-widest border-b border-primary pb-sm">Courses by this Teacher</h4>
+<ul class="flex flex-col divide-y divide-surface-variant">
+<li class="py-sm flex justify-between items-center group cursor-pointer">
+<span class="font-body-md text-body-md group-hover:underline">Advanced Algorithms</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary">arrow_forward</span>
+</li>
+<li class="py-sm flex justify-between items-center group cursor-pointer">
+<span class="font-body-md text-body-md group-hover:underline">System Architecture 101</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary">arrow_forward</span>
+</li>
+<li class="py-sm flex justify-between items-center group cursor-pointer">
+<span class="font-body-md text-body-md group-hover:underline">Data Structures in C++</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary">arrow_forward</span>
+</li>
+</ul>
+</div>
+<!-- Upcoming Live Classes -->
+<div class="flex flex-col gap-md">
+<h4 class="font-label-md text-label-md font-bold uppercase tracking-widest border-b border-primary pb-sm">Upcoming Live Classes</h4>
+<ul class="flex flex-col divide-y divide-surface-variant">
+<li class="py-sm flex flex-col gap-xs">
+<span class="font-body-md text-body-md font-medium">Q&amp;A: Big O Notation</span>
+<span class="font-label-sm text-label-sm text-secondary">OCT 24, 2024 • 14:00 EST</span>
+</li>
+<li class="py-sm flex flex-col gap-xs">
+<span class="font-body-md text-body-md font-medium">Live Coding: Graph Traversal</span>
+<span class="font-label-sm text-label-sm text-secondary">NOV 02, 2024 • 10:00 EST</span>
+</li>
+</ul>
+<button class="mt-sm border border-primary bg-transparent text-primary font-label-md text-label-md font-bold py-sm px-md uppercase tracking-widest hover:border-2 transition-all w-fit">
+                            View Calendar
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full pt-xl pb-lg bg-on-surface dark:bg-surface border-t border-on-surface dark:border-surface text-surface dark:text-on-surface font-label-md text-label-md transition-none mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop max-w-container-max mx-auto gap-lg md:gap-0">
+<div class="font-headline-sm text-headline-sm font-bold text-surface dark:text-on-surface tracking-tighter">
+                INSTITUTIONAL RIGOR
+            </div>
+<nav class="flex flex-wrap justify-center md:justify-end gap-md md:gap-lg items-center">
+<a class="text-surface-variant dark:text-on-surface-variant hover:text-white dark:hover:text-black transition-none" href="#">Privacy Policy</a>
+<a class="text-surface-variant dark:text-on-surface-variant hover:text-white dark:hover:text-black transition-none" href="#">Terms of Service</a>
+<a class="text-surface-variant dark:text-on-surface-variant hover:text-white dark:hover:text-black transition-none" href="#">Faculty Portal</a>
+<a class="text-surface-variant dark:text-on-surface-variant hover:text-white dark:hover:text-black transition-none" href="#">Contact</a>
+</nav>
+<div class="text-surface-variant dark:text-on-surface-variant text-center md:text-right mt-md md:mt-0">
+                © 2024 INSTITUTIONAL RIGOR. ALL RIGHTS RESERVED.
+            </div>
+</div>
+</footer>
+</body></html>

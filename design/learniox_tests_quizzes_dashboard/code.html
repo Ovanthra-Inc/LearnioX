@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX - Tests &amp; Quizzes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e2e2e2",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "primary-fixed": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#e4e2e2",
+                        "on-secondary-container": "#626262",
+                        "surface-tint": "#5e5e5e",
+                        "on-secondary-fixed-variant": "#464747",
+                        "inverse-primary": "#c6c6c6",
+                        "secondary": "#5e5e5e",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#848484",
+                        "on-background": "#1a1c1c",
+                        "surface-bright": "#f9f9f9",
+                        "surface": "#f9f9f9",
+                        "on-surface-variant": "#4c4546",
+                        "background": "#ffffff", /* Forced pure white for stark contrast */
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-surface": "#1a1c1c",
+                        "primary-container": "#1b1b1b",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "outline-variant": "#cfc4c5",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e8e8e8",
+                        "outline": "#7e7576",
+                        "surface-container-low": "#f3f3f4",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-primary-fixed": "#1b1b1b",
+                        "primary": "#000000",
+                        "surface-dim": "#dadada",
+                        "tertiary-container": "#1a1c1c",
+                        "surface-container": "#eeeeee",
+                        "tertiary": "#000000",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "inverse-surface": "#2f3131",
+                        "tertiary-fixed": "#e3e2e2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#e1dfdf",
+                        "on-tertiary-container": "#838484",
+                        "on-tertiary-fixed-variant": "#464747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px", /* Overridden to 0 for strict architectural style */
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "lg": "24px",
+                        "container-max": "1440px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "xl": "48px",
+                        "margin-mobile": "16px",
+                        "xxl": "64px",
+                        "sm": "8px",
+                        "margin-desktop": "32px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Strict global resets for the architectural aesthetic */
+        * { box-shadow: none !important; border-radius: 0 !important; }
+        body { background-color: #ffffff; color: #000000; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="font-body-md text-body-md flex min-h-screen">
+<!-- SideNavBar (from JSON) -->
+<nav class="w-64 h-full border-r border-primary bg-surface fixed left-0 top-0 flex flex-col p-lg transition-all duration-200 ease-in-out z-50">
+<div class="mb-xl flex items-center gap-md">
+<div class="w-10 h-10 bg-primary flex items-center justify-center text-on-primary font-bold">LX</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">LearnioX</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Learning</p>
+</div>
+</div>
+<ul class="flex-1 flex flex-col gap-sm">
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-md p-sm text-on-surface hover:bg-surface-container-high transition-all duration-200 ease-in-out hover:border-2 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-md p-sm text-on-surface hover:bg-surface-container-high transition-all duration-200 ease-in-out hover:border-2 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-md text-label-md">My Courses</span>
+</a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-md p-sm text-on-surface hover:bg-surface-container-high transition-all duration-200 ease-in-out hover:border-2 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+<span class="font-label-md text-label-md">Certificates</span>
+</a>
+</li>
+<!-- Active (Assignments mapped to Tests & Quizzes logically based on JSON constraints) -->
+<li>
+<a class="flex items-center gap-md p-sm bg-primary text-on-primary font-bold transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-label-md text-label-md">Assignments</span>
+</a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-md p-sm text-on-surface hover:bg-surface-container-high transition-all duration-200 ease-in-out hover:border-2 border-transparent hover:border-primary" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-label-md">Resources</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto flex flex-col gap-sm pt-lg border-t border-primary">
+<button class="w-full py-sm bg-primary text-on-primary font-label-md text-label-md uppercase tracking-wider border border-primary hover:bg-surface-tint transition-all duration-200 ease-in-out mb-md">
+                Upgrade Plan
+            </button>
+<a class="flex items-center gap-md p-sm text-on-surface hover:bg-surface-container-high transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md p-sm text-on-surface hover:bg-surface-container-high transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar (from JSON) -->
+<header class="w-full h-16 border-b border-primary bg-surface sticky top-0 z-40 flex justify-between items-center px-lg py-sm transition-all duration-100">
+<div class="flex items-center gap-md w-1/3">
+<span class="material-symbols-outlined text-primary" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-sm text-body-sm text-primary placeholder:text-on-surface-variant outline-none" placeholder="Search resources..." type="text"/>
+</div>
+<div class="flex items-center gap-lg">
+<button class="text-secondary hover:bg-surface-container-low transition-all duration-100 p-xs flex items-center justify-center border border-transparent hover:border-primary">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-secondary hover:bg-surface-container-low transition-all duration-100 p-xs flex items-center justify-center border border-transparent hover:border-primary">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<div class="w-8 h-8 bg-primary-container border border-primary overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover grayscale" data-alt="A striking digital portrait photography piece featuring a sharp, high-contrast monochrome image of a professional individual. The lighting is harsh and directional, creating deep black shadows and bright white highlights. The mood is serious, analytical, and authoritative, fitting perfectly into a brutalist architectural digital layout. The background is a stark, absolute white void." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ0E2CPHSirdKxGSDk1N9yVaK8gDu4fF8kc7r5oKvon0_nnz7WCKNb9Wt-Q9488PewEoSwm7bc1pd6t7Fy-Wg4JrrXoWc8P1ONeIdFNBoCI-Jy4Y20zXLEbQJPVDjzO5ScVcU6b5s20NQ3OWfeH8pMgWYjHmDHXAyq8vlUgGAEhkTlskSjD8jX-gsN47cbM65oW1lLIRPn05fxoQg7Ath5p7G98ctEIVAqBwrgYWJ8SbSTF7u2Uvwo_BX2rjiUwjhQaSJ9EKmVyRPo"/>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 p-xxl bg-background">
+<!-- Page Header & Filters -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-xl text-headline-xl font-bold text-primary uppercase tracking-tighter">Tests &amp; Quizzes</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-sm">Manage your academic assessments and review performance metrics.</p>
+</div>
+<div class="flex gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Course</label>
+<select class="border border-primary bg-surface text-primary py-sm px-md font-body-sm text-body-sm outline-none focus:border-2 focus:border-primary appearance-none rounded-none pr-xl">
+<option>All Courses</option>
+<option>Advanced CSS Grid</option>
+<option>Data Structures 101</option>
+<option>Macroeconomics</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Status</label>
+<select class="border border-primary bg-surface text-primary py-sm px-md font-body-sm text-body-sm outline-none focus:border-2 focus:border-primary appearance-none rounded-none pr-xl">
+<option>All Status</option>
+<option>Pending</option>
+<option>Attempted</option>
+<option>Passed</option>
+<option>Failed</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-4 gap-lg mb-xxl">
+<div class="border border-primary p-lg bg-surface">
+<p class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-md">Quizzes Attempted</p>
+<p class="font-headline-xl text-headline-xl font-bold text-primary">42</p>
+</div>
+<div class="border border-primary p-lg bg-surface">
+<p class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-md">Average Score</p>
+<p class="font-headline-xl text-headline-xl font-bold text-primary">85%</p>
+</div>
+<div class="border border-primary p-lg bg-surface">
+<p class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-md">Pending Tests</p>
+<p class="font-headline-xl text-headline-xl font-bold text-primary">03</p>
+</div>
+<div class="border border-primary p-lg bg-surface bg-primary text-on-primary">
+<p class="font-label-md text-label-md uppercase tracking-widest text-on-primary mb-md opacity-80">Passed Tests</p>
+<p class="font-headline-xl text-headline-xl font-bold">38</p>
+</div>
+</div>
+<!-- Main Layout Split -->
+<div class="flex gap-xl items-start">
+<!-- Main Table Area -->
+<div class="flex-1 flex flex-col">
+<div class="border border-primary overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-primary">
+<th class="py-md px-lg font-label-md text-label-md uppercase tracking-widest text-primary border-r border-primary">Quiz Title</th>
+<th class="py-md px-lg font-label-md text-label-md uppercase tracking-widest text-primary border-r border-primary">Course</th>
+<th class="py-md px-lg font-label-md text-label-md uppercase tracking-widest text-primary border-r border-primary">Due Date</th>
+<th class="py-md px-lg font-label-md text-label-md uppercase tracking-widest text-primary border-r border-primary text-center">Score</th>
+<th class="py-md px-lg font-label-md text-label-md uppercase tracking-widest text-primary border-r border-primary text-center">Status</th>
+<th class="py-md px-lg font-label-md text-label-md uppercase tracking-widest text-primary text-center">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-primary hover:bg-surface-container-low transition-colors group cursor-pointer bg-surface-bright">
+<td class="py-md px-lg font-body-sm text-body-sm font-bold text-primary border-r border-primary">Grid Architecture Module 4</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-on-surface-variant border-r border-primary">Advanced CSS Grid</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-on-surface-variant border-r border-primary">Oct 12, 2023</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-primary text-center border-r border-primary">92/100</td>
+<td class="py-md px-lg font-label-md text-label-md text-center border-r border-primary">
+<span class="bg-primary text-on-primary px-sm py-xs border border-primary">[PASSED]</span>
+</td>
+<td class="py-md px-lg text-center">
+<button class="font-label-sm text-label-sm uppercase tracking-widest text-primary hover:underline underline-offset-4">View Result</button>
+</td>
+</tr>
+<tr class="border-b border-primary hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="py-md px-lg font-body-sm text-body-sm font-bold text-primary border-r border-primary">Binary Trees &amp; Heaps</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-on-surface-variant border-r border-primary">Data Structures 101</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-on-surface-variant border-r border-primary">Oct 15, 2023</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-primary text-center border-r border-primary">--/100</td>
+<td class="py-md px-lg font-label-md text-label-md text-center border-r border-primary">
+<span class="bg-surface text-primary px-sm py-xs border border-primary">[PENDING]</span>
+</td>
+<td class="py-md px-lg text-center">
+<button class="font-label-sm text-label-sm uppercase tracking-widest text-on-primary bg-primary px-md py-xs border border-primary hover:bg-surface-tint">Start Quiz</button>
+</td>
+</tr>
+<tr class="border-b border-primary hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="py-md px-lg font-body-sm text-body-sm font-bold text-primary border-r border-primary">Monetary Policy Review</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-on-surface-variant border-r border-primary">Macroeconomics</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-on-surface-variant border-r border-primary">Oct 10, 2023</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-primary text-center border-r border-primary">45/100</td>
+<td class="py-md px-lg font-label-md text-label-md text-center border-r border-primary">
+<span class="bg-surface-container-highest text-primary px-sm py-xs border border-primary line-through">[FAILED]</span>
+</td>
+<td class="py-md px-lg text-center">
+<button class="font-label-sm text-label-sm uppercase tracking-widest text-primary border border-primary px-md py-xs hover:bg-primary hover:text-on-primary transition-colors">Retake</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="py-md px-lg font-body-sm text-body-sm font-bold text-primary border-r border-primary">Typography Systems Final</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-on-surface-variant border-r border-primary">UI Design Mastery</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-on-surface-variant border-r border-primary">Sep 28, 2023</td>
+<td class="py-md px-lg font-body-sm text-body-sm text-primary text-center border-r border-primary">98/100</td>
+<td class="py-md px-lg font-label-md text-label-md text-center border-r border-primary">
+<span class="bg-primary text-on-primary px-sm py-xs border border-primary">[PASSED]</span>
+</td>
+<td class="py-md px-lg text-center">
+<button class="font-label-sm text-label-sm uppercase tracking-widest text-primary hover:underline underline-offset-4">Review Answers</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Result Card Sidebar -->
+<aside class="w-96 flex-shrink-0 border border-primary bg-surface flex flex-col">
+<div class="border-b border-primary p-lg bg-primary text-on-primary">
+<p class="font-label-sm text-label-sm uppercase tracking-widest mb-xs opacity-80">Selected Result</p>
+<h3 class="font-headline-sm text-headline-sm font-bold leading-tight">Grid Architecture Module 4</h3>
+</div>
+<div class="p-lg flex-1">
+<div class="flex justify-between items-center mb-xl pb-md border-b border-surface-dim">
+<span class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">Final Score</span>
+<span class="font-headline-lg text-headline-lg font-bold text-primary">92<span class="text-headline-md text-on-surface-variant">/100</span></span>
+</div>
+<div class="space-y-md mb-xl">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Status</span>
+<span class="font-label-md text-label-md bg-primary text-on-primary px-sm py-xs">[PASSED]</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Time Taken</span>
+<span class="font-body-sm text-body-sm font-bold text-primary">45m 12s</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Correct Answers</span>
+<span class="font-body-sm text-body-sm font-bold text-primary">46</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Incorrect Answers</span>
+<span class="font-body-sm text-body-sm font-bold text-primary">4</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Attempt Number</span>
+<span class="font-body-sm text-body-sm font-bold text-primary">1</span>
+</div>
+</div>
+<div class="mt-auto">
+<button class="w-full py-md border border-primary bg-surface text-primary font-label-md text-label-md uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-all duration-200">
+                                View Detailed Report
+                            </button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX - Assignment Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-on-surface": "#f0f1f1",
+                      "tertiary-fixed": "#e3e2e2",
+                      "on-tertiary-fixed-variant": "#464747",
+                      "inverse-primary": "#c6c6c6",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "background": "#f9f9f9",
+                      "surface-container-low": "#f3f3f4",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "on-surface": "#1a1c1c",
+                      "surface-tint": "#5e5e5e",
+                      "surface-variant": "#e2e2e2",
+                      "error": "#ba1a1a",
+                      "surface-bright": "#f9f9f9",
+                      "secondary": "#5e5e5e",
+                      "tertiary-container": "#1a1c1c",
+                      "surface-dim": "#dadada",
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed-dim": "#c6c6c6",
+                      "tertiary": "#000000",
+                      "outline": "#7e7576",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "on-primary-fixed-variant": "#474747",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "secondary-fixed": "#e4e2e2",
+                      "on-tertiary-container": "#838484",
+                      "on-secondary-fixed-variant": "#464747",
+                      "on-background": "#1a1c1c",
+                      "secondary-container": "#e1dfdf",
+                      "primary-fixed": "#e2e2e2",
+                      "on-primary-fixed": "#1b1b1b",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#e2e2e2",
+                      "on-surface-variant": "#4c4546",
+                      "inverse-surface": "#2f3131",
+                      "surface": "#f9f9f9",
+                      "surface-container-high": "#e8e8e8",
+                      "on-primary-container": "#848484",
+                      "primary": "#000000",
+                      "on-secondary-container": "#626262",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eeeeee",
+                      "outline-variant": "#cfc4c5",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#1b1b1b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0rem",
+                      "lg": "0rem",
+                      "xl": "0rem",
+                      "full": "0rem"
+              },
+              "spacing": {
+                      "xxl": "64px",
+                      "sm": "8px",
+                      "xl": "48px",
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "md": "16px",
+                      "container-max": "1440px",
+                      "lg": "24px",
+                      "xs": "4px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "32px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Minimalist Structural Overrides */
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9f9; color: #1a1c1c; }
+        .border-structural { border: 1px solid #e5e5e5; }
+        .border-interactive { border: 1px solid #000000; }
+        .border-interactive:hover { border-width: 2px; padding: calc(1rem - 1px); }
+        input:focus, textarea:focus { border-color: #000000 !important; box-shadow: none !important; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f9f9f9; border-left: 1px solid #e5e5e5; }
+        ::-webkit-scrollbar-thumb { background: #000000; }
+    </style>
+</head>
+<body class="flex h-screen bg-background overflow-hidden">
+<!-- SideNavBar -->
+<nav aria-label="Sidebar Navigation" class="hidden md:flex flex-col h-full border-r border-primary bg-surface-container-lowest w-64 flex-shrink-0 z-10">
+<div class="px-gutter py-xl border-b border-primary">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary uppercase tracking-tight">LearnioX</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Academy Dashboard</p>
+</div>
+<div class="flex-1 overflow-y-auto py-md">
+<ul class="flex flex-col space-y-sm">
+<li>
+<a class="text-on-surface flex items-center gap-md px-md py-sm border border-transparent hover:border-primary transition-all duration-75" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface flex items-center gap-md px-md py-sm border border-transparent hover:border-primary transition-all duration-75" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu_book</span>
+<span class="font-label-md text-label-md">Curriculum</span>
+</a>
+</li>
+<li>
+<a aria-current="page" class="bg-primary text-on-primary flex items-center gap-md px-md py-sm rounded-none" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+<span class="font-label-md text-label-md">Tasks</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface flex items-center gap-md px-md py-sm border border-transparent hover:border-primary transition-all duration-75" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface flex items-center gap-md px-md py-sm border border-transparent hover:border-primary transition-all duration-75" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="p-gutter border-t border-primary">
+<button class="w-full bg-surface-container-lowest border border-primary text-primary font-label-md text-label-md py-sm hover:border-[2px] transition-all flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_upward</span>
+                Upgrade Plan
+            </button>
+<div class="mt-md flex items-center gap-md">
+<div class="w-10 h-10 border border-primary bg-surface-variant flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover grayscale" data-alt="Black and white portrait photo of a professional student or instructor. High contrast lighting. Minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqCJwNKJfJYf-E5Y-r1ihpHxJ-GVGB9hsM6xV8-4MPHIbU6EDLs92_VjSAHLkocFYQDnLiEVzvKv7B4TDjnqJIDTbfB2TUfNKpFsR2LVxwQ3AkDMal8mcCOzimVs3-Op2MrpJqwJDFJVTwywKJC1HP_9Imqd47qMwc88u7KTq83FkDb9iPqS9Zmosoc9Hb6OlSVExQVMndmWy72G-H9kS6fyHMj3CT43KbyGBBQJ-jx9uE33NKBakjW_XMfhBAsJcP3jrI0ydfVzdu"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-primary truncate">J. Doe</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Student</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 h-full overflow-y-auto bg-background flex flex-col relative">
+<!-- Mobile Header Toggle (Only visible on md-) -->
+<div class="md:hidden flex items-center justify-between p-md border-b border-primary bg-surface-container-lowest sticky top-0 z-20">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary uppercase tracking-tight">LearnioX</h1>
+<button class="text-primary p-xs border border-transparent hover:border-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="max-w-container-max mx-auto w-full p-margin-mobile md:p-margin-desktop lg:p-xl flex-1 flex flex-col">
+<!-- Breadcrumbs / Context -->
+<div class="mb-lg flex items-center gap-sm text-on-surface-variant">
+<a class="font-label-md text-label-md hover:text-primary underline" href="#">Computer Science</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="font-label-md text-label-md hover:text-primary underline" href="#">Module 4</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="font-label-md text-label-md text-primary">Assignment</span>
+</div>
+<!-- Header Section -->
+<header class="mb-xl border-b border-primary pb-lg">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-sm break-words">Advanced Python Scripting</h2>
+<div class="flex flex-wrap gap-md mt-lg">
+<div class="border border-primary bg-surface-container-lowest px-md py-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Due Date</span>
+<span class="font-label-md text-label-md text-primary">Nov 1, 2024</span>
+</div>
+</div>
+<div class="border border-primary bg-surface-container-lowest px-md py-sm flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]">grade</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Total Marks</span>
+<span class="font-label-md text-label-md text-primary">50</span>
+</div>
+</div>
+<div class="border border-primary bg-surface-container-lowest px-md py-sm flex items-center gap-sm ml-auto sm:ml-0 bg-primary text-on-primary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase opacity-80">Status</span>
+<span class="font-label-md text-label-md">Not Submitted</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Grid Layout for Content & Submission -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl flex-1">
+<!-- Left Column: Instructions & Resources -->
+<div class="lg:col-span-7 flex flex-col gap-xl">
+<!-- Instructions -->
+<section>
+<h3 class="font-headline-md text-headline-md text-primary mb-md pb-xs border-b border-structural">Instructions</h3>
+<div class="prose prose-neutral max-w-none font-body-md text-body-md text-on-surface space-y-md">
+<p>In this assignment, you will build a comprehensive Python script that automates data extraction and formatting from a provided dataset. You are expected to demonstrate mastery of basic data structures, file I/O operations, and error handling.</p>
+<p><strong>Requirements:</strong></p>
+<ul class="list-disc pl-lg space-y-xs">
+<li>The script must handle missing values gracefully without crashing.</li>
+<li>Output should be formatted as a cleanly structured CSV file.</li>
+<li>Code must be documented according to PEP 8 standards.</li>
+<li>Include a brief README file explaining your methodology.</li>
+</ul>
+<p>Review the attached reference guide for specific formatting rules.</p>
+</div>
+</section>
+<!-- Attached Resources -->
+<section>
+<h3 class="font-headline-md text-headline-md text-primary mb-md pb-xs border-b border-structural">Attached Resources</h3>
+<ul class="flex flex-col gap-sm">
+<li>
+<a class="group flex items-center justify-between p-md border border-structural hover:border-primary bg-surface-container-lowest transition-colors" href="#">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary group-hover:text-primary">picture_as_pdf</span>
+<span class="font-body-md text-body-md text-primary">Reference_Guide.pdf</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">download</span>
+</a>
+</li>
+<li>
+<a class="group flex items-center justify-between p-md border border-structural hover:border-primary bg-surface-container-lowest transition-colors" href="#">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary group-hover:text-primary">dataset</span>
+<span class="font-body-md text-body-md text-primary">raw_data_sample.csv</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">download</span>
+</a>
+</li>
+</ul>
+</section>
+</div>
+<!-- Right Column: Submission Panel & Feedback -->
+<div class="lg:col-span-5 flex flex-col gap-xl">
+<!-- Submission Box -->
+<section class="border border-primary bg-surface-container-lowest flex flex-col h-full">
+<div class="p-lg border-b border-primary bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-primary">Your Submission</h3>
+</div>
+<form class="p-lg flex flex-col gap-lg flex-1">
+<!-- Text Answer -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-primary" for="text_answer">Text Answer (Optional)</label>
+<textarea class="w-full border border-structural p-md font-body-sm text-body-sm focus:outline-none focus:ring-0 resize-y" id="text_answer" placeholder="Enter any notes or context for your submission here..." rows="4"></textarea>
+</div>
+<!-- Link Submission -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-primary" for="link_url">External Link (e.g., GitHub Repo)</label>
+<div class="flex">
+<span class="inline-flex items-center px-md border border-r-0 border-structural bg-surface-container-low text-on-surface-variant material-symbols-outlined">link</span>
+<input class="flex-1 border border-structural p-md font-body-sm text-body-sm focus:outline-none focus:ring-0" id="link_url" placeholder="https://..." type="url"/>
+</div>
+</div>
+<!-- File Upload Zone -->
+<div class="flex flex-col gap-xs flex-1">
+<label class="font-label-md text-label-md text-primary">Upload Files</label>
+<div class="border-2 border-dashed border-structural hover:border-primary transition-colors flex flex-col items-center justify-center p-xl cursor-pointer bg-background flex-1 min-h-[150px]">
+<span class="material-symbols-outlined text-headline-xl text-primary mb-sm">upload_file</span>
+<span class="font-label-md text-label-md text-primary mb-xs">Click to Upload</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-center">or drag and drop files here<br/>(Max 50MB)</span>
+</div>
+</div>
+<!-- Action -->
+<div class="mt-auto pt-lg border-t border-structural">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-md hover:bg-surface-tint transition-colors uppercase tracking-widest" type="submit">
+                                    Submit Assignment
+                                </button>
+</div>
+</form>
+</section>
+<!-- Instructor Feedback (Pending State) -->
+<section class="border border-structural bg-background p-lg">
+<div class="flex items-center justify-between mb-md pb-xs border-b border-structural">
+<h3 class="font-headline-sm text-headline-sm text-primary">Instructor Feedback</h3>
+<span class="font-label-sm text-label-sm px-sm py-xs border border-structural text-on-surface-variant uppercase">Review Status: Pending</span>
+</div>
+<div class="flex flex-col gap-md">
+<div class="flex items-center justify-between bg-surface-container-lowest p-md border border-structural">
+<span class="font-label-md text-label-md text-on-surface">Marks Received</span>
+<span class="font-headline-md text-headline-md text-primary">- / 50</span>
+</div>
+<div class="p-md border border-structural bg-surface-container-lowest min-h-[100px]">
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">Feedback will appear here once the instructor has reviewed your submission.</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-xl px-gutter border-t border-primary flex flex-col md:flex-row justify-between items-center mt-xxl bg-surface-container-lowest">
+<span class="font-label-md text-label-md font-bold text-primary uppercase mb-md md:mb-0">LearnioX</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center md:text-left mb-md md:mb-0">© 2024 LearnioX Ed-Tech. All rights reserved.</p>
+<div class="flex gap-md">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all focus:outline-none focus:ring-1 focus:ring-primary" href="#">Privacy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all focus:outline-none focus:ring-1 focus:ring-primary" href="#">Terms</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all focus:outline-none focus:ring-1 focus:ring-primary" href="#">Compliance</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary hover:underline transition-all focus:outline-none focus:ring-1 focus:ring-primary" href="#">Accessibility</a>
+</div>
+</footer>
+</div>
+</main>
+</body></html>

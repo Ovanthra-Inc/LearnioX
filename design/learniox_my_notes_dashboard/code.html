@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX - Learner Notes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "on-primary-container": "#848484",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-bright": "#f9f9f9",
+                        "outline": "#7e7576",
+                        "surface-dim": "#dadada",
+                        "on-surface": "#1a1c1c",
+                        "secondary-fixed": "#e4e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-container": "#eeeeee",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-secondary-container": "#626262",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "inverse-surface": "#2f3131",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary-fixed": "#e2e2e2",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "tertiary": "#000000",
+                        "surface-variant": "#e2e2e2",
+                        "inverse-on-surface": "#f0f1f1",
+                        "inverse-primary": "#c6c6c6",
+                        "tertiary-container": "#1a1c1c",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-surface-variant": "#4c4546",
+                        "secondary-container": "#e1dfdf",
+                        "secondary": "#5e5e5e",
+                        "on-background": "#1a1c1c",
+                        "tertiary-fixed": "#e3e2e2",
+                        "background": "#f9f9f9",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "outline-variant": "#cfc4c5",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#5e5e5e",
+                        "surface-container-low": "#f3f3f4",
+                        "on-tertiary-container": "#838484",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#1b1b1b",
+                        "on-secondary-fixed-variant": "#464747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "xl": "48px",
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "container-max": "1440px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "xxl": "64px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Force strictly square borders and pure colors per prompt */
+        * { border-radius: 0 !important; box-shadow: none !important; }
+        body { background-color: #ffffff; color: #000000; font-family: 'Inter', sans-serif; }
+        .border-thin { border: 1px solid #000000; }
+        .border-bottom-thin { border-bottom: 1px solid #000000; }
+        .border-right-thin { border-right: 1px solid #000000; }
+        .bg-black { background-color: #000000; color: #ffffff; }
+        
+        /* Custom scrollbar for minimalist feel */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #ffffff; border-left: 1px solid #e5e5e5; }
+        ::-webkit-scrollbar-thumb { background: #000000; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen flex flex-col p-lg w-64 border-r border-primary bg-surface w-64 flex-shrink-0 z-50">
+<div class="mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">LearnioX</h1>
+<p class="font-label-md text-label-md text-secondary mt-xs">Enterprise Learning</p>
+</div>
+<ul class="flex flex-col flex-grow space-y-sm">
+<li>
+<a class="flex items-center p-sm border border-transparent text-on-surface hover:border-2 hover:border-primary transition-all duration-200 ease-in-out" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-sm text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center p-sm border border-transparent text-on-surface hover:border-2 hover:border-primary transition-all duration-200 ease-in-out" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-sm text-[20px]" data-icon="school">school</span>
+<span class="font-label-md text-label-md">My Courses</span>
+</a>
+</li>
+<li>
+<a class="flex items-center p-sm border border-transparent text-on-surface hover:border-2 hover:border-primary transition-all duration-200 ease-in-out" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-sm text-[20px]" data-icon="verified">verified</span>
+<span class="font-label-md text-label-md">Certificates</span>
+</a>
+</li>
+<li>
+<a class="flex items-center p-sm border border-transparent text-on-surface hover:border-2 hover:border-primary transition-all duration-200 ease-in-out" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-sm text-[20px]" data-icon="assignment">assignment</span>
+<span class="font-label-md text-label-md">Assignments</span>
+</a>
+</li>
+<li>
+<a class="flex items-center p-sm bg-primary text-on-primary font-bold transition-all duration-200 ease-in-out" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-sm text-[20px]" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-label-md">Resources</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto">
+<button class="w-full py-sm border-thin hover:bg-surface-container-high transition-colors font-label-md text-label-md mb-md">Upgrade Plan</button>
+<ul class="space-y-sm">
+<li>
+<a class="flex items-center p-sm border border-transparent text-on-surface hover:border-2 hover:border-primary transition-all duration-200 ease-in-out" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-sm text-[20px]" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center p-sm border border-transparent text-on-surface hover:border-2 hover:border-primary transition-all duration-200 ease-in-out" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-sm text-[20px]" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-grow flex flex-col ml-64 bg-surface-container-lowest">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 flex justify-between items-center px-lg py-sm w-full h-16 border-b border-primary bg-surface transition-all duration-100 flex-shrink-0">
+<div class="flex-grow flex items-center">
+<div class="relative w-64 mr-xl border-thin bg-surface-container-lowest flex items-center px-sm">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px] text-secondary mr-sm" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 p-sm font-body-sm text-body-sm text-primary placeholder-secondary outline-none" placeholder="Search..." type="text"/>
+</div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary">My Notes</h2>
+</div>
+<div class="flex items-center space-x-md">
+<button aria-label="notifications" class="p-xs hover:bg-surface-container-low text-secondary transition-all duration-100 border border-transparent hover:border-primary">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<button aria-label="help_outline" class="p-xs hover:bg-surface-container-low text-secondary transition-all duration-100 border border-transparent hover:border-primary">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+</button>
+<div class="w-8 h-8 border-thin overflow-hidden ml-sm cursor-pointer hover:border-2 transition-all">
+<img alt="User Profile Avatar" class="w-full h-full object-cover grayscale" data-alt="A close-up studio portrait of a professional looking individual against a pure white background. High contrast black and white photography. Lighting is stark and analytical. The subject wears a simple dark shirt. The overall mood is serious and focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqSBHzERc4pEzCpxu92yqvptArGrd27r8EwuDZz7De1DX47zCOk9aYIv7WeU0inIkr5w7j_sy2-u-jTE7ZSoi3wYNzJRrrfGvdWwG-DI6dkWqWEud7nk5zW1Wbze-Klg5qt2Ppo72u3JziL3ujwAIFz_c7Se_ClYvXwsV8_7r-3F4PwfDJnRLBdSXhdnnHnKRqcCxgOPi9gz2x9JEzi6moqE81-_wJaeBd9k1t5Q2NGw7omLBl75ycvanE0xv9WjjdlkbpMarG2p-g"/>
+</div>
+</div>
+</header>
+<!-- Sub-header: Filters -->
+<div class="border-b-thin bg-surface px-lg py-md flex items-center justify-between flex-shrink-0">
+<div class="flex items-center space-x-md">
+<span class="font-label-md text-label-md text-primary">Filters:</span>
+<select class="border-thin bg-surface-container-lowest text-primary font-body-sm text-body-sm px-sm py-xs appearance-none focus:outline-none focus:ring-1 focus:ring-primary pr-xl relative cursor-pointer hover:bg-surface-container-low transition-colors">
+<option>Filter by Course</option>
+<option>Data Structures &amp; Algorithms</option>
+<option>Advanced Machine Learning</option>
+<option>System Design Architecture</option>
+</select>
+<select class="border-thin bg-surface-container-lowest text-primary font-body-sm text-body-sm px-sm py-xs appearance-none focus:outline-none focus:ring-1 focus:ring-primary pr-xl relative cursor-pointer hover:bg-surface-container-low transition-colors">
+<option>Filter by Date</option>
+<option>Last 7 Days</option>
+<option>Last 30 Days</option>
+<option>All Time</option>
+</select>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-secondary">Showing 4 notes</span>
+</div>
+</div>
+<!-- Split Layout Workspace -->
+<div class="flex-grow flex overflow-hidden">
+<!-- Left Column: Notes List -->
+<div class="w-1/3 border-r-thin overflow-y-auto bg-surface-container-lowest flex flex-col">
+<!-- Note Card 1 (Active) -->
+<div class="border-b-thin p-md cursor-pointer border-l-4 border-l-primary bg-surface-container hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-md text-label-md text-primary uppercase tracking-wide">Data Structures &amp; Algorithms</span>
+<span class="font-label-sm text-label-sm text-secondary">Oct 24, 2023</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary mb-xs">Graph Traversal Patterns</h3>
+<div class="flex items-center space-x-sm mb-sm text-secondary">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]" data-icon="play_circle">play_circle</span>
+<span class="font-body-sm text-body-sm">Timestamp: 14:32</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Key distinction between DFS and BFS: DFS uses a stack (LIFO) while BFS uses a queue (FIFO). Crucial for optimizing shortest path algorithms.</p>
+<div class="mt-sm flex space-x-xs">
+<span class="border-thin px-xs py-[2px] font-label-sm text-label-sm bg-surface">#Algorithms</span>
+<span class="border-thin px-xs py-[2px] font-label-sm text-label-sm bg-surface">#Important</span>
+</div>
+</div>
+<!-- Note Card 2 -->
+<div class="border-b-thin p-md cursor-pointer border-l-4 border-l-transparent hover:bg-surface-container transition-colors">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wide">System Design Architecture</span>
+<span class="font-label-sm text-label-sm text-secondary">Oct 22, 2023</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-semibold text-primary mb-xs">Microservices Fallacies</h3>
+<div class="flex items-center space-x-sm mb-sm text-secondary">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]" data-icon="play_circle">play_circle</span>
+<span class="font-body-sm text-body-sm">Timestamp: 05:15</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Network reliability is a myth. Always implement circuit breakers and retry logic with exponential backoff to prevent cascading failures across services.</p>
+</div>
+<!-- Note Card 3 -->
+<div class="border-b-thin p-md cursor-pointer border-l-4 border-l-transparent hover:bg-surface-container transition-colors">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wide">Advanced Machine Learning</span>
+<span class="font-label-sm text-label-sm text-secondary">Oct 20, 2023</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-semibold text-primary mb-xs">Gradient Descent Variance</h3>
+<div class="flex items-center space-x-sm mb-sm text-secondary">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]" data-icon="play_circle">play_circle</span>
+<span class="font-body-sm text-body-sm">Timestamp: 42:10</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Stochastic vs Mini-batch vs Batch. Note on learning rate decay scheduling to ensure convergence in highly non-convex loss landscapes.</p>
+<div class="mt-sm flex space-x-xs">
+<span class="border-thin px-xs py-[2px] font-label-sm text-label-sm bg-surface">#Review</span>
+</div>
+</div>
+<!-- Note Card 4 -->
+<div class="border-b-thin p-md cursor-pointer border-l-4 border-l-transparent hover:bg-surface-container transition-colors opacity-60">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wide">Data Structures &amp; Algorithms</span>
+<span class="font-label-sm text-label-sm text-secondary">Oct 15, 2023</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-semibold text-primary mb-xs">Dynamic Programming Intro</h3>
+<div class="flex items-center space-x-sm mb-sm text-secondary">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]" data-icon="play_circle">play_circle</span>
+<span class="font-body-sm text-body-sm">Timestamp: 02:45</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Memoization vs Tabulation. Top-down approach is generally more intuitive but bottom-up can save stack space memory overhead.</p>
+</div>
+</div>
+<!-- Right Column: Note Editor -->
+<div class="w-2/3 flex flex-col bg-surface-container-lowest">
+<!-- Editor Header -->
+<div class="px-xl py-lg border-b-thin bg-surface flex justify-between items-start flex-shrink-0">
+<div>
+<div class="flex items-center space-x-sm mb-xs">
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-xs py-[2px] border-thin">Course</span>
+<span class="font-label-md text-label-md text-primary font-semibold">Data Structures &amp; Algorithms</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary mb-sm">Graph Traversal Patterns</h2>
+<button class="flex items-center space-x-sm border-thin px-sm py-xs hover:bg-black hover:text-white transition-colors group">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px] group-hover:text-white" data-icon="play_arrow">play_arrow</span>
+<span class="font-label-md text-label-md">Jump to Video: 14:32</span>
+</button>
+</div>
+<div class="flex space-x-sm">
+<button class="border-thin px-md py-sm bg-surface-container-lowest hover:bg-surface-container-high transition-colors font-label-md text-label-md flex items-center">
+<span aria-hidden="true" class="material-symbols-outlined mr-xs text-[18px]" data-icon="delete">delete</span>
+                            Delete
+                        </button>
+<button class="bg-black text-white px-md py-sm hover:bg-secondary transition-colors font-label-md text-label-md flex items-center">
+<span aria-hidden="true" class="material-symbols-outlined mr-xs text-[18px]" data-icon="save">save</span>
+                            Save Changes
+                        </button>
+</div>
+</div>
+<!-- Editor Canvas -->
+<div class="flex-grow p-xl overflow-y-auto flex flex-col">
+<!-- Text Area -->
+<textarea class="w-full flex-grow border-thin p-md font-body-lg text-body-lg text-primary resize-none outline-none focus:border-2 focus:border-primary mb-lg bg-surface-container-lowest leading-relaxed" placeholder="Start typing your notes here...">Key distinction between DFS and BFS: DFS uses a stack (LIFO) while BFS uses a queue (FIFO). Crucial for optimizing shortest path algorithms.
+
+1. Depth-First Search (DFS)
+- Plunges as deep as possible before backtracking.
+- Great for finding paths, topological sorting, and cycle detection.
+- Memory: O(V) in worst case (recursion stack).
+
+2. Breadth-First Search (BFS)
+- Explores layer by layer.
+- Essential for unweighted shortest path problems.
+- Memory: O(V) in worst case (queue width).
+
+Implementation detail at 14:32: Make sure to maintain a 'visited' set to prevent infinite loops in cyclic graphs. Instructor showed a python implementation using collections.deque for O(1) pops from the front, which is more efficient than a standard list pop(0).</textarea>
+<!-- Bottom Details Panel -->
+<div class="border-t-thin pt-md mt-auto grid grid-cols-2 gap-xl">
+<!-- Tags Input -->
+<div>
+<label class="font-label-md text-label-md text-primary block mb-sm">Tags</label>
+<div class="flex flex-wrap gap-sm mb-sm">
+<span class="border-thin px-sm py-xs font-label-sm text-label-sm bg-surface flex items-center">
+                                    #Algorithms <span aria-hidden="true" class="material-symbols-outlined ml-xs text-[14px] cursor-pointer hover:font-bold" data-icon="close">close</span>
+</span>
+<span class="border-thin px-sm py-xs font-label-sm text-label-sm bg-surface flex items-center">
+                                    #Important <span aria-hidden="true" class="material-symbols-outlined ml-xs text-[14px] cursor-pointer hover:font-bold" data-icon="close">close</span>
+</span>
+<input class="border-thin bg-surface-container-lowest px-sm py-xs font-body-sm text-body-sm outline-none focus:border-2 focus:border-primary w-24" placeholder="Add tag..." type="text"/>
+</div>
+</div>
+<!-- Related Resources -->
+<div>
+<label class="font-label-md text-label-md text-primary block mb-sm">Related Resources</label>
+<ul class="space-y-xs">
+<li>
+<a class="flex items-center text-primary hover:underline font-body-sm text-body-sm group" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-xs text-[16px] text-secondary group-hover:text-primary" data-icon="picture_as_pdf">picture_as_pdf</span>
+                                        Graph_Theory_Cheatsheet.pdf
+                                    </a>
+</li>
+<li>
+<a class="flex items-center text-primary hover:underline font-body-sm text-body-sm group" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mr-xs text-[16px] text-secondary group-hover:text-primary" data-icon="quiz">quiz</span>
+                                        Self-Assessment: Traversal Algorithms
+                                    </a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

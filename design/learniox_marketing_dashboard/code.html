@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX Academy Studio - Marketing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e1dfdf",
+                    "primary-container": "#1b1b1b",
+                    "on-surface": "#1a1c1c",
+                    "tertiary-container": "#1a1c1c",
+                    "secondary": "#5e5e5e",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "inverse-on-surface": "#f0f1f1",
+                    "on-secondary-container": "#626262",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "error": "#ba1a1a",
+                    "on-surface-variant": "#4c4546",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#e2e2e2",
+                    "surface-tint": "#5e5e5e",
+                    "outline-variant": "#cfc4c5",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed": "#e3e2e2",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#000000",
+                    "on-error-container": "#93000a",
+                    "surface": "#f9f9f9",
+                    "on-primary-container": "#848484",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#c6c6c6",
+                    "surface-variant": "#e2e2e2",
+                    "surface-container-low": "#f3f3f4",
+                    "surface-container-high": "#e8e8e8",
+                    "on-secondary-fixed-variant": "#464747",
+                    "surface-bright": "#f9f9f9",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "surface-dim": "#dadada",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#1b1b1b",
+                    "on-primary-fixed-variant": "#474747",
+                    "inverse-surface": "#2f3131",
+                    "tertiary": "#000000",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#464747",
+                    "on-tertiary-container": "#838484",
+                    "surface-container": "#eeeeee",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "outline": "#7e7576",
+                    "secondary-fixed": "#e4e2e2",
+                    "on-background": "#1a1c1c",
+                    "background": "#f9f9f9",
+                    "surface-container-highest": "#e2e2e2",
+                    "inverse-primary": "#c6c6c6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "0px"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "xl": "48px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "md": "16px",
+                    "container-max": "1440px",
+                    "sm": "8px",
+                    "unit": "4px",
+                    "xxl": "64px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-xl": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased overflow-hidden selection:bg-primary selection:text-on-primary">
+<div class="flex h-screen w-full">
+<!-- SideNavBar -->
+<aside class="w-64 bg-surface border-r border-primary flex flex-col h-full py-lg px-md shrink-0 z-20">
+<div class="mb-xl">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary uppercase tracking-tighter">Growth Engine</h1>
+<p class="font-label-sm text-label-sm text-secondary mt-xs">Marketing Studio</p>
+</div>
+<nav class="flex-1 flex flex-col gap-sm">
+<a class="flex items-center gap-md p-md text-primary hover:bg-surface-container-highest transition-none rounded-none group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+<span class="font-label-md text-label-md font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-md p-md bg-primary text-on-primary font-bold rounded-none" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">campaign</span>
+<span class="font-label-md text-label-md">Campaigns</span>
+</a>
+<a class="flex items-center gap-md p-md text-primary hover:bg-surface-container-highest transition-none rounded-none group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">group</span>
+<span class="font-label-md text-label-md font-semibold">Leads</span>
+</a>
+<a class="flex items-center gap-md p-md text-primary hover:bg-surface-container-highest transition-none rounded-none group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">confirmation_number</span>
+<span class="font-label-md text-label-md font-semibold">Coupons</span>
+</a>
+<a class="flex items-center gap-md p-md text-primary hover:bg-surface-container-highest transition-none rounded-none group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">share</span>
+<span class="font-label-md text-label-md font-semibold">Referrals</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-surface-container-highest pt-md">
+<a class="flex items-center gap-md p-md text-primary hover:bg-surface-container-highest transition-none rounded-none" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md font-semibold">Settings</span>
+</a>
+<a class="flex items-center gap-md p-md text-primary hover:bg-surface-container-highest transition-none rounded-none" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md font-semibold">Support</span>
+</a>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0 bg-surface">
+<!-- TopAppBar -->
+<header class="h-[72px] bg-surface border-b border-primary flex justify-between items-center px-margin-desktop py-md shrink-0 z-10">
+<div class="flex items-center gap-md">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Marketing</h2>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-surface border border-primary text-primary px-lg py-sm font-label-md text-label-md font-semibold hover:border-[2px] transition-none h-10 flex items-center justify-center">
+                        Create Coupon
+                    </button>
+<button class="bg-primary text-on-primary px-lg py-sm font-label-md text-label-md font-semibold hover:bg-secondary transition-none h-10 flex items-center justify-center">
+                        Create Campaign
+                    </button>
+<div class="w-px h-6 bg-surface-container-highest mx-sm"></div>
+<button aria-label="Generate Copy" class="w-10 h-10 flex items-center justify-center border border-primary text-primary hover:bg-surface-container-highest transition-none">
+<span class="material-symbols-outlined text-[20px]">edit_note</span>
+</button>
+</div>
+</header>
+<!-- Main Scrollable Area -->
+<main class="flex-1 overflow-auto p-margin-desktop flex gap-xl">
+<!-- Left Content Area -->
+<div class="flex-1 flex flex-col gap-xl min-w-0">
+<!-- Stats Grid -->
+<div class="grid grid-cols-5 gap-md">
+<!-- Stat Card 1 -->
+<div class="border border-primary bg-surface-container-lowest p-lg">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-sm">Leads Collected</p>
+<div class="flex items-baseline gap-sm">
+<h3 class="font-headline-lg text-headline-lg text-primary">2,450</h3>
+<span class="font-label-md text-label-md text-primary bg-surface-container px-xs py-[2px] border border-primary">+12%</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="border border-surface-container-highest bg-surface-container-lowest p-lg">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-sm">Campaign Clicks</p>
+<div class="flex items-baseline gap-sm">
+<h3 class="font-headline-lg text-headline-lg text-primary">15.2k</h3>
+<span class="font-label-md text-label-md text-primary bg-surface-container px-xs py-[2px] border border-surface-container-highest">+5%</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="border border-surface-container-highest bg-surface-container-lowest p-lg">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-sm">Conversion Rate</p>
+<div class="flex items-baseline gap-sm">
+<h3 class="font-headline-lg text-headline-lg text-primary">3.8%</h3>
+<span class="font-label-md text-label-md text-secondary bg-surface px-xs py-[2px] border border-surface-container-highest">-0.2%</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="border border-surface-container-highest bg-surface-container-lowest p-lg">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-sm">Coupon Usage</p>
+<div class="flex items-baseline gap-sm">
+<h3 class="font-headline-lg text-headline-lg text-primary">842</h3>
+<span class="font-label-md text-label-md text-primary bg-surface-container px-xs py-[2px] border border-surface-container-highest">+15%</span>
+</div>
+</div>
+<!-- Stat Card 5 -->
+<div class="border border-surface-container-highest bg-surface-container-lowest p-lg">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-sm">Referral Signups</p>
+<div class="flex items-baseline gap-sm">
+<h3 class="font-headline-lg text-headline-lg text-primary">120</h3>
+<span class="font-label-md text-label-md text-primary bg-surface-container px-xs py-[2px] border border-surface-container-highest">+8%</span>
+</div>
+</div>
+</div>
+<!-- Tabs & Table Section -->
+<div class="flex flex-col flex-1 border border-primary bg-surface-container-lowest">
+<!-- Tab Header -->
+<div class="flex border-b border-primary bg-surface-container-low px-md">
+<button class="px-lg py-md font-label-md text-label-md font-bold text-primary border-b-2 border-primary translate-y-px">
+                                Campaigns
+                            </button>
+<button class="px-lg py-md font-label-md text-label-md text-secondary hover:text-primary transition-none">
+                                Leads
+                            </button>
+<button class="px-lg py-md font-label-md text-label-md text-secondary hover:text-primary transition-none">
+                                Coupons
+                            </button>
+<button class="px-lg py-md font-label-md text-label-md text-secondary hover:text-primary transition-none">
+                                Referrals
+                            </button>
+<button class="px-lg py-md font-label-md text-label-md text-secondary hover:text-primary transition-none ml-auto flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+                                AI Copy
+                            </button>
+</div>
+<!-- Table Area -->
+<div class="p-lg flex-1 overflow-auto">
+<div class="flex justify-between items-center mb-lg">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+<input class="w-full pl-xl pr-sm py-sm border border-surface-container-highest focus:border-primary focus:ring-0 font-body-sm text-body-sm bg-surface-container-lowest placeholder:text-secondary h-10" placeholder="Search campaigns..." type="text"/>
+</div>
+<div class="flex gap-sm">
+<button class="border border-surface-container-highest p-sm hover:border-primary flex items-center justify-center text-primary h-10 w-10">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+</button>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-y border-surface-container-highest">
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold w-12"><div class="w-4 h-4 border border-primary"></div></th>
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold">Campaign Name</th>
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold">Product</th>
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold">Channel</th>
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold">Status</th>
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold text-right">Leads</th>
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold text-right">Clicks</th>
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold text-right">Conv.</th>
+<th class="py-sm px-md font-label-md text-label-md text-primary font-semibold text-right">Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-surface-container-highest hover:bg-surface transition-none cursor-pointer">
+<td class="py-md px-md"><div class="w-4 h-4 border border-primary bg-primary"></div></td>
+<td class="py-md px-md font-body-sm text-body-sm font-semibold text-primary">Winter Bootcamp Ads</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary">Full-Stack Dev</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary">Meta Ads</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center px-sm py-[2px] border border-primary font-label-sm text-label-sm text-primary uppercase bg-surface-container-lowest tracking-widest">
+                                                Active
+                                            </span>
+</td>
+<td class="py-md px-md font-body-sm text-body-sm text-primary text-right">450</td>
+<td class="py-md px-md font-body-sm text-body-sm text-primary text-right">2.5k</td>
+<td class="py-md px-md font-body-sm text-body-sm text-primary text-right">18%</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary text-right">Oct 24, 2023</td>
+</tr>
+<tr class="border-b border-surface-container-highest hover:bg-surface transition-none cursor-pointer">
+<td class="py-md px-md"><div class="w-4 h-4 border border-surface-container-highest"></div></td>
+<td class="py-md px-md font-body-sm text-body-sm font-semibold text-primary">Q4 Retargeting - Python</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary">Data Science</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary">Google Ads</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center px-sm py-[2px] border border-primary font-label-sm text-label-sm text-primary uppercase bg-surface-container-lowest tracking-widest">
+                                                Active
+                                            </span>
+</td>
+<td class="py-md px-md font-body-sm text-body-sm text-primary text-right">312</td>
+<td class="py-md px-md font-body-sm text-body-sm text-primary text-right">1.8k</td>
+<td class="py-md px-md font-body-sm text-body-sm text-primary text-right">14%</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary text-right">Oct 20, 2023</td>
+</tr>
+<tr class="border-b border-surface-container-highest hover:bg-surface transition-none cursor-pointer bg-surface-container-lowest">
+<td class="py-md px-md"><div class="w-4 h-4 border border-surface-container-highest"></div></td>
+<td class="py-md px-md font-body-sm text-body-sm font-semibold text-secondary">Summer UX Promo</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary">UX/UI Design</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary">LinkedIn</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center px-sm py-[2px] border border-surface-container-highest font-label-sm text-label-sm text-secondary uppercase bg-surface tracking-widest">
+                                                Paused
+                                            </span>
+</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary text-right">89</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary text-right">800</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary text-right">8%</td>
+<td class="py-md px-md font-body-sm text-body-sm text-secondary text-right">Sep 15, 2023</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Sidebar (Insight Panel) -->
+<aside class="w-80 shrink-0 flex flex-col gap-lg">
+<div class="border border-primary bg-surface-container-lowest flex flex-col">
+<div class="border-b border-primary p-md flex items-center gap-sm bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">lightbulb</span>
+<h3 class="font-label-md text-label-md font-bold text-primary uppercase tracking-widest">AI Insights</h3>
+</div>
+<div class="p-md flex flex-col gap-md">
+<!-- Insight Item 1 -->
+<div class="border border-primary p-md bg-surface-container-lowest">
+<div class="flex items-start gap-sm mb-sm">
+<span class="material-symbols-outlined text-primary text-[16px] mt-[2px]">trending_up</span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest font-bold">Suggested</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary">
+                                    Increase spend on <strong>Python for Data Science</strong>. Recent tests show high conversion velocity compared to baseline.
+                                </p>
+<button class="mt-sm font-label-sm text-label-sm text-primary underline hover:text-secondary">Apply Allocation</button>
+</div>
+<!-- Insight Item 2 -->
+<div class="border border-surface-container-highest p-md bg-surface">
+<div class="flex items-start gap-sm mb-sm">
+<span class="material-symbols-outlined text-secondary text-[16px] mt-[2px]">edit_document</span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">Draft Ready</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary italic border-l-2 border-surface-container-highest pl-sm my-sm">
+                                    "Unlock your potential with our expert-led bootcamp..."
+                                </p>
+<button class="mt-xs font-label-sm text-label-sm text-primary underline hover:text-secondary">Review Draft</button>
+</div>
+<!-- Insight Item 3 -->
+<div class="border border-primary p-md bg-surface-container-lowest relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex items-start gap-sm mb-sm pl-sm">
+<span class="material-symbols-outlined text-primary text-[16px] mt-[2px]">warning</span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest font-bold">Notice</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary pl-sm">
+                                    Campaign coupon <strong>'FALL23'</strong> expires in exactly 2 days. 
+                                </p>
+<button class="mt-sm font-label-sm text-label-sm text-primary underline hover:text-secondary pl-sm">Extend Duration</button>
+</div>
+</div>
+</div>
+<!-- Quick Action Area -->
+<div class="border border-surface-container-highest bg-surface-container-lowest p-lg">
+<h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-md border-b border-surface-container-highest pb-sm">Quick Exports</h4>
+<div class="flex flex-col gap-sm">
+<button class="flex items-center justify-between p-sm border border-surface-container-highest hover:border-primary hover:bg-surface text-primary transition-none text-left w-full group">
+<span class="font-label-md text-label-md">Q3 Performance Report</span>
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:text-primary">download</span>
+</button>
+<button class="flex items-center justify-between p-sm border border-surface-container-highest hover:border-primary hover:bg-surface text-primary transition-none text-left w-full group">
+<span class="font-label-md text-label-md">Active Leads CSV</span>
+<span class="material-symbols-outlined text-[16px] text-secondary group-hover:text-primary">download</span>
+</button>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</div>
+</body></html>

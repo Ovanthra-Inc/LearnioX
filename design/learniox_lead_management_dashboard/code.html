@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lead Management - LearnioX Academy Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f9f9f9",
+                        "outline-variant": "#cfc4c5",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#4c4546",
+                        "secondary-container": "#e1dfdf",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-primary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "surface-container-high": "#e8e8e8",
+                        "primary-container": "#1b1b1b",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-background": "#1a1c1c",
+                        "inverse-primary": "#c6c6c6",
+                        "surface-tint": "#5e5e5e",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#626262",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#e2e2e2",
+                        "inverse-on-surface": "#f0f1f1",
+                        "secondary-fixed": "#e4e2e2",
+                        "on-primary-fixed": "#1b1b1b",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-container": "#eeeeee",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e2e2e2",
+                        "outline": "#7e7576",
+                        "secondary": "#5e5e5e",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "surface-container-low": "#f3f3f4",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary-container": "#838484",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-primary-container": "#848484",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-error": "#ffffff",
+                        "tertiary": "#000000",
+                        "surface-bright": "#f9f9f9",
+                        "inverse-surface": "#2f3131"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "xxl": "64px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "container-max": "1440px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "48px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex w-full">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col bg-surface h-screen left-0 w-64 rounded-none border-r border-primary">
+<div class="p-lg border-b border-primary">
+<div class="text-headline-sm font-headline-sm font-bold text-primary mb-xs">Lead Management</div>
+<div class="text-label-sm font-label-sm text-secondary">Ed-Tech SaaS</div>
+</div>
+<div class="flex-1 overflow-y-auto py-md">
+<ul class="space-y-sm px-sm">
+<li>
+<a class="flex items-center px-md py-sm text-primary hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined mr-sm">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-md py-sm bg-primary text-on-primary font-bold rounded-none transition-all" href="#">
+<span class="material-symbols-outlined mr-sm">person_search</span>
+<span class="text-label-md font-label-md">Leads</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-md py-sm text-primary hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined mr-sm">campaign</span>
+<span class="text-label-md font-label-md">Campaigns</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-md py-sm text-primary hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined mr-sm">analytics</span>
+<span class="text-label-md font-label-md">Analytics</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-md py-sm text-primary hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined mr-sm">school</span>
+<span class="text-label-md font-label-md">Programs</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-md py-sm text-primary hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined mr-sm">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="border-t border-primary p-sm">
+<ul class="space-y-sm">
+<li>
+<a class="flex items-center px-md py-sm text-primary hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined mr-sm">help</span>
+<span class="text-label-md font-label-md">Help</span>
+</a>
+</li>
+<li>
+<a class="flex items-center px-md py-sm text-primary hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined mr-sm">contact_support</span>
+<span class="text-label-md font-label-md">Support</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-primary flex justify-between items-center w-full px-lg py-md h-16 shrink-0">
+<div class="flex items-center gap-lg w-full max-w-2xl">
+<div class="md:hidden text-headline-sm font-headline-sm font-bold text-primary uppercase tracking-tighter">LeadStudio</div>
+<div class="text-headline-md font-headline-md hidden md:block">Leads</div>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-secondary">search</span>
+<input class="w-full border border-primary bg-background pl-xl py-sm text-body-sm font-body-sm focus:outline-none focus:ring-1 focus:ring-primary h-10" placeholder="Search leads..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden lg:flex gap-sm">
+<button class="border border-primary px-sm py-xs text-label-md font-label-md flex items-center gap-xs hover:bg-surface-container-highest">
+                        Source <span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</button>
+<button class="border border-primary px-sm py-xs text-label-md font-label-md flex items-center gap-xs hover:bg-surface-container-highest">
+                        Course <span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</button>
+<button class="border border-primary px-sm py-xs text-label-md font-label-md flex items-center gap-xs hover:bg-surface-container-highest">
+                        Status <span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</button>
+</div>
+<button class="border border-primary px-md py-sm text-label-md font-label-md flex items-center gap-xs hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[16px]">download</span> Export
+                </button>
+<div class="flex gap-sm border-l border-primary pl-md ml-sm">
+<button class="text-primary hover:bg-secondary-container transition-colors p-xs"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-primary hover:bg-secondary-container transition-colors p-xs"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<main class="flex-1 overflow-y-auto bg-background p-lg flex flex-col gap-lg">
+<!-- Performance Stats Row -->
+<div class="grid grid-cols-2 md:grid-cols-5 gap-md">
+<div class="border border-primary bg-surface p-md flex flex-col justify-between h-24">
+<span class="text-label-md font-label-md text-secondary uppercase">Total Leads</span>
+<span class="text-headline-md font-headline-md">1,240</span>
+</div>
+<div class="border border-primary bg-surface p-md flex flex-col justify-between h-24">
+<span class="text-label-md font-label-md text-secondary uppercase">New Leads</span>
+<span class="text-headline-md font-headline-md">48</span>
+</div>
+<div class="border border-primary bg-surface p-md flex flex-col justify-between h-24">
+<span class="text-label-md font-label-md text-secondary uppercase">Contacted</span>
+<span class="text-headline-md font-headline-md">812</span>
+</div>
+<div class="border border-primary bg-surface p-md flex flex-col justify-between h-24">
+<span class="text-label-md font-label-md text-secondary uppercase">Converted</span>
+<span class="text-headline-md font-headline-md">156</span>
+</div>
+<div class="border border-primary bg-primary text-on-primary p-md flex flex-col justify-between h-24">
+<span class="text-label-md font-label-md text-on-secondary-container uppercase">Conversion Rate</span>
+<span class="text-headline-md font-headline-md">12.5%</span>
+</div>
+</div>
+<!-- Leads Table Area -->
+<div class="flex flex-1 gap-lg overflow-hidden border border-primary bg-surface">
+<!-- Table -->
+<div class="flex-1 overflow-auto flex flex-col">
+<div class="w-full min-w-[1000px]">
+<div class="grid grid-cols-12 bg-[#F5F5F5] border-b border-primary p-sm sticky top-0 z-10">
+<div class="col-span-2 text-label-md font-label-md p-xs">Name</div>
+<div class="col-span-2 text-label-md font-label-md p-xs">Contact Info</div>
+<div class="col-span-2 text-label-md font-label-md p-xs">Interested Course</div>
+<div class="col-span-1 text-label-md font-label-md p-xs">Source</div>
+<div class="col-span-2 text-label-md font-label-md p-xs">Status</div>
+<div class="col-span-1 text-label-md font-label-md p-xs">Assigned To</div>
+<div class="col-span-1 text-label-md font-label-md p-xs">Date</div>
+<div class="col-span-1 text-label-md font-label-md p-xs text-center">Actions</div>
+</div>
+<!-- Row 1 - Active -->
+<div class="grid grid-cols-12 border-b border-[#E5E5E5] p-sm items-center bg-surface-container hover:bg-surface-container-high cursor-pointer border-l-2 border-l-primary">
+<div class="col-span-2 text-body-sm font-body-sm p-xs font-bold">Alice Chen</div>
+<div class="col-span-2 text-body-sm font-body-sm p-xs text-secondary truncate">a.chen@example.com<br/>555-0192</div>
+<div class="col-span-2 text-body-sm font-body-sm p-xs truncate">Data Science Bootcamp</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">Google Ads</div>
+<div class="col-span-2 p-xs">
+<span class="border border-primary px-xs py-[2px] text-label-sm font-label-sm bg-primary text-on-primary">New</span>
+</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">J. Smith</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">Oct 12</div>
+<div class="col-span-1 text-center p-xs flex justify-center gap-xs">
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-[18px]">mail</span></button>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-12 border-b border-[#E5E5E5] p-sm items-center hover:bg-surface-container-low cursor-pointer">
+<div class="col-span-2 text-body-sm font-body-sm p-xs">Marcus Johnson</div>
+<div class="col-span-2 text-body-sm font-body-sm p-xs text-secondary truncate">mjohnson88@mail.com<br/>555-8374</div>
+<div class="col-span-2 text-body-sm font-body-sm p-xs truncate">UI/UX Design Masterclass</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">Organic</div>
+<div class="col-span-2 p-xs">
+<span class="border border-primary px-xs py-[2px] text-label-sm font-label-sm">Contacted</span>
+</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">S. Lee</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">Oct 11</div>
+<div class="col-span-1 text-center p-xs flex justify-center gap-xs">
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-[18px]">mail</span></button>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-12 border-b border-[#E5E5E5] p-sm items-center hover:bg-surface-container-low cursor-pointer">
+<div class="col-span-2 text-body-sm font-body-sm p-xs">Elena Rodriguez</div>
+<div class="col-span-2 text-body-sm font-body-sm p-xs text-secondary truncate">elena.r@business.com<br/>555-1029</div>
+<div class="col-span-2 text-body-sm font-body-sm p-xs truncate">Full-Stack Web Dev</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">LinkedIn</div>
+<div class="col-span-2 p-xs">
+<span class="border border-primary px-xs py-[2px] text-label-sm font-label-sm border-dashed">In Progress</span>
+</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">J. Smith</div>
+<div class="col-span-1 text-body-sm font-body-sm p-xs">Oct 10</div>
+<div class="col-span-1 text-center p-xs flex justify-center gap-xs">
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-[18px]">mail</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Lead Detail Panel -->
+<div class="w-80 border-l border-primary bg-surface flex flex-col shrink-0 hidden lg:flex">
+<div class="p-md border-b border-primary flex justify-between items-center bg-[#F5F5F5]">
+<span class="text-headline-sm font-headline-sm">Lead Details</span>
+<button class="text-primary"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="flex-1 overflow-y-auto p-md flex flex-col gap-md">
+<div>
+<div class="text-headline-sm font-headline-sm mb-xs">Alice Chen</div>
+<span class="border border-primary px-sm py-xs text-label-sm font-label-sm bg-primary text-on-primary uppercase">New</span>
+</div>
+<div class="border-t border-[#E5E5E5] pt-md">
+<div class="text-label-md font-label-md text-secondary mb-sm uppercase">Contact Details</div>
+<div class="text-body-sm font-body-sm flex items-center gap-sm mb-xs"><span class="material-symbols-outlined text-[16px]">mail</span> a.chen@example.com</div>
+<div class="text-body-sm font-body-sm flex items-center gap-sm"><span class="material-symbols-outlined text-[16px]">phone</span> +1 (555) 019-2834</div>
+</div>
+<div class="border-t border-[#E5E5E5] pt-md">
+<div class="text-label-md font-label-md text-secondary mb-sm uppercase">Source &amp; Interest</div>
+<div class="text-body-sm font-body-sm mb-xs"><span class="font-bold">Course:</span> Data Science Bootcamp</div>
+<div class="text-body-sm font-body-sm"><span class="font-bold">Source:</span> Google Ads (Campaign Q3_DS)</div>
+</div>
+<div class="border-t border-[#E5E5E5] pt-md">
+<div class="text-label-md font-label-md text-secondary mb-sm uppercase">Internal Notes</div>
+<div class="border border-[#CCCCCC] p-sm bg-background text-body-sm font-body-sm min-h-[80px]">
+                                Wants to start in November. Currently working as an analyst. Needs info on payment plans.
+                            </div>
+</div>
+</div>
+<div class="p-md border-t border-primary bg-[#F5F5F5] flex flex-col gap-sm">
+<div class="flex gap-sm">
+<select class="border border-primary bg-surface flex-1 p-sm text-label-md font-label-md focus:outline-none focus:ring-1 focus:ring-primary h-10">
+<option>J. Smith</option>
+<option>S. Lee</option>
+</select>
+<select class="border border-primary bg-surface flex-1 p-sm text-label-md font-label-md focus:outline-none focus:ring-1 focus:ring-primary h-10">
+<option>New</option>
+<option>Contacted</option>
+<option>In Progress</option>
+</select>
+</div>
+<button class="bg-primary text-on-primary w-full py-sm text-label-md font-label-md hover:bg-[#666666] transition-colors h-10">
+                            Convert to Learner
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

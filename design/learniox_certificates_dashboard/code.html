@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Certificates - LearnioX</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e3e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-container": "#626262",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#5e5e5e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-surface-variant": "#4c4546",
+                        "primary-fixed": "#e2e2e2",
+                        "tertiary-container": "#1a1c1c",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#1b1b1b",
+                        "primary-container": "#1b1b1b",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-primary-container": "#848484",
+                        "primary": "#000000",
+                        "surface": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "surface-container-low": "#f3f3f4",
+                        "surface-dim": "#dadada",
+                        "surface-bright": "#f9f9f9",
+                        "on-background": "#1a1c1c",
+                        "tertiary": "#000000",
+                        "inverse-on-surface": "#f0f1f1",
+                        "secondary": "#5e5e5e",
+                        "outline": "#7e7576",
+                        "on-surface": "#1a1c1c",
+                        "surface-container": "#eeeeee",
+                        "inverse-primary": "#c6c6c6",
+                        "background": "#f9f9f9",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-primary-fixed-variant": "#474747",
+                        "inverse-surface": "#2f3131",
+                        "secondary-container": "#e1dfdf",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed": "#e4e2e2",
+                        "on-tertiary-container": "#838484",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#cfc4c5",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xxl": "64px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "container-max": "1440px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "xl": "48px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col pt-xxl z-40 bg-surface dark:bg-background text-primary dark:text-on-background border-r border-primary dark:border-on-background docked h-full left-0 w-64 hidden md:flex">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-sm text-headline-sm font-black tracking-tighter">LEARNIOX</h1>
+<p class="font-label-sm text-label-sm mt-sm text-secondary">Enterprise Edition</p>
+</div>
+<nav class="flex-1 flex flex-col font-label-md text-label-md">
+<a class="text-primary dark:text-on-background flex items-center gap-md px-lg py-md border-b border-surface-container-highest hover:bg-secondary-container dark:hover:bg-secondary-fixed-dim transition-all duration-75" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-primary dark:text-on-background flex items-center gap-md px-lg py-md border-b border-surface-container-highest hover:bg-secondary-container dark:hover:bg-secondary-fixed-dim transition-all duration-75" href="#">
+<span class="material-symbols-outlined">school</span>
+                My Courses
+            </a>
+<a class="bg-primary dark:bg-on-background text-on-primary dark:text-background flex items-center gap-md px-lg py-md transition-all duration-75" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                Certificates
+            </a>
+<a class="text-primary dark:text-on-background flex items-center gap-md px-lg py-md border-b border-surface-container-highest hover:bg-secondary-container dark:hover:bg-secondary-fixed-dim transition-all duration-75" href="#">
+<span class="material-symbols-outlined">description</span>
+                Notes
+            </a>
+<a class="text-primary dark:text-on-background flex items-center gap-md px-lg py-md border-b border-surface-container-highest hover:bg-secondary-container dark:hover:bg-secondary-fixed-dim transition-all duration-75" href="#">
+<span class="material-symbols-outlined">help_center</span>
+                Doubts
+            </a>
+</nav>
+<div class="p-lg border-t border-surface-container-highest flex items-center gap-md">
+<div class="w-8 h-8 bg-surface-container-high border border-primary rounded-none overflow-hidden">
+<img alt="User profile photo" class="w-full h-full object-cover grayscale" data-alt="A strict, black and white professional headshot of a person looking directly at the camera. The lighting is high contrast and dramatic. The aesthetic is extremely minimalist and corporate, fitting an enterprise software environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyagaPnW2-Gt6RPOXZTZf87NhwLXT_709mqb0oBOp4VgnT_sVnNPvP5_ONYTDsaQCjMHoyNJnpr5lEaCjq2BS726Q88xL1Av1m_pdQOQdKREgnUTN1d7HBJYDVeQQS76VhQS65Iler34G-UJWejfwMohvsuBeTuLKZiI3Pmnriykm5qT5hhDRV8foyiow4q8lawAfs2-mMqOORJI7aCub6XTFpQfYMnPezxbdIwcNh53cgPOZCrrLAOvaQzwAkOC7JllovBl9BLC_2"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md">Alex Johnson</span>
+<span class="font-label-sm text-label-sm text-secondary">alex.j@enterprise.com</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full">
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-xl gap-lg">
+<h2 class="font-headline-xl text-headline-xl">Certificates</h2>
+<div class="flex flex-col sm:flex-row gap-md w-full md:w-auto">
+<div class="relative w-full sm:w-64">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-secondary">search</span>
+<input class="w-full pl-xl pr-md py-sm bg-surface-container-lowest border border-[#CCCCCC] focus:border-primary focus:ring-0 font-body-sm text-body-sm text-on-background placeholder:text-secondary rounded-none outline-none" placeholder="Search certificates..." type="text"/>
+</div>
+<div class="flex gap-md w-full sm:w-auto">
+<select class="flex-1 sm:w-40 px-md py-sm bg-surface-container-lowest border border-[#CCCCCC] focus:border-primary focus:ring-0 font-body-sm text-body-sm text-on-background rounded-none outline-none appearance-none">
+<option>Institution</option>
+<option>TechGlobal Institute</option>
+<option>DataSci Academy</option>
+</select>
+<select class="flex-1 sm:w-40 px-md py-sm bg-surface-container-lowest border border-[#CCCCCC] focus:border-primary focus:ring-0 font-body-sm text-body-sm text-on-background rounded-none outline-none appearance-none">
+<option>Course</option>
+<option>Advanced Python</option>
+<option>Machine Learning</option>
+</select>
+</div>
+</div>
+</header>
+<!-- Certificates Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Certificate Card 1 -->
+<article class="bg-surface-container-lowest border border-primary p-lg flex flex-col gap-md">
+<div class="aspect-[1.414] bg-surface-container-high border border-surface-container-highest flex items-center justify-center cursor-pointer hover:border-primary transition-colors" onclick="document.getElementById('cert-modal').classList.remove('hidden'); document.getElementById('cert-modal').classList.add('flex')">
+<span class="material-symbols-outlined text-4xl text-secondary">workspace_premium</span>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<h3 class="font-headline-sm text-headline-sm line-clamp-2">Advanced Python for Data Science</h3>
+<p class="font-body-sm text-body-sm text-secondary">TechGlobal Institute</p>
+</div>
+<div class="border-t border-surface-container-highest pt-sm flex flex-col gap-xs font-label-sm text-label-sm text-secondary">
+<div class="flex justify-between">
+<span>Issued:</span>
+<span class="text-on-surface">Oct 24, 2023</span>
+</div>
+<div class="flex justify-between">
+<span>Verification:</span>
+<span class="text-on-surface">LX-882-991</span>
+</div>
+</div>
+<div class="flex gap-sm mt-sm">
+<button class="flex-1 bg-surface-container-lowest border border-primary hover:border-[2px] text-primary font-label-md text-label-md py-sm transition-all text-center">Verify</button>
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-sm hover:bg-[#666666] transition-colors text-center">Download PDF</button>
+<button class="w-10 h-10 border border-primary flex items-center justify-center hover:border-[2px] transition-all bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</button>
+</div>
+</article>
+<!-- Certificate Card 2 -->
+<article class="bg-surface-container-lowest border border-primary p-lg flex flex-col gap-md">
+<div class="aspect-[1.414] bg-surface-container-high border border-surface-container-highest flex items-center justify-center cursor-pointer hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-4xl text-secondary">workspace_premium</span>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<h3 class="font-headline-sm text-headline-sm line-clamp-2">Machine Learning Fundamentals</h3>
+<p class="font-body-sm text-body-sm text-secondary">DataSci Academy</p>
+</div>
+<div class="border-t border-surface-container-highest pt-sm flex flex-col gap-xs font-label-sm text-label-sm text-secondary">
+<div class="flex justify-between">
+<span>Issued:</span>
+<span class="text-on-surface">Aug 15, 2023</span>
+</div>
+<div class="flex justify-between">
+<span>Verification:</span>
+<span class="text-on-surface">LX-741-220</span>
+</div>
+</div>
+<div class="flex gap-sm mt-sm">
+<button class="flex-1 bg-surface-container-lowest border border-primary hover:border-[2px] text-primary font-label-md text-label-md py-sm transition-all text-center">Verify</button>
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-sm hover:bg-[#666666] transition-colors text-center">Download PDF</button>
+<button class="w-10 h-10 border border-primary flex items-center justify-center hover:border-[2px] transition-all bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</button>
+</div>
+</article>
+<!-- Certificate Card 3 -->
+<article class="bg-surface-container-lowest border border-primary p-lg flex flex-col gap-md">
+<div class="aspect-[1.414] bg-surface-container-high border border-surface-container-highest flex items-center justify-center cursor-pointer hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-4xl text-secondary">workspace_premium</span>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<h3 class="font-headline-sm text-headline-sm line-clamp-2">Enterprise Cloud Architecture</h3>
+<p class="font-body-sm text-body-sm text-secondary">TechGlobal Institute</p>
+</div>
+<div class="border-t border-surface-container-highest pt-sm flex flex-col gap-xs font-label-sm text-label-sm text-secondary">
+<div class="flex justify-between">
+<span>Issued:</span>
+<span class="text-on-surface">May 02, 2023</span>
+</div>
+<div class="flex justify-between">
+<span>Verification:</span>
+<span class="text-on-surface">LX-119-456</span>
+</div>
+</div>
+<div class="flex gap-sm mt-sm">
+<button class="flex-1 bg-surface-container-lowest border border-primary hover:border-[2px] text-primary font-label-md text-label-md py-sm transition-all text-center">Verify</button>
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-sm hover:bg-[#666666] transition-colors text-center">Download PDF</button>
+<button class="w-10 h-10 border border-primary flex items-center justify-center hover:border-[2px] transition-all bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</button>
+</div>
+</article>
+</div>
+<!-- Empty State (Hidden, structural example) -->
+<div class="hidden flex-col items-center justify-center text-center py-xxl border border-[#E5E5E5] mt-xl">
+<span class="material-symbols-outlined text-4xl text-secondary mb-md">school</span>
+<p class="font-body-lg text-body-lg text-on-surface mb-lg">Complete a course to earn your first certificate.</p>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-lg py-sm hover:bg-[#666666] transition-colors">Browse Courses</button>
+</div>
+</main>
+<!-- Certificate Detail Modal -->
+<div class="fixed inset-0 z-50 hidden items-center justify-center p-margin-mobile md:p-margin-desktop" id="cert-modal">
+<div class="absolute inset-0 bg-[#000000] opacity-40 cursor-pointer" onclick="document.getElementById('cert-modal').classList.remove('flex'); document.getElementById('cert-modal').classList.add('hidden')"></div>
+<div class="relative bg-surface-container-lowest border border-primary w-full max-w-4xl max-h-[921px] overflow-y-auto flex flex-col md:flex-row">
+<div class="p-lg border-b md:border-b-0 md:border-r border-surface-container-highest flex-1 flex flex-col justify-center bg-surface">
+<div class="aspect-[1.414] border border-primary w-full p-xl flex flex-col items-center justify-center text-center bg-surface-container-lowest relative">
+<div class="absolute top-md left-md right-md bottom-md border border-[#E5E5E5] pointer-events-none"></div>
+<span class="font-headline-lg text-headline-lg mb-xl uppercase tracking-widest">Certificate of Completion</span>
+<span class="font-label-sm text-label-sm text-secondary mb-sm uppercase">This certifies that</span>
+<span class="font-headline-xl text-headline-xl mb-xl border-b border-primary px-lg pb-sm inline-block">Alex Johnson</span>
+<span class="font-label-sm text-label-sm text-secondary mb-sm uppercase">has successfully completed</span>
+<span class="font-headline-sm text-headline-sm mb-xl">Advanced Python for Data Science</span>
+<div class="flex justify-between w-full px-xl mt-auto font-label-sm text-label-sm text-secondary">
+<div class="flex flex-col border-t border-primary pt-xs">
+<span>TechGlobal Institute</span>
+<span>October 24, 2023</span>
+</div>
+<div class="flex flex-col border-t border-primary pt-xs text-right">
+<span>Verification Code</span>
+<span>LX-882-991</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-lg md:w-80 flex flex-col gap-lg bg-surface-container-lowest">
+<div class="flex justify-between items-start">
+<h2 class="font-headline-md text-headline-md">Details</h2>
+<button class="text-secondary hover:text-primary transition-colors" onclick="document.getElementById('cert-modal').classList.remove('flex'); document.getElementById('cert-modal').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-md">
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary">Course Name</span>
+<span class="font-body-md text-body-md">Advanced Python for Data Science</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary">Institution</span>
+<span class="font-body-md text-body-md">TechGlobal Institute</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary">Completion Date</span>
+<span class="font-body-md text-body-md">Oct 24, 2023</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-secondary">Verification Code</span>
+<span class="font-body-md text-body-md font-mono">LX-882-991</span>
+</div>
+</div>
+<div class="mt-auto flex flex-col gap-sm pt-lg border-t border-[#E5E5E5]">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm hover:bg-[#666666] transition-colors flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Download PDF
+                    </button>
+<button class="w-full bg-surface-container-lowest border border-primary hover:border-[2px] text-primary font-label-md text-label-md py-sm transition-all flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                        Share on LinkedIn
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

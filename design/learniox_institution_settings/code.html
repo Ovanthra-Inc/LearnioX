@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnioX Institution Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dadada",
+                        "surface-tint": "#5e5e5e",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-error-container": "#93000a",
+                        "secondary": "#5e5e5e",
+                        "surface-container-low": "#f3f3f4",
+                        "on-primary-container": "#848484",
+                        "tertiary-container": "#1a1c1c",
+                        "surface-container": "#eeeeee",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2f3131",
+                        "secondary-container": "#e1dfdf",
+                        "on-primary-fixed": "#1b1b1b",
+                        "surface-variant": "#e2e2e2",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "outline-variant": "#cfc4c5",
+                        "on-tertiary": "#ffffff",
+                        "background": "#ffffff",
+                        "on-secondary-container": "#626262",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f0f1f1",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "tertiary-fixed": "#e3e2e2",
+                        "surface-bright": "#f9f9f9",
+                        "secondary-fixed": "#e4e2e2",
+                        "primary-fixed": "#e2e2e2",
+                        "inverse-primary": "#c6c6c6",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1a1c1c",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#4c4546",
+                        "outline": "#000000",
+                        "tertiary": "#000000",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-background": "#000000",
+                        "primary": "#000000",
+                        "surface": "#ffffff",
+                        "primary-container": "#1b1b1b",
+                        "on-tertiary-container": "#838484",
+                        "surface-container-high": "#e8e8e8",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "sm": "8px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "xxl": "64px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #ffffff; color: #000000; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .border-base { border: 1px solid #000000; }
+        .border-b-base { border-bottom: 1px solid #000000; }
+        .border-t-base { border-top: 1px solid #000000; }
+        .border-l-base { border-left: 1px solid #000000; }
+        .border-r-base { border-right: 1px solid #000000; }
+        input[type="text"], input[type="email"], input[type="url"], input[type="tel"], textarea, select {
+            border: 1px solid #CCCCCC;
+            background-color: #ffffff;
+            border-radius: 0;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #000000;
+            box-shadow: none;
+        }
+        .btn-primary { background-color: #000000; color: #ffffff; padding: 12px 24px; transition: background-color 0.2s; }
+        .btn-primary:hover { background-color: #666666; }
+        .btn-secondary { background-color: #ffffff; color: #000000; border: 1px solid #000000; padding: 12px 24px; transition: border-width 0.2s; }
+        .btn-secondary:hover { border-width: 2px; padding: 11px 23px; }
+        .btn-danger { background-color: #ffffff; color: #ba1a1a; border: 1px solid #ba1a1a; padding: 12px 24px; }
+        .btn-danger:hover { background-color: #ffdad6; }
+        
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #000000;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex overflow-x-hidden">
+<!-- Primary SideNavBar -->
+<nav class="w-64 h-screen border-r border-outline bg-surface flex flex-col fixed left-0 top-0 z-20">
+<div class="p-lg border-b border-outline">
+<div class="w-10 h-10 bg-primary mb-md"></div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">LearnioX Academy</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Studio Admin</p>
+</div>
+<div class="flex-1 overflow-y-auto py-md">
+<a class="flex items-center px-lg py-md text-on-surface hover:bg-surface-container transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined mr-md">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center px-lg py-md text-on-surface hover:bg-surface-container transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined mr-md">auto_stories</span>
+<span class="font-body-md text-body-md">Courses</span>
+</a>
+<a class="flex items-center px-lg py-md text-on-surface hover:bg-surface-container transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined mr-md">group</span>
+<span class="font-body-md text-body-md">Students</span>
+</a>
+<a class="flex items-center px-lg py-md text-on-surface hover:bg-surface-container transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined mr-md">analytics</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center px-lg py-md bg-primary text-on-primary transition-colors duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined mr-md">settings</span>
+<span class="font-body-md text-body-md">Studio Settings</span>
+</a>
+</div>
+<div class="p-lg border-t border-outline">
+<button class="w-full btn-secondary font-label-md text-label-md">View Live Academy</button>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="h-16 border-b border-outline bg-surface flex justify-between items-center w-full pl-64 pr-lg ml-auto fixed top-0 z-10">
+<div class="font-headline-sm text-headline-sm font-bold text-primary px-lg">Studio Settings</div>
+<div class="flex items-center space-x-md">
+<button class="text-on-surface-variant hover:text-primary transition-opacity duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-opacity duration-200">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="w-8 h-8 bg-surface-dim border-base ml-md"></div>
+</div>
+</header>
+<!-- Secondary Navigation -->
+<nav class="fixed left-64 top-16 w-48 h-[calc(100vh-64px)] border-r border-outline bg-surface-container-low flex flex-col z-10 pt-md">
+<div class="px-lg pb-md mb-md border-b border-outline">
+<span class="font-label-md text-label-md uppercase tracking-widest text-primary">Settings</span>
+</div>
+<div class="flex flex-col space-y-sm">
+<a class="flex items-center py-sm border-l-4 border-primary bg-surface text-primary font-label-md text-label-md transition-all duration-200" href="#general">
+<span class="material-symbols-outlined ml-2 mr-sm text-[18px]">info</span>
+                General
+            </a>
+<a class="flex items-center py-sm pl-3 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-all duration-200" href="#branding">
+<span class="material-symbols-outlined ml-2 mr-sm text-[18px]">palette</span>
+                Branding
+            </a>
+<a class="flex items-center py-sm pl-3 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-all duration-200" href="#profile">
+<span class="material-symbols-outlined ml-2 mr-sm text-[18px]">public</span>
+                Public Profile
+            </a>
+<a class="flex items-center py-sm pl-3 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-all duration-200" href="#domain">
+<span class="material-symbols-outlined ml-2 mr-sm text-[18px]">language</span>
+                Domain
+            </a>
+<a class="flex items-center py-sm pl-3 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-all duration-200" href="#payments">
+<span class="material-symbols-outlined ml-2 mr-sm text-[18px]">payments</span>
+                Payments
+            </a>
+<a class="flex items-center py-sm pl-3 text-error hover:text-error font-label-md text-label-md transition-all duration-200 mt-xl border-t border-outline pt-md" href="#danger">
+<span class="material-symbols-outlined ml-2 mr-sm text-[18px]">warning</span>
+                Danger Zone
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-[448px] mt-16 p-xl w-full max-w-container-max flex flex-col gap-xxl">
+<!-- General Settings -->
+<section class="scroll-mt-32" id="general">
+<div class="border-b-base pb-md mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-primary">General Settings</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-sm">Manage the primary details and public information of your institution.</p>
+</div>
+<div class="border-base p-lg bg-surface">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-primary uppercase">Institution Name</label>
+<input class="p-sm font-body-md text-body-md w-full" type="text" value="LearnioX Academy"/>
+</div>
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-primary uppercase">Slug</label>
+<div class="flex border border-[#CCCCCC] focus-within:border-black transition-colors">
+<span class="bg-surface-container-low px-sm py-sm text-on-surface-variant font-body-md text-body-md border-r border-[#CCCCCC]">learniox.com/</span>
+<input class="p-sm font-body-md text-body-md w-full border-0 focus:ring-0 flex-1" type="text" value="academy"/>
+</div>
+</div>
+<div class="flex flex-col gap-sm md:col-span-2">
+<label class="font-label-md text-label-md text-primary uppercase">Tagline</label>
+<input class="p-sm font-body-md text-body-md w-full" type="text" value="Empowering the next generation of creators."/>
+</div>
+<div class="flex flex-col gap-sm md:col-span-2">
+<label class="font-label-md text-label-md text-primary uppercase">Description</label>
+<textarea class="p-sm font-body-md text-body-md w-full resize-none" rows="4">LearnioX Academy offers premium courses in design, technology, and business, taught by industry experts.</textarea>
+</div>
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-primary uppercase">Category</label>
+<select class="p-sm font-body-md text-body-md w-full">
+<option>Design &amp; Creative</option>
+<option>Technology</option>
+<option>Business</option>
+</select>
+</div>
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-primary uppercase">Website URL</label>
+<input class="p-sm font-body-md text-body-md w-full" type="url" value="https://learniox.com"/>
+</div>
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-primary uppercase">Support Email</label>
+<input class="p-sm font-body-md text-body-md w-full" type="email" value="support@learniox.com"/>
+</div>
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-primary uppercase">Support Phone</label>
+<input class="p-sm font-body-md text-body-md w-full" type="tel" value="+1 (555) 019-2834"/>
+</div>
+</div>
+<div class="mt-xl flex justify-end border-t border-[#E5E5E5] pt-lg">
+<button class="btn-primary font-label-md text-label-md uppercase">Save Changes</button>
+</div>
+</div>
+</section>
+<!-- Branding Section -->
+<section class="scroll-mt-32" id="branding">
+<div class="border-b-base pb-md mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-primary">Branding</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-sm">Configure the visual identity of your institution.</p>
+</div>
+<div class="border-base p-lg bg-surface grid grid-cols-1 md:grid-cols-2 gap-xl">
+<!-- Logo Upload -->
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-primary uppercase">Institution Logo</label>
+<div class="border border-dashed border-outline p-xl flex flex-col items-center justify-center bg-surface-bright cursor-pointer hover:bg-surface-container transition-colors min-h-[200px]">
+<span class="material-symbols-outlined text-[32px] text-on-surface-variant mb-md">upload_file</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center">Drag and drop your logo here, or <span class="text-primary underline">browse</span></p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-sm uppercase">Recommended: 512x512px PNG</p>
+</div>
+</div>
+<!-- Banner Upload -->
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-primary uppercase">Cover Banner</label>
+<div class="border border-dashed border-outline p-xl flex flex-col items-center justify-center bg-surface-bright cursor-pointer hover:bg-surface-container transition-colors min-h-[200px]">
+<span class="material-symbols-outlined text-[32px] text-on-surface-variant mb-md">image</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center">Drag and drop your banner here, or <span class="text-primary underline">browse</span></p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-sm uppercase">Recommended: 1920x1080px JPG</p>
+</div>
+</div>
+<div class="flex flex-col gap-sm md:col-span-2 border-t border-[#E5E5E5] pt-lg">
+<label class="font-label-md text-label-md text-primary uppercase">Theme Mode Default</label>
+<div class="flex gap-md mt-sm">
+<label class="flex items-center gap-sm cursor-pointer">
+<input checked="" class="w-4 h-4 text-primary focus:ring-primary border-outline rounded-none" name="theme" type="radio"/>
+<span class="font-body-md text-body-md">Light Mode (White)</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer">
+<input class="w-4 h-4 text-primary focus:ring-primary border-outline rounded-none" name="theme" type="radio"/>
+<span class="font-body-md text-body-md">Dark Mode (Black)</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-sm md:col-span-2">
+<label class="font-label-md text-label-md text-primary uppercase">Primary Typography</label>
+<select class="p-sm font-body-md text-body-md w-1/2">
+<option>Inter (Default System)</option>
+<option>Helvetica Neue</option>
+<option>Roboto</option>
+<option>Georgia</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Danger Zone -->
+<section class="scroll-mt-32 mb-xxl" id="danger">
+<div class="border-b border-error pb-md mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-error">Danger Zone</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-sm">Irreversible actions concerning your institution's data and status.</p>
+</div>
+<div class="border border-error p-lg bg-surface">
+<div class="flex items-center justify-between py-md border-b border-[#E5E5E5]">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Unpublish Academy</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Temporarily hide your academy from public access. Current students will retain access.</p>
+</div>
+<button class="btn-secondary font-label-md text-label-md uppercase border-primary text-primary">Unpublish</button>
+</div>
+<div class="flex items-center justify-between py-md pt-lg">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-error">Delete Academy</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Permanently erase all data, courses, and student records associated with this institution.</p>
+</div>
+<button class="btn-danger font-label-md text-label-md uppercase">Delete Permanently</button>
+</div>
+</div>
+</section>
+</main>
+</body></html>

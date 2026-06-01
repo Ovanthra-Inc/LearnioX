@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About LearnioX</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e3e2e2",
+                        "inverse-primary": "#c6c6c6",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-tertiary-container": "#838484",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#474747",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-surface-variant": "#4c4546",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "background": "#f9f9f9",
+                        "surface-container-high": "#e8e8e8",
+                        "tertiary": "#000000",
+                        "on-primary-fixed": "#1b1b1b",
+                        "surface-tint": "#5e5e5e",
+                        "primary": "#000000",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-background": "#1a1c1c",
+                        "surface-container-highest": "#e2e2e2",
+                        "outline-variant": "#cfc4c5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-container": "#eeeeee",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-variant": "#e2e2e2",
+                        "surface": "#f9f9f9",
+                        "secondary-fixed": "#e4e2e2",
+                        "on-surface": "#1a1c1c",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#5e5e5e",
+                        "primary-container": "#1b1b1b",
+                        "on-secondary-container": "#626262",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e1dfdf",
+                        "inverse-surface": "#2f3131",
+                        "tertiary-container": "#1a1c1c",
+                        "outline": "#7e7576",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f9f9f9",
+                        "primary-fixed": "#e2e2e2",
+                        "on-primary-container": "#848484",
+                        "inverse-on-surface": "#f0f1f1",
+                        "surface-container-low": "#f3f3f4",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "surface-dim": "#dadada"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "margin-desktop": "32px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "md": "16px",
+                        "xxl": "64px",
+                        "xl": "48px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Enforce absolute starkness as per guidelines */
+        body { background-color: #ffffff; color: #000000; }
+        .border-strict { border: 1px solid #000000; }
+        .border-b-strict { border-bottom: 1px solid #000000; }
+        .border-t-strict { border-top: 1px solid #000000; }
+        .border-r-strict { border-right: 1px solid #000000; }
+        .border-l-strict { border-left: 1px solid #000000; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-primary font-body-md antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface w-full border-b border-primary dark:border-inverse-primary border-b-strict flat no shadows z-50 sticky top-0 bg-surface-container-lowest">
+<div class="flex justify-between items-center w-full px-margin-desktop py-md max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm font-black tracking-tighter text-primary dark:text-inverse-primary">
+                LearnioX
+            </div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md cursor-pointer transition-opacity active:opacity-70" href="#">Platform</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md cursor-pointer transition-opacity active:opacity-70" href="#">Academy Studio</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-inverse-primary transition-colors font-body-md text-body-md cursor-pointer transition-opacity active:opacity-70" href="#">Marketplace</a>
+<a class="text-primary dark:text-inverse-primary border-b-2 border-primary dark:border-inverse-primary pb-1 font-body-md text-body-md cursor-pointer transition-opacity active:opacity-70" href="#">About</a>
+</nav>
+<div class="hidden md:flex items-center gap-md">
+<button class="font-label-md text-label-md px-lg py-sm border-strict bg-surface-container-lowest text-primary hover:bg-surface-container transition-colors rounded-none">Sign In</button>
+<button class="font-label-md text-label-md px-lg py-sm bg-primary text-on-primary hover:bg-surface-tint transition-colors rounded-none">Launch Academy</button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+<!-- Hero Section -->
+<section class="py-xxl md:py-[120px] border-b-strict flex flex-col md:flex-row gap-xl items-end">
+<div class="w-full md:w-2/3">
+<h1 class="font-headline-xl text-headline-xl md:font-headline-xl md:text-[64px] md:leading-[1.05] tracking-tighter uppercase mb-lg">
+                    Building the operating system for online learning institutions
+                </h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl">
+                    LearnioX helps learners discover quality education and helps institutions run complete online academies. An uncompromising infrastructure for the future of knowledge distribution.
+                </p>
+</div>
+<div class="w-full md:w-1/3 h-64 bg-surface-container border-strict relative overflow-hidden" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAscSF1b9Ei3fz8VY5mPk7AXXtIE8tnlClDQ5thKVbtpJ4MziEKWenArnIIYvoBKzUOsb8dBLzFKI1ITxaIK6RbU7ENjZ6oWyK8uof8tMu5yBecD_xIfNT1AHy8ut1YMV_re5wUziwBdU0bxDnZN9jJB_VWCOOioQ7NIBdfmQ5_HZfqH9txDOa6lPuF5dgrQfjGw3H-q44P2uwkkoKpHxS8IHtgn92rCD7oyFB6EUTv6TrMOnoTfsdZLJRjxjnG2keperI55mUDaCUj'); background-size: cover; background-position: center; filter: grayscale(100%) contrast(1.2);">
+<!-- Stark architectural image placeholder -->
+</div>
+</section>
+<!-- Main Sections Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 border-b-strict">
+<!-- Mission -->
+<div class="p-xl border-b-strict md:border-b-0 md:border-r-strict col-span-1 md:col-span-2 bg-surface">
+<h2 class="font-label-md text-label-md uppercase mb-lg text-secondary tracking-widest">01 / Mission</h2>
+<p class="font-headline-lg text-headline-lg md:text-[40px] md:leading-tight">
+                    To architect a centralized, high-stakes learning ecosystem where educational integrity meets unyielding scalability.
+                </p>
+</div>
+<!-- For Learners -->
+<div class="p-xl border-b-strict md:border-r-strict">
+<h2 class="font-label-md text-label-md uppercase mb-lg text-secondary tracking-widest">02 / For Learners</h2>
+<h3 class="font-headline-md text-headline-md mb-md">Precision Discovery</h3>
+<p class="font-body-md text-body-md">
+                    Focus on quality discovery, definitive certification, and measurable professional growth. Eliminate noise and connect directly with vetted, high-caliber institutional knowledge.
+                </p>
+</div>
+<!-- For Institutions -->
+<div class="p-xl border-b-strict">
+<h2 class="font-label-md text-label-md uppercase mb-lg text-secondary tracking-widest">03 / For Institutions</h2>
+<h3 class="font-headline-md text-headline-md mb-md">Absolute Control</h3>
+<p class="font-body-md text-body-md">
+                    Enterprise-grade infrastructure ensuring uncompromised scalability and total administrative control. Own your audience, your data, and your intellectual property securely.
+                </p>
+</div>
+</section>
+<!-- 3-Column Features -->
+<section class="grid grid-cols-1 md:grid-cols-3 border-b-strict">
+<!-- Solo Mode -->
+<div class="p-xl border-b-strict md:border-b-0 md:border-r-strict">
+<span class="material-symbols-outlined text-[32px] mb-md block" style="font-variation-settings: 'FILL' 1;">person</span>
+<h3 class="font-headline-sm text-headline-sm mb-sm">Solo Institution Mode</h3>
+<p class="font-body-sm text-body-sm text-secondary">
+                    Individual educators can launch independent, fully-branded academies with the same backend power as enterprise universities.
+                </p>
+</div>
+<!-- AI Studio -->
+<div class="p-xl border-b-strict md:border-b-0 md:border-r-strict">
+<span class="material-symbols-outlined text-[32px] mb-md block" style="font-variation-settings: 'FILL' 1;">memory</span>
+<h3 class="font-headline-sm text-headline-sm mb-sm">AI-powered Academy Studio</h3>
+<p class="font-body-sm text-body-sm text-secondary">
+                    Algorithmic tools for rapid curriculum generation, automated grading protocols, and frictionless operational logistics.
+                </p>
+</div>
+<!-- Marketplace -->
+<div class="p-xl">
+<span class="material-symbols-outlined text-[32px] mb-md block" style="font-variation-settings: 'FILL' 1;">travel_explore</span>
+<h3 class="font-headline-sm text-headline-sm mb-sm">Marketplace Discovery</h3>
+<p class="font-body-sm text-body-sm text-secondary">
+                    A global nexus connecting elite academies with dedicated learners through algorithmic matching and verifiable credentialing.
+                </p>
+</div>
+</section>
+<!-- Values Section -->
+<section class="py-xxl border-b-strict">
+<h2 class="font-label-md text-label-md uppercase mb-xl text-center text-secondary tracking-widest">Platform Values</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-0 border-t-strict border-l-strict border-r-strict border-b-strict">
+<div class="p-lg border-r-strict text-center hover:bg-surface-container transition-colors">
+<span class="font-headline-sm text-headline-sm uppercase block">Precision</span>
+</div>
+<div class="p-lg border-r-strict border-b-strict md:border-b-0 text-center hover:bg-surface-container transition-colors">
+<span class="font-headline-sm text-headline-sm uppercase block">Authority</span>
+</div>
+<div class="p-lg border-r-strict text-center hover:bg-surface-container transition-colors">
+<span class="font-headline-sm text-headline-sm uppercase block">Reliability</span>
+</div>
+<div class="p-lg text-center hover:bg-surface-container transition-colors">
+<span class="font-headline-sm text-headline-sm uppercase block">Clarity</span>
+</div>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="py-xl border-b-strict grid grid-cols-2 md:grid-cols-4 gap-0">
+<div class="p-lg text-center border-r-strict border-b-strict md:border-b-0">
+<div class="font-headline-lg text-headline-lg md:text-[48px] font-black tracking-tighter mb-xs">1,200+</div>
+<div class="font-label-md text-label-md text-secondary uppercase">Institutions</div>
+</div>
+<div class="p-lg text-center border-r-strict border-b-strict md:border-b-0">
+<div class="font-headline-lg text-headline-lg md:text-[48px] font-black tracking-tighter mb-xs">450K+</div>
+<div class="font-label-md text-label-md text-secondary uppercase">Learners</div>
+</div>
+<div class="p-lg text-center border-r-strict">
+<div class="font-headline-lg text-headline-lg md:text-[48px] font-black tracking-tighter mb-xs">8,000+</div>
+<div class="font-label-md text-label-md text-secondary uppercase">Courses</div>
+</div>
+<div class="p-lg text-center">
+<div class="font-headline-lg text-headline-lg md:text-[48px] font-black tracking-tighter mb-xs">12M+</div>
+<div class="font-label-md text-label-md text-secondary uppercase">Lessons Watched</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-xxl text-center flex flex-col items-center">
+<h2 class="font-headline-lg text-headline-lg mb-lg">Ready to engage the ecosystem?</h2>
+<div class="flex flex-col sm:flex-row gap-md">
+<button class="font-label-md text-label-md px-xl py-md bg-primary text-on-primary hover:bg-surface-tint transition-colors rounded-none uppercase tracking-widest">Launch Your Academy</button>
+<button class="font-label-md text-label-md px-xl py-md border-strict bg-surface-container-lowest text-primary hover:bg-surface-container transition-colors rounded-none uppercase tracking-widest">Start Learning</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface dark:bg-surface w-full border-t border-primary dark:border-inverse-primary border-t-strict flat no shadows mt-xxl">
+<div class="w-full px-margin-desktop py-xl flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto">
+<div class="flex flex-col items-center md:items-start mb-lg md:mb-0">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary mb-sm block">LearnioX</span>
+<span class="font-label-md text-label-md text-secondary dark:text-secondary-fixed-dim">© 2024 LearnioX Ed-Tech. All rights reserved.</span>
+</div>
+<nav class="flex flex-wrap justify-center gap-lg font-label-md text-label-md">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:underline transition-all" href="#">Mission</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:underline transition-all" href="#">Institutions</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:underline transition-all" href="#">Learners</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:underline transition-all" href="#">Privacy</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:underline transition-all" href="#">Terms</a>
+</nav>
+</div>
+</footer>
+</body></html>

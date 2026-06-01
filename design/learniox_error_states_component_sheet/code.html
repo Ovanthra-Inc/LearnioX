@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LEARNIOX SYSTEM - Error States Component Sheet</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#464747",
+                        "tertiary": "#000000",
+                        "surface-bright": "#f9f9f9",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#1b1b1b",
+                        "inverse-surface": "#2f3131",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface": "#f9f9f9",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#626262",
+                        "primary": "#000000",
+                        "on-tertiary-container": "#838484",
+                        "surface-container-low": "#f3f3f4",
+                        "inverse-on-surface": "#f0f1f1",
+                        "background": "#f9f9f9",
+                        "outline-variant": "#cfc4c5",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#e1dfdf",
+                        "outline": "#7e7576",
+                        "primary-container": "#1b1b1b",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#5e5e5e",
+                        "tertiary-fixed": "#e3e2e2",
+                        "inverse-primary": "#c6c6c6",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "primary-fixed": "#e2e2e2",
+                        "on-surface-variant": "#4c4546",
+                        "on-primary-fixed-variant": "#474747",
+                        "tertiary-container": "#1a1c1c",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#5e5e5e",
+                        "secondary-fixed": "#e4e2e2",
+                        "surface-container": "#eeeeee",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#848484"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "xl": "48px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "xxl": "64px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["11px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top Navigation Anchor Component -->
+<header class="bg-surface dark:bg-surface w-full border-b border-primary dark:border-primary">
+<div class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-16">
+<div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary dark:text-primary cursor-pointer active:opacity-80">LEARNIOX</div>
+<nav class="hidden md:flex gap-md">
+<a class="text-secondary dark:text-secondary hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors cursor-pointer active:opacity-80 font-label-md text-label-md p-sm" href="#">Curriculum</a>
+<a class="text-secondary dark:text-secondary hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors cursor-pointer active:opacity-80 font-label-md text-label-md p-sm" href="#">Assessment</a>
+<a class="text-secondary dark:text-secondary hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors cursor-pointer active:opacity-80 font-label-md text-label-md p-sm" href="#">Analytics</a>
+<a class="text-secondary dark:text-secondary hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors cursor-pointer active:opacity-80 font-label-md text-label-md p-sm" href="#">Resources</a>
+</nav>
+<button class="font-label-md text-label-md text-primary dark:text-primary hover:bg-surface-variant dark:hover:bg-surface-variant transition-colors cursor-pointer active:opacity-80 px-md py-sm border border-primary">
+                Support
+            </button>
+</div>
+</header>
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-xl md:py-xxl">
+<div class="mb-xl border-b border-primary pb-md">
+<h1 class="font-headline-xl text-headline-xl text-primary">Error States System</h1>
+<p class="font-body-lg text-body-lg text-secondary mt-sm">Architectural UI Component Sheet. Pure functionalism. Zero decorative elements.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- 1. Network Error -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="wifi_off">wifi_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Connection Interrupted</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">We are unable to establish a secure connection to the LearnioX servers.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Please verify your local network status or attempt to reconnect.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Retry Connection
+                    </button>
+<button class="w-full bg-surface text-primary font-label-md text-label-md py-sm px-md hover:border-[2px] transition-all border border-primary">
+                        System Status
+                    </button>
+</div>
+</div>
+<!-- 2. Course Unavailable -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="block">block</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Course Enrollment Closed</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">The requested curriculum is currently beyond capacity or past its enrollment deadline.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Consider alternative programs or request notification for future availability.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Browse Other Courses
+                    </button>
+<button class="w-full bg-surface text-primary font-label-md text-label-md py-sm px-md hover:border-[2px] transition-all border border-primary">
+                        Join Waitlist
+                    </button>
+</div>
+</div>
+<!-- 3. Payment Failed -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="credit_card_off">credit_card_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Transaction Error</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">Your financial institution rejected the processing of this payment request.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Please update your payment method or contact your issuing bank for authorization details.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Update Payment Method
+                    </button>
+<button class="w-full bg-surface text-primary font-label-md text-label-md py-sm px-md hover:border-[2px] transition-all border border-primary">
+                        Contact Billing Support
+                    </button>
+</div>
+</div>
+<!-- 4. Access Denied -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="lock">lock</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Unauthorized Access</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">Your current session lacks the necessary credentials to view this specific resource.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Authenticate with an account holding appropriate clearance to proceed.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Login to Continue
+                    </button>
+</div>
+</div>
+<!-- 5. Membership Expired -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="event_busy">event_busy</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Renewal Required</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">Your subscription to the LearnioX platform has lapsed as of the previous billing cycle.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Reactivate your account to restore uninterrupted access to all curriculum materials.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        View Pricing Plans
+                    </button>
+</div>
+</div>
+<!-- 6. Lesson Locked -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="vpn_key_off">vpn_key_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Prerequisite Required</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">This module is locked because foundational assessments have not yet been completed.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">You must satisfy the criteria in the preceding section before advancing.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Complete Previous Module
+                    </button>
+</div>
+</div>
+<!-- 7. Video Processing Failed -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="broken_image">broken_image</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Media Rendering Error</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">The server encountered an unrecoverable fault while transcoding your multimedia submission.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Ensure your file meets encoding specifications and execute a new upload.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Re-upload Video
+                    </button>
+<button class="w-full bg-surface text-primary font-label-md text-label-md py-sm px-md hover:border-[2px] transition-all border border-primary">
+                        View Encoding Guidelines
+                    </button>
+</div>
+</div>
+<!-- 8. Upload Failed -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="cloud_off">cloud_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">File Transfer Interrupted</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">The upload sequence was terminated prematurely before reaching 100% completion.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Initiate the transfer protocol again, maintaining a stable network state.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Retry Upload
+                    </button>
+</div>
+</div>
+<!-- 9. Form Validation Error -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="error_outline">error_outline</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Information Required</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">The data submitted does not conform to the required input parameters for this form.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Address all structural errors in the highlighted input fields to proceed.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Review Highlighted Fields
+                    </button>
+</div>
+</div>
+<!-- 10. Server Error -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="dns">dns</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">System Malfunction</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">An internal server error (500) has prevented the successful execution of your request.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">This issue has been logged. Navigate away from this module momentarily.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Return to Dashboard
+                    </button>
+<button class="w-full bg-surface text-primary font-label-md text-label-md py-sm px-md hover:border-[2px] transition-all border border-primary">
+                        Contact Technical Support
+                    </button>
+</div>
+</div>
+<!-- 11. Permission Denied -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="gavel">gavel</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Administrative Restriction</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">Your user role does not possess the explicit privileges required to modify this entity.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Request elevated access from an authorized system administrator.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Contact Administrator
+                    </button>
+</div>
+</div>
+<!-- 12. Unsupported File Type -->
+<div class="border border-primary bg-surface p-lg flex flex-col h-full hover:border-[2px] transition-all">
+<div class="mb-md">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="insert_drive_file">insert_drive_file</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">Invalid Format</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xs">The file extension provided is not recognized by our internal processing engine.</p>
+<p class="font-body-sm text-body-sm text-on-surface font-semibold mb-lg flex-grow">Convert your document to a supported format (e.g., PDF, CSV) and retry.</p>
+<div class="flex flex-col gap-sm mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md hover:bg-[#666666] transition-colors border border-primary">
+                        Review Upload Guidelines
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Component Anchor -->
+<footer class="bg-surface dark:bg-surface w-full border-t border-primary dark:border-primary">
+<div class="w-full px-margin-desktop py-xl max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary">
+                LEARNIOX
+            </div>
+<div class="font-label-sm text-label-sm text-secondary">
+                © 2024 LEARNIOX SYSTEM. ALL RIGHTS RESERVED.
+            </div>
+<nav class="flex gap-md font-label-sm text-label-sm">
+<a class="text-secondary dark:text-secondary hover:text-primary dark:hover:text-primary underline transition-all" href="#">Documentation</a>
+<a class="text-secondary dark:text-secondary hover:text-primary dark:hover:text-primary underline transition-all" href="#">System Status</a>
+<a class="text-secondary dark:text-secondary hover:text-primary dark:hover:text-primary underline transition-all" href="#">Security Protocol</a>
+<a class="text-secondary dark:text-secondary hover:text-primary dark:hover:text-primary underline transition-all" href="#">Contact</a>
+</nav>
+</div>
+</footer>
+</body></html>

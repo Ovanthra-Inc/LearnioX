@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Saved Courses - PREPCORE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e1dfdf",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f9f9f9",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "surface-container": "#eeeeee",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "surface": "#f9f9f9",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#1a1c1c",
+                        "primary-container": "#1b1b1b",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-secondary-container": "#626262",
+                        "inverse-surface": "#2f3131",
+                        "on-primary-container": "#848484",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "on-primary-fixed": "#1b1b1b",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-tint": "#5e5e5e",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#c6c6c6",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#e2e2e2",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-background": "#1a1c1c",
+                        "surface-container-low": "#f3f3f4",
+                        "on-surface-variant": "#4c4546",
+                        "tertiary": "#000000",
+                        "outline": "#7e7576",
+                        "secondary": "#5e5e5e",
+                        "on-secondary-fixed-variant": "#464747",
+                        "surface-bright": "#f9f9f9",
+                        "outline-variant": "#cfc4c5",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#838484",
+                        "surface-dim": "#dadada",
+                        "primary": "#000000",
+                        "secondary-fixed": "#e4e2e2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "lg": "24px",
+                        "xxl": "64px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "container-max": "1440px",
+                        "xl": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 w-64 bg-surface border-r border-outline-variant pt-20 pb-10 overflow-y-auto z-20">
+<div class="px-margin-desktop mb-8">
+<h2 class="text-headline-sm font-headline-sm font-bold text-primary">LEARNER PORTAL</h2>
+<p class="text-label-sm font-label-sm text-secondary mt-1">High-Stakes Prep</p>
+</div>
+<div class="flex flex-col space-y-1">
+<a class="text-on-surface flex items-center gap-3 px-4 py-3 hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md uppercase">Dashboard</span>
+</a>
+<a class="text-on-surface flex items-center gap-3 px-4 py-3 hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md uppercase">My Courses</span>
+</a>
+<a class="text-on-surface flex items-center gap-3 px-4 py-3 hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="live_tv">live_tv</span>
+<span class="text-label-md font-label-md uppercase">Live Classes</span>
+</a>
+<a class="text-on-surface flex items-center gap-3 px-4 py-3 hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-label-md font-label-md uppercase">Notes</span>
+</a>
+<a class="text-on-surface flex items-center gap-3 px-4 py-3 hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="text-label-md font-label-md uppercase">Doubts</span>
+</a>
+<a class="text-on-surface flex items-center gap-3 px-4 py-3 hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+<span class="text-label-md font-label-md uppercase">Certificates</span>
+</a>
+<a class="bg-primary text-on-primary font-bold flex items-center gap-3 px-4 py-3 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+<span class="text-label-md font-label-md uppercase">Saved Courses</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface flex justify-between items-center w-full px-margin-desktop py-4 border-b border-outline-variant docked full-width top-0 z-10 sticky">
+<div class="flex items-center gap-8 w-full max-w-2xl">
+<h1 class="text-headline-md font-headline-md font-black text-primary hidden md:block">PREPCORE</h1>
+<div class="flex-1 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 border border-outline-variant bg-surface-container-lowest text-body-sm focus:border-primary focus:ring-0 focus:outline-none placeholder-secondary transition-colors" placeholder="Search saved courses" type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button aria-label="notifications" class="p-2 text-secondary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button aria-label="help_outline" class="p-2 text-secondary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<button aria-label="account_circle" class="p-2 text-secondary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 px-margin-mobile md:px-margin-desktop py-8 max-w-container-max mx-auto w-full">
+<div class="mb-lg">
+<h2 class="text-headline-lg font-headline-lg text-primary mb-2">SAVED COURSES</h2>
+<p class="text-body-md font-body-md text-secondary">Manage and organize the courses you have bookmarked for later.</p>
+</div>
+<!-- Filters -->
+<div class="flex flex-wrap gap-4 mb-xl border-b border-outline-variant pb-4">
+<select class="border border-outline-variant bg-surface-container-lowest text-label-md font-label-md uppercase px-4 py-2 focus:border-primary focus:ring-0 cursor-pointer min-w-[150px]">
+<option value="">Category</option>
+<option value="finance">Finance</option>
+<option value="design">Design</option>
+<option value="technology">Technology</option>
+</select>
+<select class="border border-outline-variant bg-surface-container-lowest text-label-md font-label-md uppercase px-4 py-2 focus:border-primary focus:ring-0 cursor-pointer min-w-[150px]">
+<option value="">Institution</option>
+<option value="stanford">Stanford Online</option>
+<option value="lse">LSE</option>
+<option value="mit">MIT xPRO</option>
+</select>
+<select class="border border-outline-variant bg-surface-container-lowest text-label-md font-label-md uppercase px-4 py-2 focus:border-primary focus:ring-0 cursor-pointer min-w-[150px]">
+<option value="">Price</option>
+<option value="free">Free</option>
+<option value="paid">Paid</option>
+</select>
+<select class="border border-outline-variant bg-surface-container-lowest text-label-md font-label-md uppercase px-4 py-2 focus:border-primary focus:ring-0 cursor-pointer min-w-[150px]">
+<option value="">Level</option>
+<option value="beginner">Beginner</option>
+<option value="intermediate">Intermediate</option>
+<option value="advanced">Advanced</option>
+</select>
+</div>
+<!-- Course Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Card 1 -->
+<article class="border border-primary bg-surface-container-lowest flex flex-col hover:border-2 transition-all group">
+<div class="h-48 bg-surface-variant relative border-b border-primary overflow-hidden">
+<img alt="Data analytics screen" class="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A highly structured, high-contrast black and white photograph of complex financial charts and data analytics displayed on a series of monitors. The setting is a professional, sterile enterprise trading floor. The lighting is harsh and direct, emphasizing the sharp geometric lines of the data visualizations. The overall mood is serious, analytical, and authoritative, matching a minimalist architectural UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrupa8aYm_JlC3RmcxUjoVla2trVAvP3arTWzuUIJSHWnEFApmKLeZDRDlKjAfVsCAeA6WqRcVDNsUYkUrj9OKhSDEfXU_j6bdWdoeuz2oIBXgHWF4jF633dvg9C7ZbG53ovzScFxN_1jN2thYaqLPN0-al3ZiiyuX0_pGm4qLmpLyqQBEL6s6LN8JwVqUWLmUg1_31aJrtnPqbF-8oYx8-3khi76nfY34KNPjLNvRulOUh1VWlP-B5gg0yaSw5Q5cU6V8i_RgjT_B"/>
+<div class="absolute top-4 right-4 bg-surface-container-lowest border border-primary px-2 py-1">
+<span class="text-label-sm font-label-sm uppercase font-bold">$499</span>
+</div>
+</div>
+<div class="p-lg flex-1 flex flex-col">
+<div class="mb-4">
+<p class="text-label-sm font-label-sm text-secondary uppercase mb-1">Stanford Online</p>
+<h3 class="text-headline-sm font-headline-sm text-primary mb-2">Advanced Quant Systems</h3>
+<div class="flex gap-4 text-label-sm font-label-sm text-secondary uppercase">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">school</span> Advanced</span>
+<span>Saved on Oct 12</span>
+</div>
+</div>
+<div class="mt-auto pt-4 flex gap-3 border-t border-outline-variant">
+<button class="flex-1 bg-primary text-on-primary py-2 text-label-md font-label-md uppercase hover:bg-[#666666] transition-colors">View Course</button>
+<button aria-label="Remove saved course" class="px-4 border border-primary bg-surface-container-lowest text-primary py-2 text-label-md font-label-md uppercase hover:border-[2px] transition-all">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="border border-primary bg-surface-container-lowest flex flex-col hover:border-2 transition-all group">
+<div class="h-48 bg-surface-variant relative border-b border-primary overflow-hidden">
+<img alt="Corporate office space" class="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A striking black and white architectural photograph of a stark, modern corporate office interior. The space is defined by rigid structural pillars and expansive glass walls, shot with high-key lighting that creates intense contrasts. The minimalist aesthetic conveys permanence and intellectual rigor, perfectly aligning with a stark, professional enterprise brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwgIWTSxUC8v7NbLYPHw2Tz1NFoLrXbEWXVU-YjsAhqhP81psp41J8HzK3znHeX_a_a1962fP61SLju902qFpyoPGaEIS4IxlG36MXth9gDO-pyI6CclSyK06wyffoNnlWAz6ty6Z-PPBL8svof0yAB3x04KWT6oQKwBZbvbF1GJhEG0PmIjokQw0MfMnN47oSsrNUbhVrkVp7NGuh52pYRvUcWPw3btmIg0ckxrXyNMLbyfli7cWYN90s8e5uFPUoAB7nx6fHoTIO"/>
+<div class="absolute top-4 right-4 bg-surface-container-lowest border border-primary px-2 py-1">
+<span class="text-label-sm font-label-sm uppercase font-bold">Free</span>
+</div>
+</div>
+<div class="p-lg flex-1 flex flex-col">
+<div class="mb-4">
+<p class="text-label-sm font-label-sm text-secondary uppercase mb-1">LSE</p>
+<h3 class="text-headline-sm font-headline-sm text-primary mb-2">Institutional Design</h3>
+<div class="flex gap-4 text-label-sm font-label-sm text-secondary uppercase">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">school</span> Beginner</span>
+<span>Saved on Oct 10</span>
+</div>
+</div>
+<div class="mt-auto pt-4 flex gap-3 border-t border-outline-variant">
+<button class="flex-1 bg-primary text-on-primary py-2 text-label-md font-label-md uppercase hover:bg-[#666666] transition-colors">View Course</button>
+<button aria-label="Remove saved course" class="px-4 border border-primary bg-surface-container-lowest text-primary py-2 text-label-md font-label-md uppercase hover:border-[2px] transition-all">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="border border-primary bg-surface-container-lowest flex flex-col hover:border-2 transition-all group">
+<div class="h-48 bg-surface-variant relative border-b border-primary overflow-hidden">
+<img alt="Money and graphs" class="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A stark, high-contrast monochrome macro photograph of physical currency laid over geometric printed graphs and charts. The lighting is clinical and precise, casting sharp shadows that emphasize the texture of the paper and the strict lines of the data. The mood is highly authoritative and functional, rejecting decorative elements for pure informational clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5dMHQshJJ-oK9B041qWEyF8QhalQu64L9q5f2ihHdTj2S-gS-JDHKbxesdfkqmldp6tnOPUW8VDoFGRUadiloKQ3XDAlObJ5e1wFu3s_gyTHqQSsXc9D3tPoJtfIERFg7u6f3dRgvUMW3u-fKMWPbOgJQHGzXtXmyJlMBvY9bG5C8uzOd-jEIDM5UG6F_srSdm6AruUYblGstzrZYBHwhjEpBq_HOW5yXAduSVqF2z5J20mIAx3RJS-SSDcSaTMKHxRJZQp9ca5z4"/>
+<div class="absolute top-4 right-4 bg-surface-container-lowest border border-primary px-2 py-1">
+<span class="text-label-sm font-label-sm uppercase font-bold">$850</span>
+</div>
+</div>
+<div class="p-lg flex-1 flex flex-col">
+<div class="mb-4">
+<p class="text-label-sm font-label-sm text-secondary uppercase mb-1">MIT xPRO</p>
+<h3 class="text-headline-sm font-headline-sm text-primary mb-2">Macroeconomic Modeling</h3>
+<div class="flex gap-4 text-label-sm font-label-sm text-secondary uppercase">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">school</span> Advanced</span>
+<span>Saved on Sep 28</span>
+</div>
+</div>
+<div class="mt-auto pt-4 flex gap-3 border-t border-outline-variant">
+<button class="flex-1 bg-primary text-on-primary py-2 text-label-md font-label-md uppercase hover:bg-[#666666] transition-colors">View Course</button>
+<button aria-label="Remove saved course" class="px-4 border border-primary bg-surface-container-lowest text-primary py-2 text-label-md font-label-md uppercase hover:border-[2px] transition-all">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination (Architectural Style) -->
+<div class="mt-xl pt-lg border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-md font-label-md text-secondary uppercase">Showing 1-3 of 3</span>
+<div class="flex gap-2">
+<button class="w-10 h-10 border border-outline-variant bg-surface-container-lowest flex items-center justify-center text-secondary opacity-50 cursor-not-allowed">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 border border-primary bg-primary text-on-primary flex items-center justify-center font-bold">1</button>
+<button class="w-10 h-10 border border-outline-variant bg-surface-container-lowest flex items-center justify-center text-secondary opacity-50 cursor-not-allowed">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

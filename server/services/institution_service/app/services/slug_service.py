@@ -1,0 +1,10 @@
+import re
+
+
+class SlugService:
+    @staticmethod
+    def slugify(text: str) -> str:
+        text = text.lower().strip()
+        text = re.sub(r"[^\w\s-]", "", text)
+        text = re.sub(r"[\s_-]+", "-", text)
+        return text.strip("-")

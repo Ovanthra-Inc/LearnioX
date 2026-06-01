@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Course Publish Checklist - LearnioX Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f3f4",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#e4e2e2",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "surface-dim": "#dadada",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary": "#000000",
+                        "inverse-primary": "#c6c6c6",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary-container": "#626262",
+                        "surface-container": "#eeeeee",
+                        "outline": "#7e7576",
+                        "secondary-container": "#e1dfdf",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#cfc4c5",
+                        "tertiary-container": "#1a1c1c",
+                        "inverse-on-surface": "#f0f1f1",
+                        "primary-container": "#1b1b1b",
+                        "on-tertiary-container": "#838484",
+                        "on-surface-variant": "#4c4546",
+                        "on-surface": "#1a1c1c",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f9f9f9",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "surface-container-high": "#e8e8e8",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f3131",
+                        "background": "#f9f9f9",
+                        "tertiary": "#000000",
+                        "surface": "#f9f9f9",
+                        "surface-tint": "#5e5e5e",
+                        "on-background": "#1a1c1c",
+                        "on-primary-container": "#848484",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-primary-fixed": "#1b1b1b",
+                        "primary-fixed": "#e2e2e2",
+                        "secondary": "#5e5e5e",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xxl": "64px",
+                        "container-max": "1440px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "margin-desktop": "32px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen flex flex-col z-50 bg-surface-container-lowest dark:bg-surface-dim h-full w-64 border-r border-primary dark:border-primary-fixed hidden md:flex">
+<div class="p-6 border-b border-primary">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-on-primary-fixed uppercase tracking-tighter">LearnioX</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Academy Studio</p>
+<button class="mt-6 w-full py-2 px-4 bg-primary text-on-primary font-label-md text-label-md hover:bg-surface-tint transition-colors duration-100 ease-linear flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add</span> New Course
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<ul class="space-y-1">
+<li><a class="text-on-surface dark:text-on-surface-variant flex items-center px-4 py-3 border-l-4 border-transparent hover:bg-surface-container-high transition-colors duration-100 ease-linear" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">dashboard</span><span class="font-label-md text-label-md">Dashboard</span></a></li>
+<li><a class="bg-primary text-on-primary dark:bg-primary-fixed dark:text-on-primary-fixed flex items-center px-4 py-3 border-l-4 border-primary hover:bg-surface-container-high transition-colors duration-100 ease-linear" href="#"><span class="material-symbols-outlined mr-3 text-[20px]" style="font-variation-settings: 'FILL' 1;">menu_book</span><span class="font-label-md text-label-md">Courses</span></a></li>
+<li><a class="text-on-surface dark:text-on-surface-variant flex items-center px-4 py-3 border-l-4 border-transparent hover:bg-surface-container-high transition-colors duration-100 ease-linear" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">group</span><span class="font-label-md text-label-md">Students</span></a></li>
+<li><a class="text-on-surface dark:text-on-surface-variant flex items-center px-4 py-3 border-l-4 border-transparent hover:bg-surface-container-high transition-colors duration-100 ease-linear" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">insights</span><span class="font-label-md text-label-md">Analytics</span></a></li>
+<li><a class="text-on-surface dark:text-on-surface-variant flex items-center px-4 py-3 border-l-4 border-transparent hover:bg-surface-container-high transition-colors duration-100 ease-linear" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">folder_open</span><span class="font-label-md text-label-md">Resources</span></a></li>
+<li><a class="text-on-surface dark:text-on-surface-variant flex items-center px-4 py-3 border-l-4 border-transparent hover:bg-surface-container-high transition-colors duration-100 ease-linear" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">settings</span><span class="font-label-md text-label-md">Settings</span></a></li>
+</ul>
+</div>
+<div class="border-t border-primary py-4">
+<ul class="space-y-1">
+<li><a class="text-on-surface dark:text-on-surface-variant flex items-center px-4 py-3 border-l-4 border-transparent hover:bg-surface-container-high transition-colors duration-100 ease-linear" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">help</span><span class="font-label-md text-label-md">Support</span></a></li>
+<li><a class="text-on-surface dark:text-on-surface-variant flex items-center px-4 py-3 border-l-4 border-transparent hover:bg-surface-container-high transition-colors duration-100 ease-linear" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">account_circle</span><span class="font-label-md text-label-md">Account</span></a></li>
+</ul>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] flex justify-between items-center px-8 h-16 z-40 bg-surface-container-lowest dark:bg-surface-dim border-b border-primary dark:border-primary-fixed">
+<div class="flex items-center gap-6">
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-on-primary-fixed">LearnioX Academy</h2>
+<div class="h-6 w-px bg-primary opacity-20 hidden md:block"></div>
+<nav class="hidden md:flex gap-6 mt-2">
+<a class="text-primary dark:text-on-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-2 font-label-md text-label-md hover:text-primary dark:hover:text-on-primary-fixed transition-all duration-150" href="#">Publishing</a>
+<a class="text-on-surface-variant dark:text-on-tertiary-container pb-2 font-label-md text-label-md hover:text-primary dark:hover:text-on-primary-fixed transition-all duration-150" href="#">Review</a>
+<a class="text-on-surface-variant dark:text-on-tertiary-container pb-2 font-label-md text-label-md hover:text-primary dark:hover:text-on-primary-fixed transition-all duration-150" href="#">History</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden lg:flex items-center gap-2 px-4 py-2 border border-primary text-primary font-label-md text-label-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Editor
+            </button>
+<button class="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md hover:bg-surface-tint transition-colors">
+                Save Draft
+            </button>
+<button class="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md hover:bg-surface-tint transition-colors border border-primary">
+                Publish Now
+            </button>
+<div class="flex items-center gap-2 ml-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">more_vert</span></button>
+<div class="w-8 h-8 bg-surface-variant border border-primary overflow-hidden ml-2">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A small square profile picture of a professional individual looking confidently into the camera. The lighting is bright and even, set against a neutral studio background. The styling is minimalist and corporate, fitting a high-contrast enterprise application. Colors are subdued, focusing on black, white, and grays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFhbN_a87C_6PeAll0wmlcOPQrv8mI_XFy5_FNaOeoz6YMCFNAEbXqy5HlEJ4csxnwrQnYnO484AdcmJYVy2Jk3pdnIex1JcUlqUO7vRy0Uq_Ze-f_cHjKd1GVd6rpoJ8yeg6aqgbn7IK5Mn4hN4Ts0CLECKc3zU42D5FoBxMw3Y9VuU5k-yPkD-_BvrkrMPbc78toBtx5hs-dHcqaOh8t0qpoGmTPB4usDzCcKMY6zy5hrBAuPNH3hanYULQBylGcEHmIroSUIA2K"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<main class="pt-24 pb-16 px-margin-mobile md:px-margin-desktop md:ml-64 max-w-container-max mx-auto">
+<div class="mb-8">
+<p class="font-label-md text-label-md text-on-surface-variant mb-2">Publish Course</p>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Advanced Analytics 101</h1>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Left/Center Column: Checklist -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Section 1: Basic Information -->
+<section class="border border-primary bg-surface-container-lowest p-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary border-b border-surface-variant pb-4 mb-4">Basic Information</h3>
+<ul class="space-y-4 font-body-md text-body-md text-on-surface">
+<li class="flex items-center justify-between">
+<span>Title added</span>
+<span class="font-bold">[✓]</span>
+</li>
+<li class="flex items-center justify-between">
+<span>Description added</span>
+<span class="font-bold">[✓]</span>
+</li>
+<li class="flex items-center justify-between">
+<span>Category selected</span>
+<span class="font-bold">[✓]</span>
+</li>
+<li class="flex items-center justify-between">
+<span>Language selected</span>
+<span class="font-bold">[✓]</span>
+</li>
+</ul>
+</section>
+<!-- Section 2: Media -->
+<section class="border border-primary bg-surface-container-lowest p-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary border-b border-surface-variant pb-4 mb-4">Media</h3>
+<ul class="space-y-4 font-body-md text-body-md text-on-surface">
+<li class="flex items-center justify-between">
+<span>Thumbnail uploaded</span>
+<span class="font-bold">[✓]</span>
+</li>
+<li class="flex items-center justify-between text-on-surface-variant">
+<span>Promo video</span>
+<span class="font-bold">[—]</span>
+</li>
+</ul>
+</section>
+<!-- Section 3: Curriculum -->
+<section class="border border-primary bg-surface-container-lowest p-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary border-b border-surface-variant pb-4 mb-4">Curriculum</h3>
+<ul class="space-y-4 font-body-md text-body-md text-on-surface">
+<li class="flex items-center justify-between">
+<span>At least one module</span>
+<span class="font-bold">[✓]</span>
+</li>
+<li class="flex items-center justify-between">
+<span>At least one published lesson</span>
+<span class="font-bold">[✓]</span>
+</li>
+<li class="flex items-center justify-between">
+<span>Lesson access configured</span>
+<span class="font-bold">[✓]</span>
+</li>
+</ul>
+</section>
+<!-- Section 4: Pricing -->
+<section class="border border-primary bg-surface-container-lowest p-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary border-b border-surface-variant pb-4 mb-4">Pricing</h3>
+<ul class="space-y-4 font-body-md text-body-md text-on-surface">
+<li class="flex items-center justify-between">
+<span>Access type selected</span>
+<span class="font-bold">[✓]</span>
+</li>
+<li class="flex items-center justify-between">
+<span>Price configured if paid</span>
+<span class="font-bold">[✓]</span>
+</li>
+</ul>
+</section>
+<!-- Section 5: Instructor -->
+<section class="border border-primary bg-surface-container-lowest p-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary border-b border-surface-variant pb-4 mb-4">Instructor</h3>
+<ul class="space-y-4 font-body-md text-body-md text-on-surface">
+<li class="flex items-center justify-between">
+<span>Instructor assigned</span>
+<span class="font-bold">[✓]</span>
+</li>
+</ul>
+</section>
+<!-- Section 6: SEO -->
+<section class="border border-primary bg-surface-container-lowest p-lg border-l-4 border-l-error">
+<h3 class="font-headline-sm text-headline-sm text-primary border-b border-surface-variant pb-4 mb-4">SEO</h3>
+<ul class="space-y-4 font-body-md text-body-md text-on-surface">
+<li class="flex items-center justify-between">
+<span>Meta title</span>
+<span class="font-bold">[✓]</span>
+</li>
+<li class="flex items-center justify-between text-error font-bold">
+<span>Meta description</span>
+<span>[✗]</span>
+</li>
+</ul>
+</section>
+</div>
+<!-- Right Panel: Preview & Actions -->
+<div class="lg:col-span-4 flex flex-col gap-6 sticky top-24">
+<!-- Preview Card -->
+<div class="border border-primary bg-surface-container-lowest flex flex-col">
+<div class="p-4 border-b border-primary bg-surface-container font-label-md text-label-md text-primary uppercase">
+                        Public Preview
+                    </div>
+<div class="h-48 border-b border-primary bg-surface-variant relative overflow-hidden">
+<img alt="Course Thumbnail" class="w-full h-full object-cover grayscale opacity-80" data-alt="A stark, high-contrast black and white photograph showing abstract data visualization charts displayed on a modern monitor. The scene is minimal, focusing on sharp geometric lines and data points. The lighting is dramatic, highlighting the structural nature of information design. The overall aesthetic perfectly matches a rigorous, enterprise-grade analytics course." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_sKMUZssDnvUqKQohOP5NbU9y6mMLjKeuK2Vw2ny-8r5KNpLydPfb7Y8gZYP-M6FPAqez08JfrOWtLtYJ2z5IrwyczKYpwG46YxMOIvPDOMo6anteaXoqApOy6SbQSusS3FBFDcJwWxOHWjwwHUtdiHh5ul9NiQxEgLNXGc4c4tUZoD5FRYBLJhGyAUCsLgH6-zi26F188Lk28BZZyXvdAlYQBOVZ_8I7Kdp-mWfoW1_ZnqLYXAOWPckAiBgYGpKIwGVsAQ4LB2ts"/>
+</div>
+<div class="p-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-2">DATA SCIENCE</p>
+<h4 class="font-headline-md text-headline-md text-primary mb-4 leading-tight">Advanced Analytics 101</h4>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 border border-primary bg-surface-variant"></div>
+<span class="font-label-md text-label-md text-on-surface">Dr. Sarah Jenkins</span>
+</div>
+</div>
+</div>
+<!-- Warnings -->
+<div class="border border-error bg-surface-container-lowest p-lg">
+<div class="flex items-center gap-2 text-error mb-2">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+<h4 class="font-label-md text-label-md uppercase">Action Required</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+                        Missing Meta Description. Please provide a description in the SEO settings before publishing.
+                    </p>
+</div>
+<!-- Final Action -->
+<button class="w-full py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-wider hover:bg-surface-tint transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled="">
+                    Publish Course
+                </button>
+<p class="text-center font-body-sm text-body-sm text-on-surface-variant">
+                    All requirements must be met to publish.
+                </p>
+</div>
+</div>
+</main>
+</body></html>

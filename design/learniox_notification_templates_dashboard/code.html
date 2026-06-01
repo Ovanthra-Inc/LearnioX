@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notification Templates - Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Enforce sharp corners globally for this specific architectural theme */
+        * {
+            border-radius: 0 !important;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dadada",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-container-highest": "#e2e2e2",
+                        "outline": "#7e7576",
+                        "on-surface-variant": "#4c4546",
+                        "inverse-on-surface": "#f0f1f1",
+                        "background": "#f9f9f9",
+                        "primary-fixed": "#e2e2e2",
+                        "tertiary-container": "#1a1c1c",
+                        "surface-container": "#eeeeee",
+                        "on-secondary-fixed-variant": "#464747",
+                        "outline-variant": "#cfc4c5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-container-low": "#f3f3f4",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#838484",
+                        "surface-variant": "#e2e2e2",
+                        "inverse-surface": "#2f3131",
+                        "surface-container-high": "#e8e8e8",
+                        "primary-container": "#1b1b1b",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "surface": "#f9f9f9",
+                        "surface-bright": "#f9f9f9",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#848484",
+                        "inverse-primary": "#c6c6c6",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5e5e5e",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary": "#000000",
+                        "on-secondary-container": "#626262",
+                        "secondary-container": "#e1dfdf",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "tertiary": "#000000",
+                        "secondary-fixed": "#e4e2e2",
+                        "secondary": "#5e5e5e"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "xxl": "64px",
+                        "sm": "8px",
+                        "container-max": "1440px",
+                        "margin-desktop": "32px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "xl": "48px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-container-lowest text-primary antialiased min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col h-screen w-64 border-r border-primary bg-surface dark:bg-surface text-primary dark:text-on-surface z-20">
+<div class="p-lg border-b border-primary dark:border-outline">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 bg-primary text-on-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">business</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold uppercase tracking-tight text-primary dark:text-on-surface">Studio</h1>
+<p class="font-label-sm text-label-sm text-secondary">Management</p>
+</div>
+</div>
+</div>
+<div class="flex-1 py-md flex flex-col gap-sm">
+<a class="flex items-center gap-md px-lg py-md text-primary dark:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors border-none cursor-pointer" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md bg-primary text-on-primary dark:bg-on-surface dark:text-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors border-none cursor-pointer" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-body-md text-body-md font-bold">Templates</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-primary dark:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors border-none cursor-pointer" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md text-body-md">Variables</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-primary dark:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors border-none cursor-pointer" href="#">
+<span class="material-symbols-outlined">send</span>
+<span class="font-body-md text-body-md">Channels</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-primary dark:text-on-surface hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors border-none cursor-pointer" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-64 flex justify-between items-center px-lg z-10 h-16 w-full border-b border-primary bg-surface dark:bg-surface border-b border-primary dark:border-outline flat no shadows">
+<div class="flex items-center">
+<h2 class="font-headline-md text-headline-md font-bold text-primary dark:text-on-surface">Notification Studio</h2>
+</div>
+<div class="flex items-center gap-lg">
+<button class="bg-primary text-on-primary px-lg py-sm font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors cursor-pointer border border-primary">
+                Create Template
+            </button>
+<div class="flex gap-md">
+<button class="text-primary hover:opacity-80 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-primary hover:opacity-80 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-xxl max-w-container-max mx-auto">
+<div class="mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-sm">Template Registry</h2>
+<p class="font-body-md text-body-md text-secondary">Manage and configure automated communication structures.</p>
+</div>
+<!-- Data Table Section -->
+<section class="border border-primary mb-xxl bg-surface-container-lowest">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-primary">
+<th class="p-md font-label-md text-label-md text-primary uppercase">Template Name</th>
+<th class="p-md font-label-md text-label-md text-primary uppercase">Channel</th>
+<th class="p-md font-label-md text-label-md text-primary uppercase">Status</th>
+<th class="p-md font-label-md text-label-md text-primary uppercase">Last Updated</th>
+<th class="p-md font-label-md text-label-md text-primary uppercase">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<tr class="border-b border-surface-dim hover:bg-surface transition-colors bg-surface">
+<td class="p-md font-bold">Enrollment Confirmation</td>
+<td class="p-md">Email</td>
+<td class="p-md"><span class="px-sm py-xs border border-primary bg-primary text-on-primary text-[10px] uppercase tracking-widest">Active</span></td>
+<td class="p-md text-secondary">Oct 24, 2023</td>
+<td class="p-md">
+<button class="text-primary underline hover:text-secondary mr-md">Edit</button>
+</td>
+</tr>
+<tr class="border-b border-surface-dim hover:bg-surface transition-colors">
+<td class="p-md font-bold">Payment Success Receipt</td>
+<td class="p-md">Email, In-App</td>
+<td class="p-md"><span class="px-sm py-xs border border-primary bg-primary text-on-primary text-[10px] uppercase tracking-widest">Active</span></td>
+<td class="p-md text-secondary">Oct 20, 2023</td>
+<td class="p-md">
+<button class="text-primary underline hover:text-secondary mr-md">Edit</button>
+</td>
+</tr>
+<tr class="border-b border-surface-dim hover:bg-surface transition-colors">
+<td class="p-md font-bold">Live Class Reminder</td>
+<td class="p-md">SMS</td>
+<td class="p-md"><span class="px-sm py-xs border border-primary text-[10px] uppercase tracking-widest">Draft</span></td>
+<td class="p-md text-secondary">Nov 01, 2023</td>
+<td class="p-md">
+<button class="text-primary underline hover:text-secondary mr-md">Edit</button>
+</td>
+</tr>
+<tr class="hover:bg-surface transition-colors">
+<td class="p-md font-bold">Course Certificate Issued</td>
+<td class="p-md">Email</td>
+<td class="p-md"><span class="px-sm py-xs border border-primary text-[10px] uppercase tracking-widest">Draft</span></td>
+<td class="p-md text-secondary">Nov 02, 2023</td>
+<td class="p-md">
+<button class="text-primary underline hover:text-secondary mr-md">Edit</button>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<!-- Editor & Preview Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
+<!-- Editor Panel -->
+<section class="md:col-span-5 border border-primary bg-surface-container-lowest p-lg flex flex-col gap-lg">
+<div class="border-b border-primary pb-sm mb-sm">
+<h3 class="font-headline-sm text-headline-sm text-primary">Editor: Enrollment Confirmation</h3>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-primary mb-sm uppercase">Template Name</label>
+<input class="w-full border border-primary p-md font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-primary bg-surface-container-lowest" type="text" value="Enrollment Confirmation"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-primary mb-sm uppercase">Delivery Channel</label>
+<select class="w-full border border-primary p-md font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-primary appearance-none bg-surface-container-lowest">
+<option selected="">Email</option>
+<option>In-App Notification</option>
+<option>SMS</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-primary mb-sm uppercase">Subject Line</label>
+<input class="w-full border border-primary p-md font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-primary bg-surface-container-lowest" type="text" value="Welcome to {{course_name}}, {{learner_name}}!"/>
+</div>
+<div class="flex-1">
+<label class="block font-label-md text-label-md text-primary mb-sm uppercase">Message Body</label>
+<textarea class="w-full border border-primary p-md font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-primary font-mono text-sm bg-surface-container-lowest resize-none" rows="10">Hello {{learner_name}},
+
+Your enrollment in "{{course_name}}" at {{institution_name}} is confirmed.
+
+Your first class is scheduled for {{class_time}}.
+
+Access your dashboard here: {{dashboard_link}}
+
+Regards,
+LearnioX Admin</textarea>
+</div>
+<div class="pt-md border-t border-primary mt-auto">
+<button class="w-full bg-primary text-on-primary py-md font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors cursor-pointer border border-primary">
+                        Save Template Definition
+                    </button>
+</div>
+</section>
+<!-- Variables Sidebar -->
+<section class="md:col-span-2 border border-primary bg-surface p-lg h-full">
+<h4 class="font-label-md text-label-md text-primary mb-md uppercase tracking-widest border-b border-primary pb-sm">Data Variables</h4>
+<ul class="flex flex-col gap-sm font-mono text-xs">
+<li>
+<button class="text-left w-full hover:underline text-primary p-xs cursor-pointer focus:outline-none focus:bg-primary focus:text-on-primary transition-colors">
+                            {{learner_name}}
+                        </button>
+</li>
+<li>
+<button class="text-left w-full hover:underline text-primary p-xs cursor-pointer focus:outline-none focus:bg-primary focus:text-on-primary transition-colors">
+                            {{course_name}}
+                        </button>
+</li>
+<li>
+<button class="text-left w-full hover:underline text-primary p-xs cursor-pointer focus:outline-none focus:bg-primary focus:text-on-primary transition-colors">
+                            {{institution_name}}
+                        </button>
+</li>
+<li>
+<button class="text-left w-full hover:underline text-primary p-xs cursor-pointer focus:outline-none focus:bg-primary focus:text-on-primary transition-colors">
+                            {{class_time}}
+                        </button>
+</li>
+<li>
+<button class="text-left w-full hover:underline text-primary p-xs cursor-pointer focus:outline-none focus:bg-primary focus:text-on-primary transition-colors">
+                            {{dashboard_link}}
+                        </button>
+</li>
+<li>
+<button class="text-left w-full hover:underline text-primary p-xs cursor-pointer focus:outline-none focus:bg-primary focus:text-on-primary transition-colors">
+                            {{certificate_link}}
+                        </button>
+</li>
+</ul>
+<div class="mt-xl pt-md border-t border-primary">
+<p class="font-body-sm text-body-sm text-secondary text-xs italic">Click to insert into editor.</p>
+</div>
+</section>
+<!-- Preview Panel -->
+<section class="md:col-span-5 border border-primary bg-surface-container-low p-lg h-full flex flex-col">
+<div class="border-b border-primary pb-sm mb-md flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-primary">Live Output Rendering</h3>
+<span class="font-label-md text-label-md bg-surface-dim px-sm py-xs border border-primary">EMAIL PREVIEW</span>
+</div>
+<div class="flex-1 border border-primary bg-surface-container-lowest p-lg shadow-[8px_8px_0px_rgba(0,0,0,1)] relative">
+<!-- Simulate Email Header -->
+<div class="border-b border-surface-dim pb-md mb-md">
+<div class="font-body-sm text-body-sm text-secondary mb-xs"><strong>From:</strong> notifications@learniox.edu</div>
+<div class="font-body-sm text-body-sm text-secondary mb-xs"><strong>To:</strong> j.doe@example.com</div>
+<div class="font-headline-sm text-headline-sm text-primary mt-sm">Welcome to Advanced Architecture 101, Jane Doe!</div>
+</div>
+<!-- Simulate Email Body -->
+<div class="font-body-md text-body-md text-primary whitespace-pre-wrap">Hello Jane Doe,
+
+Your enrollment in "Advanced Architecture 101" at State University is confirmed.
+
+Your first class is scheduled for Monday, 9:00 AM EST.
+
+Access your dashboard here: https://learniox.edu/dash
+
+Regards,
+LearnioX Admin</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

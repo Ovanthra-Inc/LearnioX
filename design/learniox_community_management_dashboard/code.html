@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Community Management Dashboard - LearnioX Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-variant": "#cfc4c5",
+                      "on-secondary-container": "#626262",
+                      "on-primary-container": "#848484",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "on-primary-fixed-variant": "#474747",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "secondary": "#5e5e5e",
+                      "tertiary": "#000000",
+                      "outline": "#7e7576",
+                      "tertiary-fixed": "#e3e2e2",
+                      "secondary-container": "#e1dfdf",
+                      "surface-dim": "#dadada",
+                      "on-secondary": "#ffffff",
+                      "surface-container": "#eeeeee",
+                      "on-primary": "#ffffff",
+                      "background": "#f9f9f9",
+                      "secondary-fixed": "#e4e2e2",
+                      "on-surface-variant": "#4c4546",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed-dim": "#c6c6c6",
+                      "surface": "#f9f9f9",
+                      "inverse-surface": "#2f3131",
+                      "surface-container-high": "#e8e8e8",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "on-secondary-fixed-variant": "#464747",
+                      "surface-variant": "#e2e2e2",
+                      "tertiary-container": "#1a1c1c",
+                      "on-background": "#1a1c1c",
+                      "on-surface": "#1a1c1c",
+                      "primary": "#000000",
+                      "surface-bright": "#f9f9f9",
+                      "primary-fixed": "#e2e2e2",
+                      "on-tertiary-container": "#838484",
+                      "inverse-primary": "#c6c6c6",
+                      "on-primary-fixed": "#1b1b1b",
+                      "surface-container-low": "#f3f3f4",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed-variant": "#464747",
+                      "inverse-on-surface": "#f0f1f1",
+                      "surface-tint": "#5e5e5e",
+                      "primary-container": "#1b1b1b",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e2e2e2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0px",
+                      "lg": "0px",
+                      "xl": "0px",
+                      "full": "0px"
+              },
+              "spacing": {
+                      "margin-desktop": "32px",
+                      "container-max": "1440px",
+                      "xl": "48px",
+                      "xxl": "64px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "margin-mobile": "16px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "headline-xl": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "headline-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                      "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                      "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                      "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                      "headline-sm": ["20px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                      "label-sm": ["11px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                      "label-md": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                      "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                      "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex h-screen overflow-hidden antialiased">
+<!-- SideNavBar -->
+<aside class="bg-surface text-primary border-r border-primary flex flex-col h-full overflow-y-auto w-64 shrink-0 transition-all duration-100 ease-linear">
+<div class="p-lg border-b border-primary flex items-center gap-md">
+<div class="w-12 h-12 bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary truncate">Studio Admin</h1>
+<p class="font-label-md text-label-md text-on-surface-variant truncate">Education Portal</p>
+</div>
+</div>
+<nav class="flex-1 py-md flex flex-col gap-xs">
+<!-- Active Tab: Spaces based on page context -->
+<a class="flex items-center gap-md px-lg py-sm bg-primary text-on-primary transition-all duration-100 ease-linear" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-body-md text-body-md">Spaces</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-primary hover:bg-surface-container transition-all duration-100 ease-linear hover:border-2 hover:border-primary border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-body-md text-body-md">Posts</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-primary hover:bg-surface-container transition-all duration-100 ease-linear hover:border-2 hover:border-primary border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-body-md text-body-md">Announcements</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-primary hover:bg-surface-container transition-all duration-100 ease-linear hover:border-2 hover:border-primary border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-body-md text-body-md">Comments</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-primary hover:bg-surface-container transition-all duration-100 ease-linear hover:border-2 hover:border-primary border-2 border-transparent" href="#">
+<span class="material-symbols-outlined">flag</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+</nav>
+<div class="p-lg border-t border-primary">
+<button class="w-full bg-primary text-on-primary py-sm px-md font-label-md text-label-md uppercase tracking-tight hover:bg-[#666666] transition-colors">
+                New Announcement
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full bg-surface overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface text-primary border-b border-primary flex justify-between items-center px-lg py-md w-full sticky top-0 z-50 shrink-0">
+<div class="flex items-center gap-lg">
+<h2 class="font-headline-md text-headline-md font-black text-primary uppercase tracking-tight">Community Manager</h2>
+<div class="relative ml-xl border border-[#CCCCCC] focus-within:border-primary bg-on-primary hidden md:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-xl pr-sm py-sm border-none focus:ring-0 bg-transparent font-body-sm text-body-sm w-64 placeholder:text-on-surface-variant outline-none" placeholder="Search community..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md hidden lg:flex">
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline active:opacity-80 px-sm py-xs" href="#">Dashboard</a>
+<a class="text-primary font-bold font-label-md text-label-md border-b-2 border-primary active:opacity-80 px-sm py-xs" href="#">Moderation</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline active:opacity-80 px-sm py-xs" href="#">Settings</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="font-label-md text-label-md text-primary bg-surface border border-primary px-md py-sm hover:border-[2px] transition-all">Help</button>
+<button class="font-label-md text-label-md text-on-primary bg-primary border border-primary px-md py-sm hover:bg-[#666666] transition-colors">Export Data</button>
+<div class="h-6 w-[1px] bg-primary mx-sm"></div>
+<button class="text-primary hover:opacity-80"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-primary hover:opacity-80"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="flex-1 overflow-y-auto p-lg lg:p-xl xl:p-xxl flex flex-col xl:flex-row gap-xl bg-surface">
+<!-- Left Column: Core Data -->
+<div class="flex-1 flex flex-col gap-xl">
+<!-- Section Header & Tabs -->
+<div class="border-b border-primary flex justify-between items-end pb-sm">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">Moderation Overview</h3>
+<div class="flex gap-md">
+<button class="font-label-md text-label-md border-b-2 border-primary text-primary pb-xs px-sm">Spaces</button>
+<button class="font-label-md text-label-md border-b-2 border-transparent text-on-surface-variant hover:text-primary pb-xs px-sm">Posts</button>
+<button class="font-label-md text-label-md border-b-2 border-transparent text-on-surface-variant hover:text-primary pb-xs px-sm">Reports</button>
+</div>
+</div>
+<!-- Data Table: Spaces -->
+<div class="border border-primary bg-on-primary overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead>
+<tr class="bg-[#F5F5F5] border-b border-primary">
+<th class="py-md px-lg font-label-md text-label-md text-primary uppercase tracking-wider">Space Name</th>
+<th class="py-md px-lg font-label-md text-label-md text-primary uppercase tracking-wider">Visibility</th>
+<th class="py-md px-lg font-label-md text-label-md text-primary uppercase tracking-wider">Linked Course</th>
+<th class="py-md px-lg font-label-md text-label-md text-primary uppercase tracking-wider text-right">Members</th>
+<th class="py-md px-lg font-label-md text-label-md text-primary uppercase tracking-wider">Status</th>
+<th class="py-md px-lg font-label-md text-label-md text-primary uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-primary divide-y divide-[#E5E5E5]">
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="py-md px-lg font-medium">UX Foundations Cohort 4</td>
+<td class="py-md px-lg"><span class="inline-block border border-primary px-xs py-[2px] text-[10px] uppercase font-bold tracking-wider">Private</span></td>
+<td class="py-md px-lg text-on-surface-variant">UXD-101</td>
+<td class="py-md px-lg text-right font-mono">142</td>
+<td class="py-md px-lg flex items-center gap-xs"><div class="w-2 h-2 bg-primary"></div> Active</td>
+<td class="py-md px-lg text-right">
+<button class="font-label-md text-label-md hover:underline underline-offset-2">Manage</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="py-md px-lg font-medium">General Discussion</td>
+<td class="py-md px-lg"><span class="inline-block border border-primary px-xs py-[2px] text-[10px] uppercase font-bold tracking-wider bg-primary text-on-primary">Public</span></td>
+<td class="py-md px-lg text-on-surface-variant">All</td>
+<td class="py-md px-lg text-right font-mono">1,084</td>
+<td class="py-md px-lg flex items-center gap-xs"><div class="w-2 h-2 bg-primary"></div> Active</td>
+<td class="py-md px-lg text-right">
+<button class="font-label-md text-label-md hover:underline underline-offset-2">Manage</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="py-md px-lg font-medium text-on-surface-variant">Legacy Alumni Network</td>
+<td class="py-md px-lg"><span class="inline-block border border-primary px-xs py-[2px] text-[10px] uppercase font-bold tracking-wider">Private</span></td>
+<td class="py-md px-lg text-on-surface-variant">None</td>
+<td class="py-md px-lg text-right font-mono text-on-surface-variant">45</td>
+<td class="py-md px-lg flex items-center gap-xs text-on-surface-variant"><div class="w-2 h-2 border border-primary"></div> Archived</td>
+<td class="py-md px-lg text-right">
+<button class="font-label-md text-label-md hover:underline underline-offset-2">Manage</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Announcement Composer -->
+<div class="mt-xl">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary border-b border-primary pb-sm mb-lg">Quick Announcement</h3>
+<div class="border border-primary bg-on-primary p-lg flex flex-col gap-md">
+<div>
+<label class="block font-label-md text-label-md text-primary mb-sm uppercase tracking-wide">Target Audience</label>
+<div class="flex gap-md">
+<label class="flex items-center gap-sm cursor-pointer group">
+<div class="w-4 h-4 border border-primary flex items-center justify-center group-hover:border-[2px]">
+<div class="w-2 h-2 bg-primary hidden group-has-[:checked]:block"></div>
+</div>
+<input checked="" class="hidden" name="audience" type="radio"/>
+<span class="font-body-sm text-body-sm">All Students</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer group">
+<div class="w-4 h-4 border border-primary flex items-center justify-center group-hover:border-[2px]">
+<div class="w-2 h-2 bg-primary hidden group-has-[:checked]:block"></div>
+</div>
+<input class="hidden" name="audience" type="radio"/>
+<span class="font-body-sm text-body-sm">Specific Course</span>
+</label>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-primary mb-sm uppercase tracking-wide">Title</label>
+<input class="w-full border border-[#CCCCCC] focus:border-primary p-sm font-body-md text-body-md outline-none bg-on-primary" placeholder="Enter announcement title..." type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-primary mb-sm uppercase tracking-wide">Body</label>
+<textarea class="w-full border border-[#CCCCCC] focus:border-primary p-sm font-body-md text-body-md outline-none bg-on-primary resize-y" placeholder="Draft your message..." rows="4"></textarea>
+</div>
+<div class="flex justify-end gap-md pt-sm">
+<button class="font-label-md text-label-md bg-on-primary text-primary border border-primary px-lg py-sm hover:border-[2px] transition-all">Save Draft</button>
+<button class="font-label-md text-label-md bg-primary text-on-primary border border-primary px-lg py-sm hover:bg-[#666666] transition-colors">Publish Now</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Context Panel -->
+<aside class="w-full xl:w-80 shrink-0 flex flex-col gap-xl">
+<!-- Action Card: Flagged Content -->
+<div class="border border-primary bg-on-primary">
+<div class="bg-primary text-on-primary p-md flex justify-between items-center">
+<h4 class="font-label-md text-label-md uppercase tracking-wider">Reported Content</h4>
+<span class="bg-on-primary text-primary font-bold font-mono px-xs py-[2px] text-[10px]">3</span>
+</div>
+<div class="divide-y divide-[#E5E5E5]">
+<div class="p-md hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-xs">
+<span class="font-label-md text-label-md text-error">Harassment</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-mono">10m ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary line-clamp-2">"This assignment requirement is completely ridiculous and the TA clearly doesn't know what they are doing..."</p>
+<div class="mt-sm flex gap-sm">
+<button class="font-label-sm text-label-sm uppercase underline underline-offset-2">Review</button>
+<button class="font-label-sm text-label-sm uppercase underline underline-offset-2 text-error">Remove</button>
+</div>
+</div>
+<div class="p-md hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-xs">
+<span class="font-label-md text-label-md text-primary">Spam</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-mono">1h ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary line-clamp-2">"Check out this link for free design resources totally not a scam http://suspicious-link.net"</p>
+<div class="mt-sm flex gap-sm">
+<button class="font-label-sm text-label-sm uppercase underline underline-offset-2">Review</button>
+<button class="font-label-sm text-label-sm uppercase underline underline-offset-2 text-error">Remove</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Admin Log -->
+<div class="border border-[#E5E5E5] bg-on-primary p-lg">
+<h4 class="font-label-md text-label-md uppercase tracking-wider border-b border-[#E5E5E5] pb-sm mb-md text-primary">Recent Activity</h4>
+<ul class="space-y-md">
+<li class="flex gap-md items-start">
+<div class="mt-xs w-2 h-2 bg-primary shrink-0"></div>
+<div>
+<p class="font-body-sm text-body-sm text-primary"><strong>You</strong> created space <span class="border border-[#E5E5E5] px-xs bg-surface text-xs font-mono">Web Dev Fall 24</span></p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-xs">2 hours ago</p>
+</div>
+</li>
+<li class="flex gap-md items-start">
+<div class="mt-xs w-2 h-2 border border-primary shrink-0"></div>
+<div>
+<p class="font-body-sm text-body-sm text-primary"><strong>System</strong> archived inactive space <span class="border border-[#E5E5E5] px-xs bg-surface text-xs font-mono">Summer Project</span></p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-xs">Yesterday</p>
+</div>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+</main>
+</body></html>
