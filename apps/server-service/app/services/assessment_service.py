@@ -1,0 +1,544 @@
+from datetime import datetime, timezone
+from typing import List, Optional
+from uuid import UUID
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    NotFoundException,
+    ValidationException,
+)
+from app.models.assessment import (
+    Assignment,
+    AssignmentStatus,
+    AssignmentSubmission,
+    AttemptStatus,
+    QuestionType,
+    Quiz,
+    QuizAttempt,
+    QuizOption,
+    QuizQuestion,
+    QuizStatus,
+    SubmissionStatus,
+)
+from app.repositories.assessment_repository import AssessmentRepository
+from app.repositories.curriculum_repository import CurriculumRepository
+from app.schemas.assessment import (
+    AssignmentResponse,
+    AssignmentStatisticsResponse,
+    CreateAssignmentRequest,
+    CreateQuestionRequest,
+    CreateQuizRequest,
+    GradeSubmissionRequest,
+    OptionRequest,
+    OptionResponse,
+    QuestionResponse,
+    QuizAnswerDetail,
+    QuizAttemptResponse,
+    QuizResponse,
+    QuizResultResponse,
+    QuizStatisticsResponse,
+    ReorderQuestionRequest,
+    SubmissionResponse,
+    SubmitAssignmentRequest,
+    SubmitQuizRequest,
+    UpdateAssignmentRequest,
+    UpdateQuestionRequest,
+    UpdateQuizRequest,
+)
+
+
+class AssessmentService:
+    def __init__(self, db: AsyncSession):
+        self.db = db
+        self.repo = AssessmentRepository(db)
+        self.curriculum_repo = CurriculumRepository(db)
+
+    def _resolve_file_url(self, file_id: Optional[UUID]) -> Optional[str]:
+        if not file_id:
+            return None
+        return f"/api/v1/storage/files/{file_id}/preview"
+
+    # Quiz Services
+    async def create_quiz(
+        self, lesson_id: UUID, user_id: UUID, payload: CreateQuizRequest
+    ) -> QuizResponse:
+        lesson = await self.curriculum_repo.get_lesson_by_id(lesson_id)
+        if not lesson:
+            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+
+        if payload.passing_marks > payload.total_marks:
+            raise ValidationException(
+                message="Passing marks cannot exceed total marks",
+                error_code="INVALID_QUIZ_MARKS",
+            )
+
+        quiz = await self.repo.create_quiz(
+            lesson_id=lesson_id,
+            title=payload.title,
+            description=payload.description,
+            passing_marks=payload.passing_marks,
+            total_marks=payload.total_marks,
+            time_limit=payload.time_limit,
+            attempt_limit=payload.attempt_limit,
+            shuffle_questions=payload.shuffle_questions,
+            show_result=payload.show_result,
+            created_by=user_id,
+        )
+        return QuizResponse.model_validate(quiz)
+
+    async def get_quiz(self, quiz_id: UUID) -> QuizResponse:
+        quiz = await self.repo.get_quiz_by_id(quiz_id)
+        if not quiz:
+            raise NotFoundException(message="Quiz not found", error_code="QUIZ_NOT_FOUND")
+        return QuizResponse.model_validate(quiz)
+
+    async def list_quizzes(self, lesson_id: UUID) -> List[QuizResponse]:
+        quizzes = await self.repo.list_quizzes(lesson_id)
+        return [QuizResponse.model_validate(q) for q in quizzes]
+
+    async def update_quiz(
+        self, quiz_id: UUID, user_id: UUID, payload: UpdateQuizRequest
+    ) -> QuizResponse:
+        quiz = await self.repo.get_quiz_by_id(quiz_id)
+        if not quiz:
+            raise NotFoundException(message="Quiz not found", error_code="QUIZ_NOT_FOUND")
+
+        update_dict = payload.model_dump(exclude_unset=True)
+        updated = await self.repo.update_quiz(quiz, update_dict)
+        return QuizResponse.model_validate(updated)
+
+    async def delete_quiz(self, quiz_id: UUID, user_id: UUID) -> None:
+        success = await self.repo.delete_quiz(quiz_id)
+        if not success:
+            raise NotFoundException(message="Quiz not found", error_code="QUIZ_NOT_FOUND")
+
+    async def publish_quiz(self, quiz_id: UUID, user_id: UUID) -> QuizResponse:
+        quiz = await self.repo.get_quiz_by_id(quiz_id)
+        if not quiz:
+            raise NotFoundException(message="Quiz not found", error_code="QUIZ_NOT_FOUND")
+
+        questions = await self.repo.list_questions(quiz_id)
+        if not questions:
+            raise ValidationException(
+                message="Cannot publish quiz without questions",
+                error_code="QUIZ_NO_QUESTIONS",
+            )
+
+        updated = await self.repo.update_quiz(quiz, {"status": QuizStatus.PUBLISHED})
+        return QuizResponse.model_validate(updated)
+
+    async def draft_quiz(self, quiz_id: UUID, user_id: UUID) -> QuizResponse:
+        quiz = await self.repo.get_quiz_by_id(quiz_id)
+        if not quiz:
+            raise NotFoundException(message="Quiz not found", error_code="QUIZ_NOT_FOUND")
+
+        updated = await self.repo.update_quiz(quiz, {"status": QuizStatus.DRAFT})
+        return QuizResponse.model_validate(updated)
+
+    # Question & Option Services
+    async def create_question(
+        self, quiz_id: UUID, user_id: UUID, payload: CreateQuestionRequest
+    ) -> QuestionResponse:
+        quiz = await self.repo.get_quiz_by_id(quiz_id)
+        if not quiz:
+            raise NotFoundException(message="Quiz not found", error_code="QUIZ_NOT_FOUND")
+
+        qtype = QuestionType(payload.question_type)
+        question = await self.repo.create_question(
+            quiz_id=quiz_id,
+            question_text=payload.question,
+            question_type=qtype,
+            marks=payload.marks,
+            explanation=payload.explanation,
+            options=payload.options,
+        )
+        return await self._to_question_response(question)
+
+    async def _to_question_response(self, question: QuizQuestion) -> QuestionResponse:
+        options = await self.repo.list_options(question.id)
+        opt_responses = [OptionResponse.model_validate(o) for o in options]
+        return QuestionResponse(
+            id=question.id,
+            quiz_id=question.quiz_id,
+            question=question.question,
+            question_type=question.question_type.value if hasattr(question.question_type, "value") else str(question.question_type),
+            marks=question.marks,
+            position=question.position,
+            explanation=question.explanation,
+            options=opt_responses,
+        )
+
+    async def list_questions(self, quiz_id: UUID) -> List[QuestionResponse]:
+        questions = await self.repo.list_questions(quiz_id)
+        return [await self._to_question_response(q) for q in questions]
+
+    async def update_question(
+        self, question_id: UUID, user_id: UUID, payload: UpdateQuestionRequest
+    ) -> QuestionResponse:
+        question = await self.repo.get_question_by_id(question_id)
+        if not question:
+            raise NotFoundException(message="Question not found", error_code="QUESTION_NOT_FOUND")
+
+        update_dict = payload.model_dump(exclude_unset=True)
+        if "question_type" in update_dict and update_dict["question_type"]:
+            update_dict["question_type"] = QuestionType(update_dict["question_type"])
+
+        updated = await self.repo.update_question(question, update_dict)
+        return await self._to_question_response(updated)
+
+    async def delete_question(self, question_id: UUID, user_id: UUID) -> None:
+        success = await self.repo.delete_question(question_id)
+        if not success:
+            raise NotFoundException(message="Question not found", error_code="QUESTION_NOT_FOUND")
+
+    async def reorder_questions(
+        self, quiz_id: UUID, user_id: UUID, payload: ReorderQuestionRequest
+    ) -> None:
+        await self.repo.reorder_questions(quiz_id, payload.question_ids)
+
+    async def add_option(
+        self, question_id: UUID, user_id: UUID, payload: OptionRequest
+    ) -> OptionResponse:
+        question = await self.repo.get_question_by_id(question_id)
+        if not question:
+            raise NotFoundException(message="Question not found", error_code="QUESTION_NOT_FOUND")
+
+        option = await self.repo.add_option(
+            question_id=question_id,
+            option_text=payload.option_text,
+            is_correct=payload.is_correct,
+        )
+        return OptionResponse.model_validate(option)
+
+    async def update_option(
+        self, option_id: UUID, user_id: UUID, payload: OptionRequest
+    ) -> OptionResponse:
+        option = await self.repo.get_option_by_id(option_id)
+        if not option:
+            raise NotFoundException(message="Option not found", error_code="OPTION_NOT_FOUND")
+
+        updated = await self.repo.update_option(
+            option, option_text=payload.option_text, is_correct=payload.is_correct
+        )
+        return OptionResponse.model_validate(updated)
+
+    async def delete_option(self, option_id: UUID, user_id: UUID) -> None:
+        success = await self.repo.delete_option(option_id)
+        if not success:
+            raise NotFoundException(message="Option not found", error_code="OPTION_NOT_FOUND")
+
+    # Quiz Attempt & Auto-Grading Services
+    async def start_attempt(self, quiz_id: UUID, user_id: UUID) -> QuizAttemptResponse:
+        quiz = await self.repo.get_quiz_by_id(quiz_id)
+        if not quiz:
+            raise NotFoundException(message="Quiz not found", error_code="QUIZ_NOT_FOUND")
+
+        if quiz.status != QuizStatus.PUBLISHED:
+            raise ValidationException(
+                message="Cannot attempt an unpublished quiz", error_code="QUIZ_NOT_PUBLISHED"
+            )
+
+        if quiz.attempt_limit > 0:
+            count = await self.repo.count_user_attempts(user_id, quiz_id)
+            if count >= quiz.attempt_limit:
+                raise ValidationException(
+                    message=f"Maximum quiz attempt limit reached ({quiz.attempt_limit})",
+                    error_code="ATTEMPT_LIMIT_EXCEEDED",
+                )
+
+        attempt = await self.repo.create_attempt(
+            user_id=user_id, quiz_id=quiz_id, total_marks=quiz.total_marks
+        )
+        return QuizAttemptResponse(
+            attempt_id=attempt.id,
+            quiz_id=attempt.quiz_id,
+            user_id=attempt.user_id,
+            status=attempt.status.value if hasattr(attempt.status, "value") else str(attempt.status),
+            started_at=attempt.started_at,
+        )
+
+    async def submit_attempt(
+        self, quiz_id: UUID, user_id: UUID, payload: SubmitQuizRequest
+    ) -> QuizResultResponse:
+        quiz = await self.repo.get_quiz_by_id(quiz_id)
+        if not quiz:
+            raise NotFoundException(message="Quiz not found", error_code="QUIZ_NOT_FOUND")
+
+        # HIGH-09: Do NOT silently create a new attempt — that bypasses the
+        # attempt-limit guard enforced in start_attempt. Require start_attempt first.
+        attempts = await self.repo.list_user_attempts(user_id, quiz_id=quiz_id, limit=50)
+        active_attempt = None
+        for a in attempts:
+            if a.quiz_id == quiz_id and a.status == AttemptStatus.STARTED:
+                active_attempt = a
+                break
+
+        if not active_attempt:
+            raise NotFoundException(
+                message="No active attempt found. Call start_attempt before submitting.",
+                error_code="NO_ACTIVE_ATTEMPT",
+            )
+
+        evaluated = await self.repo.evaluate_and_submit_attempt(
+            attempt_id=active_attempt.id, answers=payload.answers
+        )
+
+        answers_list = await self.repo.get_attempt_answers(evaluated.id)
+        answer_details = [
+            QuizAnswerDetail(
+                question_id=ans.question_id,
+                selected_option_id=ans.selected_option_id,
+                text_answer=ans.text_answer,
+                marks_awarded=ans.marks_awarded,
+                is_correct=(ans.marks_awarded > 0),
+            )
+            for ans in answers_list
+        ]
+
+        passed = evaluated.score >= quiz.passing_marks
+        return QuizResultResponse(
+            attempt_id=evaluated.id,
+            quiz_id=evaluated.quiz_id,
+            score=evaluated.score,
+            total_marks=evaluated.total_marks,
+            percentage=evaluated.percentage,
+            passed=passed,
+            answers=answer_details,
+            submitted_at=evaluated.submitted_at,
+        )
+
+    async def get_attempt_result(self, attempt_id: UUID, user_id: UUID) -> QuizResultResponse:
+        attempt = await self.repo.get_attempt_by_id(attempt_id)
+        if not attempt or attempt.user_id != user_id:
+            raise NotFoundException(message="Attempt not found", error_code="ATTEMPT_NOT_FOUND")
+
+        quiz = await self.repo.get_quiz_by_id(attempt.quiz_id)
+        answers_list = await self.repo.get_attempt_answers(attempt.id)
+        answer_details = [
+            QuizAnswerDetail(
+                question_id=ans.question_id,
+                selected_option_id=ans.selected_option_id,
+                text_answer=ans.text_answer,
+                marks_awarded=ans.marks_awarded,
+                is_correct=(ans.marks_awarded > 0),
+            )
+            for ans in answers_list
+        ]
+
+        passing_marks = quiz.passing_marks if quiz else 0
+        return QuizResultResponse(
+            attempt_id=attempt.id,
+            quiz_id=attempt.quiz_id,
+            score=attempt.score,
+            total_marks=attempt.total_marks,
+            percentage=attempt.percentage,
+            passed=(attempt.score >= passing_marks),
+            answers=answer_details,
+            submitted_at=attempt.submitted_at,
+        )
+
+    async def get_user_quiz_history(self, user_id: UUID) -> List[QuizAttemptResponse]:
+        attempts = await self.repo.list_user_attempts(user_id)
+        return [
+            QuizAttemptResponse(
+                attempt_id=a.id,
+                quiz_id=a.quiz_id,
+                user_id=a.user_id,
+                status=a.status.value if hasattr(a.status, "value") else str(a.status),
+                started_at=a.started_at,
+            )
+            for a in attempts
+        ]
+
+    # Assignment Services
+    async def create_assignment(
+        self, lesson_id: UUID, user_id: UUID, payload: CreateAssignmentRequest
+    ) -> AssignmentResponse:
+        lesson = await self.curriculum_repo.get_lesson_by_id(lesson_id)
+        if not lesson:
+            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+
+        assignment = await self.repo.create_assignment(
+            lesson_id=lesson_id,
+            title=payload.title,
+            description=payload.description,
+            total_marks=payload.total_marks,
+            due_date=payload.due_date,
+            allow_late_submission=payload.allow_late_submission,
+        )
+        return AssignmentResponse.model_validate(assignment)
+
+    async def list_assignments(self, lesson_id: UUID) -> List[AssignmentResponse]:
+        assignments = await self.repo.list_assignments(lesson_id)
+        return [AssignmentResponse.model_validate(a) for a in assignments]
+
+    async def get_assignment(self, assignment_id: UUID) -> AssignmentResponse:
+        assignment = await self.repo.get_assignment_by_id(assignment_id)
+        if not assignment:
+            raise NotFoundException(
+                message="Assignment not found", error_code="ASSIGNMENT_NOT_FOUND"
+            )
+        return AssignmentResponse.model_validate(assignment)
+
+    async def update_assignment(
+        self, assignment_id: UUID, user_id: UUID, payload: UpdateAssignmentRequest
+    ) -> AssignmentResponse:
+        assignment = await self.repo.get_assignment_by_id(assignment_id)
+        if not assignment:
+            raise NotFoundException(
+                message="Assignment not found", error_code="ASSIGNMENT_NOT_FOUND"
+            )
+
+        update_dict = payload.model_dump(exclude_unset=True)
+        updated = await self.repo.update_assignment(assignment, update_dict)
+        return AssignmentResponse.model_validate(updated)
+
+    async def delete_assignment(self, assignment_id: UUID, user_id: UUID) -> None:
+        success = await self.repo.delete_assignment(assignment_id)
+        if not success:
+            raise NotFoundException(
+                message="Assignment not found", error_code="ASSIGNMENT_NOT_FOUND"
+            )
+
+    async def submit_assignment(
+        self, assignment_id: UUID, user_id: UUID, payload: SubmitAssignmentRequest
+    ) -> SubmissionResponse:
+        assignment = await self.repo.get_assignment_by_id(assignment_id)
+        if not assignment:
+            raise NotFoundException(
+                message="Assignment not found", error_code="ASSIGNMENT_NOT_FOUND"
+            )
+
+        now = datetime.now(timezone.utc)
+        due_date = assignment.due_date
+        if due_date and due_date.tzinfo is None:
+            due_date = due_date.replace(tzinfo=timezone.utc)
+
+        if due_date and now > due_date and not assignment.allow_late_submission:
+            raise ValidationException(
+                message="Assignment due date has passed and late submission is disabled",
+                error_code="DUE_DATE_EXPIRED",
+            )
+
+        submission = await self.repo.create_submission(
+            assignment_id=assignment_id,
+            student_id=user_id,
+            file_id=payload.file_id,
+            remarks=payload.remarks,
+        )
+
+        return SubmissionResponse(
+            id=submission.id,
+            assignment_id=submission.assignment_id,
+            student_id=submission.student_id,
+            file_id=submission.file_id,
+            file_url=self._resolve_file_url(submission.file_id),
+            remarks=submission.remarks,
+            marks=submission.marks,
+            feedback=submission.feedback,
+            status=submission.status.value if hasattr(submission.status, "value") else str(submission.status),
+            submitted_at=submission.submitted_at,
+            graded_at=submission.graded_at,
+        )
+
+    async def list_assignment_submissions(
+        self, assignment_id: UUID, user_id: UUID
+    ) -> List[SubmissionResponse]:
+        submissions = await self.repo.list_submissions(assignment_id)
+        return [
+            SubmissionResponse(
+                id=s.id,
+                assignment_id=s.assignment_id,
+                student_id=s.student_id,
+                file_id=s.file_id,
+                file_url=self._resolve_file_url(s.file_id),
+                remarks=s.remarks,
+                marks=s.marks,
+                feedback=s.feedback,
+                status=s.status.value if hasattr(s.status, "value") else str(s.status),
+                submitted_at=s.submitted_at,
+                graded_at=s.graded_at,
+            )
+            for s in submissions
+        ]
+
+    async def grade_submission(
+        self, submission_id: UUID, user_id: UUID, payload: GradeSubmissionRequest
+    ) -> SubmissionResponse:
+        submission = await self.repo.get_submission_by_id(submission_id)
+        if not submission:
+            raise NotFoundException(
+                message="Submission not found", error_code="SUBMISSION_NOT_FOUND"
+            )
+
+        updated = await self.repo.grade_submission(
+            submission, marks=payload.marks, feedback=payload.feedback
+        )
+
+        return SubmissionResponse(
+            id=updated.id,
+            assignment_id=updated.assignment_id,
+            student_id=updated.student_id,
+            file_id=updated.file_id,
+            file_url=self._resolve_file_url(updated.file_id),
+            remarks=updated.remarks,
+            marks=updated.marks,
+            feedback=updated.feedback,
+            status=updated.status.value if hasattr(updated.status, "value") else str(updated.status),
+            submitted_at=updated.submitted_at,
+            graded_at=updated.graded_at,
+        )
+
+    async def review_submission(
+        self, submission_id: UUID, user_id: UUID
+    ) -> SubmissionResponse:
+        submission = await self.repo.get_submission_by_id(submission_id)
+        if not submission:
+            raise NotFoundException(
+                message="Submission not found", error_code="SUBMISSION_NOT_FOUND"
+            )
+
+        updated = await self.repo.review_submission(submission)
+        return SubmissionResponse(
+            id=updated.id,
+            assignment_id=updated.assignment_id,
+            student_id=updated.student_id,
+            file_id=updated.file_id,
+            file_url=self._resolve_file_url(updated.file_id),
+            remarks=updated.remarks,
+            marks=updated.marks,
+            feedback=updated.feedback,
+            status=updated.status.value if hasattr(updated.status, "value") else str(updated.status),
+            submitted_at=updated.submitted_at,
+            graded_at=updated.graded_at,
+        )
+
+    async def get_user_assignments(self, user_id: UUID) -> List[SubmissionResponse]:
+        submissions = await self.repo.list_user_submissions(user_id)
+        return [
+            SubmissionResponse(
+                id=s.id,
+                assignment_id=s.assignment_id,
+                student_id=s.student_id,
+                file_id=s.file_id,
+                file_url=self._resolve_file_url(s.file_id),
+                remarks=s.remarks,
+                marks=s.marks,
+                feedback=s.feedback,
+                status=s.status.value if hasattr(s.status, "value") else str(s.status),
+                submitted_at=s.submitted_at,
+                graded_at=s.graded_at,
+            )
+            for s in submissions
+        ]
+
+    # Statistics Services
+    async def get_quiz_statistics(self, quiz_id: UUID) -> QuizStatisticsResponse:
+        stats = await self.repo.get_quiz_statistics(quiz_id)
+        return QuizStatisticsResponse(**stats)
+
+    async def get_assignment_statistics(self, assignment_id: UUID) -> AssignmentStatisticsResponse:
+        stats = await self.repo.get_assignment_statistics(assignment_id)
+        return AssignmentStatisticsResponse(**stats)

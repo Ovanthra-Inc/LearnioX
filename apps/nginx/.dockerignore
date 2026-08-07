@@ -1,0 +1,13 @@
+# Version Control
+.git
+.gitignore
+.gitattributes
+
+# Logs & Temporary Files
+*.log
+*.tmp
+
+# Documentation & IDE
+.vscode/
+.idea/
+README.md

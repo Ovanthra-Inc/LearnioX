@@ -1,0 +1,29 @@
+# Version Control
+.git
+.gitignore
+.gitattributes
+
+# Next.js Build & Output
+.next/
+out/
+build/
+dist/
+
+# Dependency Lock & Node Modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment & Local Secrets
+.env
+.env.*
+!.env.example
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+README.md

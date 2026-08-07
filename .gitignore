@@ -1,1 +1,54 @@
 data
+
+# CRIT-06: Never commit secrets or environment files
+.env
+.env.*
+!.env.example
+
+# LOW-08: Test databases should not be committed
+*.db
+*.sqlite3
+*.sqlite
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Uploads (runtime data)
+uploads/
+
+# Logs
+*.log
+logs/
+
+# Node / Frontend
+node_modules/
+.next/
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+.gunicorn

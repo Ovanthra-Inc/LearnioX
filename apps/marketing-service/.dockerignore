@@ -1,0 +1,41 @@
+# Git & Version Control
+.git
+.gitignore
+.gitattributes
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env
+.env.*
+
+# Local Media & Storage Files
+*.db
+*.sqlite
+uploads/*
+!uploads/.gitkeep
+images/*
+!images/.gitkeep
+videos/*
+!videos/.gitkeep
+pdfs/*
+!pdfs/.gitkeep
+thumbnails/*
+!thumbnails/.gitkeep
+storages/*
+!storages/.gitkeep
+
+# Documentation & IDE
+.vscode/
+.idea/
+*.swp
+README.md

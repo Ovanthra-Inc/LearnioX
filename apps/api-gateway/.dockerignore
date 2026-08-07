@@ -1,0 +1,25 @@
+# Git & Version Control
+.git
+.gitignore
+.gitattributes
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env
+.env.*
+
+# Documentation & IDE
+.vscode/
+.idea/
+*.swp
+README.md
