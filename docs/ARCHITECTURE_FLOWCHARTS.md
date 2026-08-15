@@ -31,7 +31,7 @@ flowchart TD
     Webhooks -->|HTTPS Webhook Call| Ngrok
     Ngrok -->|Port 80 Forwarding| Nginx
 
-    Nginx -->|Route '/' (HTML/JS)| ClientApp
+    Nginx -->|"Route '/' (HTML/JS)"| ClientApp
     Nginx -->|Route '/uploads/*| UploadsVolume
     Nginx -->|Route '/api/*| APIGateway
 ```
