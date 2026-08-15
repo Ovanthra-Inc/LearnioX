@@ -1,36 +1,30 @@
 'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
-import { useRouter, useSearchParams, useParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { BookOpen, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 function CallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useParams();
-  const provider = params?.provider || 'google';
 
   const code = searchParams.get('code');
-  const state = searchParams.get('state');
   const error = searchParams.get('error');
 
   const { loginWithCode } = useAuth();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (error) {
-      setStatus('error');
-      setErrorMessage(`Authentication was declined or failed: ${error}`);
+      setErrorMessage(`Authentication failed: ${error}`);
       toast.error(`Authentication failed: ${error}`);
       return;
     }
 
     if (!code) {
-      setStatus('error');
-      setErrorMessage('No authorization code was found in callback URL.');
+      setErrorMessage('No authorization code found in callback URL.');
       return;
     }
 
@@ -40,16 +34,15 @@ function CallbackContent() {
       try {
         await loginWithCode(code as string);
         if (isMounted) {
-          setStatus('success');
           toast.success('Successfully authenticated!');
-          setTimeout(() => {
-            router.push('/dashboard');
-          }, 800);
+          router.replace('/dashboard');
         }
       } catch (err: any) {
         if (isMounted) {
-          setStatus('error');
-          const msg = err?.message || 'Failed to exchange authorization code with server';
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            'Failed to authenticate with server';
           setErrorMessage(msg);
           toast.error(msg);
         }
@@ -63,65 +56,36 @@ function CallbackContent() {
     };
   }, [code, error, loginWithCode, router]);
 
-  return (
-    <div className="flex min-h-[calc(100vh-3.5rem)] flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="w-full max-w-sm space-y-6 text-center">
-        {/* Brand */}
-        <div className="flex flex-col items-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md mb-3">
-            <BookOpen className="h-6 w-6" />
+  if (errorMessage) {
+    return (
+      <div className="flex min-h-svh flex-col items-center justify-center p-6 text-center bg-background">
+        <div className="w-full max-w-xs space-y-4">
+          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+            <AlertCircle className="h-5 w-5" />
           </div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground font-sans">
-            Learnio<span className="text-primary">X</span> Auth
-          </h2>
-          <p className="text-xs text-muted-foreground mt-1 capitalize">
-            Verifying {String(provider)} authentication...
-          </p>
+          <div className="space-y-1">
+            <h1 className="text-lg font-bold font-sans text-foreground">Authentication Error</h1>
+            <p className="text-xs text-muted-foreground leading-relaxed">{errorMessage}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => router.replace('/login')}
+            className="w-full rounded-md bg-primary py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
+          >
+            Back to Sign In
+          </button>
         </div>
+      </div>
+    );
+  }
 
-        {/* Status Card */}
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm flex flex-col items-center space-y-4">
-          {status === 'loading' && (
-            <>
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-foreground">Exchanging Credentials</p>
-                <p className="text-[11px] text-muted-foreground">
-                  Securing your session with API Gateway...
-                </p>
-              </div>
-            </>
-          )}
-
-          {status === 'success' && (
-            <>
-              <CheckCircle2 className="h-8 w-8 text-emerald-500 animate-bounce" />
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-foreground">Authentication Verified</p>
-                <p className="text-[11px] text-muted-foreground">
-                  Redirecting to your dashboard...
-                </p>
-              </div>
-            </>
-          )}
-
-          {status === 'error' && (
-            <>
-              <AlertCircle className="h-8 w-8 text-destructive" />
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-destructive">Authentication Error</p>
-                <p className="text-[11px] text-muted-foreground max-w-xs">{errorMessage}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => router.push('/auth/login')}
-                className="mt-2 w-full rounded-md bg-primary hover:bg-primary/90 px-3 py-2 text-xs font-medium text-primary-foreground transition-colors cursor-pointer"
-              >
-                Back to Sign In
-              </button>
-            </>
-          )}
-        </div>
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center bg-background text-center">
+      <div className="flex flex-col items-center gap-3">
+        <Loader2 className="h-6 w-6 animate-spin text-foreground" />
+        <p className="text-xs font-medium text-muted-foreground tracking-wide">
+          Signing you in...
+        </p>
       </div>
     </div>
   );
@@ -131,9 +95,8 @@ export default function OAuthCallbackPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex h-screen items-center justify-center space-x-2 text-xs text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin text-primary" />
-          <span>Processing authentication callback...</span>
+        <div className="flex min-h-svh flex-col items-center justify-center bg-background">
+          <Loader2 className="h-6 w-6 animate-spin text-foreground" />
         </div>
       }
     >

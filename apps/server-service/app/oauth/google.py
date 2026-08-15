@@ -41,18 +41,10 @@ class GoogleOAuthProvider(BaseOAuthProvider):
     ) -> str:
         # Check if credentials are fully configured
         if not self.is_configured:
-            if settings.ALLOW_DEV_LOGIN:
-                # In dev mode when credentials aren't configured yet,
-                # return a local mock callback URL so local development works seamlessly
-                signed_state = state if (state and verify_signed_state(state)) else create_signed_state("dev_local")
-                redirect_uri = settings.GOOGLE_REDIRECT_URI
-                separator = "&" if "?" in redirect_uri else "?"
-                return f"{redirect_uri}{separator}code=dev_google_user&state={signed_state}"
-            else:
-                raise ValidationException(
-                    message="Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env.",
-                    error_code="GOOGLE_OAUTH_NOT_CONFIGURED",
-                )
+            raise ValidationException(
+                message="Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env.",
+                error_code="GOOGLE_OAUTH_NOT_CONFIGURED",
+            )
 
         signed_state = state if (state and verify_signed_state(state)) else create_signed_state(state or "")
         params = {
@@ -76,21 +68,6 @@ class GoogleOAuthProvider(BaseOAuthProvider):
         code: str,
         code_verifier: Optional[str] = None,
     ) -> OAuthUserPayload:
-        # 1. Dev / Mock bypass for offline local development
-        if settings.ALLOW_DEV_LOGIN and (
-            not self.is_configured or code.startswith("dev_")
-        ):
-            dev_email = f"dev_user_{code[:8]}@example.com" if code else "dev_user@example.com"
-            return OAuthUserPayload(
-                email=dev_email,
-                name="Dev Google User",
-                picture="https://lh3.googleusercontent.com/a/default-avatar",
-                provider="google",
-                provider_id=f"google_dev_{code}",
-                email_verified=True,
-                raw_data={"mock": True, "code": code},
-            )
-
         if not self.is_configured:
             raise UnauthorizedException(
                 message="Google OAuth credentials are not configured on this server.",

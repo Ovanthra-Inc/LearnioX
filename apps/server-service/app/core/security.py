@@ -1,10 +1,31 @@
 import hashlib
+import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, Optional, Tuple
 import jwt
+from passlib.context import CryptContext
 from app.core.config import settings
 from app.core.exceptions import UnauthorizedException
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def get_password_hash(password: str) -> str:
+    """Hashes plain text password using bcrypt."""
+    return pwd_context.hash(password)
+
+
+def verify_password(plain_password: str, hashed_password: Optional[str]) -> bool:
+    """Verifies a plain password against stored hash."""
+    if not hashed_password:
+        return False
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def generate_secure_token(nbytes: int = 32) -> str:
+    """Generates URL-safe cryptographically random token."""
+    return secrets.token_urlsafe(nbytes)
 
 
 def create_access_token(user_id: str, email: str) -> Tuple[str, int]:
@@ -58,3 +79,45 @@ def decode_token(token: str) -> Dict[str, Any]:
 
 def hash_token(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def set_auth_cookies(
+    response: Any,
+    access_token: str,
+    refresh_token: str,
+    access_token_expires_in: int = 900,
+    refresh_token_days: int = 7,
+) -> None:
+    """
+    Sets dual HttpOnly secure SameSite cookies for access and refresh tokens.
+    """
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        max_age=access_token_expires_in,
+        expires=access_token_expires_in,
+        httponly=True,
+        secure=settings.is_production,
+        samesite="lax",
+        path="/",
+    )
+    refresh_max_age = refresh_token_days * 86400
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        max_age=refresh_max_age,
+        expires=refresh_max_age,
+        httponly=True,
+        secure=settings.is_production,
+        samesite="lax",
+        path="/",
+    )
+
+
+def clear_auth_cookies(response: Any) -> None:
+    """
+    Clears access_token and refresh_token cookies.
+    """
+    response.delete_cookie(key="access_token", path="/", httponly=True, samesite="lax", secure=settings.is_production)
+    response.delete_cookie(key="refresh_token", path="/", httponly=True, samesite="lax", secure=settings.is_production)
+

@@ -12,9 +12,11 @@ class UserResponse(BaseModel):
     name: str
     picture: Optional[str] = None
     avatar_file_id: Optional[UUID] = None
-    provider: str = "google"
+    provider: str = "email"
+    signup_method: str = "email_password"
+    last_login_method: Optional[str] = None
     is_active: bool = True
-    is_verified: bool = True
+    is_verified: bool = False
     language: str = "en"
     theme: str = "light"
     created_at: datetime

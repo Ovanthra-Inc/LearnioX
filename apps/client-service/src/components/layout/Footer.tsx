@@ -2,9 +2,32 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, Shield, Terminal } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { BookOpen } from 'lucide-react';
 
 export function Footer() {
+  const pathname = usePathname();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || !pathname) {
+    return null;
+  }
+
+  // Hide footer on landing page, auth routes, and sidebar dashboard routes
+  const authRoutes = ['/login', '/forgot-password', '/reset-password', '/verify-email'];
+  if (
+    pathname === '/' ||
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/settings') ||
+    pathname.startsWith('/auth') ||
+    authRoutes.some((route) => pathname === route || pathname.startsWith(route + '/'))
+  ) {
+    return null;
+  }
   return (
     <footer className="w-full border-t border-border bg-card text-muted-foreground mt-auto transition-colors">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useAuth } from '@/hooks/useAuth';
 import {
@@ -21,10 +21,32 @@ import { toast } from 'sonner';
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { user, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || !pathname) {
+    return null;
+  }
+
+  // Hide header on landing page, on auth pages, and on sidebar dashboard routes
+  const authRoutes = ['/login', '/forgot-password', '/reset-password', '/verify-email'];
+  if (
+    pathname === '/' ||
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/settings') ||
+    pathname.startsWith('/auth') ||
+    authRoutes.some((route) => pathname === route || pathname.startsWith(route + '/'))
+  ) {
+    return null;
+  }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,18 +145,26 @@ export function Header() {
                   <Link
                     href="/dashboard"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center px-3 py-1.5 text-xs text-foreground hover:bg-secondary rounded-md transition-colors cursor-pointer"
+                    className="flex items-center px-3 py-2 text-xs text-foreground hover:bg-muted rounded-md transition-colors cursor-pointer"
                   >
                     <Layers className="h-3.5 w-3.5 mr-2 text-muted-foreground" />
                     My Learning Dashboard
                   </Link>
                   <Link
+                    href="/courses"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center px-3 py-2 text-xs text-foreground hover:bg-muted rounded-md transition-colors cursor-pointer"
+                  >
+                    <BookOpen className="h-3.5 w-3.5 mr-2 text-muted-foreground" />
+                    Explore Courses
+                  </Link>
+                  <Link
                     href="/institution"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center px-3 py-1.5 text-xs text-foreground hover:bg-secondary rounded-md transition-colors cursor-pointer"
+                    className="flex items-center px-3 py-2 text-xs text-foreground hover:bg-muted rounded-md transition-colors cursor-pointer"
                   >
                     <Shield className="h-3.5 w-3.5 mr-2 text-muted-foreground" />
-                    Institution Management
+                    Institutions
                   </Link>
 
                   <div className="my-1 border-t border-border" />
@@ -146,7 +176,7 @@ export function Header() {
                       logout();
                       toast.info('Signed out successfully');
                     }}
-                    className="w-full flex items-center px-3 py-1.5 text-xs text-destructive hover:bg-destructive/10 rounded-md transition-colors cursor-pointer"
+                    className="w-full flex items-center px-3 py-2 text-xs text-destructive hover:bg-destructive/10 rounded-md transition-colors cursor-pointer"
                   >
                     <LogOut className="h-3.5 w-3.5 mr-2" />
                     Sign Out
@@ -156,7 +186,7 @@ export function Header() {
             </div>
           ) : (
             <Link
-              href="/auth/login"
+              href="/login"
               className="inline-flex items-center justify-center rounded-md bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors cursor-pointer"
             >
               Sign In
