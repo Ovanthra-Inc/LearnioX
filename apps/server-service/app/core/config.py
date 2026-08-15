@@ -53,7 +53,16 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""
     GOOGLE_REDIRECT_URI: str = "http://localhost:3000/auth/callback/google"
-    ALLOW_DEV_LOGIN: bool = False  # Secure default — must be explicitly enabled in .env
+
+    # SMTP / Email Service Configuration
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_TLS: bool = True
+    EMAILS_FROM_EMAIL: str = "no-reply@learniox.com"
+    EMAILS_FROM_NAME: str = "LearnioX Platform"
+    FRONTEND_URL: str = "https://culinary-prism-aging.ngrok-free.dev"
 
     # File Storage Configuration
     UPLOAD_DIR: str = "uploads"
@@ -95,10 +104,6 @@ class Settings(BaseSettings):
             # Block wildcard CORS in production
             if "*" in self.CORS_ORIGINS:
                 raise ValueError("Wildcard CORS origin '*' is not allowed in production environment.")
-
-            # Block dev login in production
-            if self.ALLOW_DEV_LOGIN:
-                raise ValueError("ALLOW_DEV_LOGIN must be False in production environment.")
 
             # Block missing webhook secret in production
             if not self.WEBHOOK_SECRET:

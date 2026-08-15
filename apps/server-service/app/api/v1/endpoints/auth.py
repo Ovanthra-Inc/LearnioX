@@ -1,19 +1,24 @@
 from typing import List, Optional
 from uuid import UUID
-from fastapi import APIRouter, Depends, Query, Request, status
+from fastapi import APIRouter, Depends, Query, Request, Response, status
 from fastapi.responses import RedirectResponse
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from app.api.deps import get_current_active_user, get_auth_service
 from app.core.response import APIResponse
+from app.core.security import set_auth_cookies, clear_auth_cookies
 from app.models.user import User
 from app.schemas.auth import (
+    ForgotPasswordRequest,
     GoogleAuthUrlResponse,
+    LoginRequest,
     LogoutRequest,
     OAuthCallbackRequest,
     RefreshResponse,
     RefreshTokenRequest,
+    ResetPasswordRequest,
+    SignupRequest,
     TokenResponse,
 )
 from app.schemas.session import SessionResponse
@@ -23,9 +28,193 @@ from app.utils.oauth import verify_signed_state
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-# FIX #18: Rate limiter instance (shares key_func with main app)
 limiter = Limiter(key_func=get_remote_address)
 
+
+# ─── 1. Email & Password Signup & Login Endpoints ──────────────────────────────
+
+@router.post(
+    "/signup",
+    summary="Register New Account with Email and Password",
+    response_model=APIResponse[TokenResponse],
+    status_code=status.HTTP_201_CREATED,
+)
+@limiter.limit("10/minute")
+async def signup_email(
+    request: Request,
+    response: Response,
+    body: SignupRequest,
+    service: AuthService = Depends(get_auth_service),
+):
+    """
+    Registers a new user account with email + password and triggers rich email verification.
+    """
+    ip_address = request.client.host if request.client else None
+    user_agent = request.headers.get("User-Agent")
+
+    tokens = await service.register_email_user(
+        payload=body,
+        ip_address=ip_address,
+        user_agent=user_agent,
+    )
+    set_auth_cookies(
+        response=response,
+        access_token=tokens.access_token,
+        refresh_token=tokens.refresh_token,
+        access_token_expires_in=tokens.expires_in,
+    )
+    return APIResponse.ok(
+        data=tokens,
+        message="Account created successfully. A verification link has been sent to your email.",
+    )
+
+
+@router.post(
+    "/login",
+    summary="Authenticate Account with Email and Password",
+    response_model=APIResponse[TokenResponse],
+)
+@limiter.limit("15/minute")
+async def login_email(
+    request: Request,
+    response: Response,
+    body: LoginRequest,
+    service: AuthService = Depends(get_auth_service),
+):
+    """
+    Authenticates an existing user account using email and password.
+    """
+    ip_address = request.client.host if request.client else None
+    user_agent = request.headers.get("User-Agent")
+
+    tokens = await service.authenticate_with_password(
+        payload=body,
+        device_ip=ip_address,
+        user_agent=user_agent,
+    )
+    set_auth_cookies(
+        response=response,
+        access_token=tokens.access_token,
+        refresh_token=tokens.refresh_token,
+        access_token_expires_in=tokens.expires_in,
+    )
+    return APIResponse.ok(
+        data=tokens,
+        message="Signed in successfully",
+    )
+
+
+# ─── 2. Email Verification Endpoints ──────────────────────────────────────────
+
+@router.post(
+    "/verify-email",
+    summary="Verify Account Email with Verification Token",
+    response_model=APIResponse[dict],
+)
+@limiter.limit("10/minute")
+async def verify_email(
+    request: Request,
+    token: str = Query(..., description="Verification token from email link"),
+    service: AuthService = Depends(get_auth_service),
+):
+    """
+    Verifies user email address using the URL token.
+    """
+    ip_address = request.client.host if request.client else None
+    user_agent = request.headers.get("User-Agent")
+
+    await service.verify_email(
+        token=token,
+        ip_address=ip_address,
+        user_agent=user_agent,
+    )
+    return APIResponse.ok(
+        data={"verified": True},
+        message="Email address verified successfully. Your account is fully activated.",
+    )
+
+
+@router.post(
+    "/resend-verification",
+    summary="Resend Account Email Verification Link",
+    response_model=APIResponse[dict],
+)
+@limiter.limit("5/minute")
+async def resend_verification(
+    request: Request,
+    email: str = Query(..., description="Account email address"),
+    service: AuthService = Depends(get_auth_service),
+):
+    """
+    Resends a fresh account verification email.
+    """
+    await service.resend_verification_email(email=email)
+    return APIResponse.ok(
+        data={"sent": True},
+        message="If an account exists with this email, a verification link has been sent.",
+    )
+
+
+# ─── 3. Password Reset Endpoints ──────────────────────────────────────────────
+
+@router.post(
+    "/forgot-password",
+    summary="Request Password Reset Link",
+    response_model=APIResponse[dict],
+)
+@limiter.limit("5/minute")
+async def forgot_password(
+    request: Request,
+    body: ForgotPasswordRequest,
+    service: AuthService = Depends(get_auth_service),
+):
+    """
+    Generates a secure password reset token and sends instructions to user email.
+    """
+    ip_address = request.client.host if request.client else None
+    user_agent = request.headers.get("User-Agent")
+
+    await service.request_password_reset(
+        email=body.email,
+        ip_address=ip_address,
+        user_agent=user_agent,
+    )
+    return APIResponse.ok(
+        data={"sent": True},
+        message="If this email is registered, password reset instructions have been sent.",
+    )
+
+
+@router.post(
+    "/reset-password",
+    summary="Reset Password with Secure Token",
+    response_model=APIResponse[dict],
+)
+@limiter.limit("5/minute")
+async def reset_password(
+    request: Request,
+    body: ResetPasswordRequest,
+    service: AuthService = Depends(get_auth_service),
+):
+    """
+    Resets account password using valid reset token and invalidates active sessions.
+    """
+    ip_address = request.client.host if request.client else None
+    user_agent = request.headers.get("User-Agent")
+
+    await service.reset_password(
+        token=body.token,
+        new_password=body.new_password,
+        ip_address=ip_address,
+        user_agent=user_agent,
+    )
+    return APIResponse.ok(
+        data={"reset": True},
+        message="Password has been updated successfully. Please sign in with your new password.",
+    )
+
+
+# ─── 4. Google OAuth Endpoints ────────────────────────────────────────────────
 
 @router.get(
     "/google",
@@ -59,15 +248,15 @@ async def get_google_auth(
     summary="Google OAuth Callback Endpoint (GET Redirect)",
     response_model=APIResponse[TokenResponse],
 )
-@limiter.limit("10/minute")  # FIX #18: Strict limit on OAuth callbacks to prevent abuse
+@limiter.limit("10/minute")
 async def google_callback_get(
     request: Request,
+    response: Response,
     code: str = Query(..., description="Authorization code returned by Google"),
     state: Optional[str] = Query(None, description="CSRF state parameter"),
     code_verifier: Optional[str] = Query(None, description="Optional PKCE code verifier"),
     service: AuthService = Depends(get_auth_service),
 ):
-    # HIGH-04: Validate signed state in production mode to prevent OAuth CSRF
     from app.core.config import settings
     from app.core.exceptions import ForbiddenException
     if settings.is_production and (not state or not verify_signed_state(state)):
@@ -77,9 +266,8 @@ async def google_callback_get(
         )
     accept = request.headers.get("accept", "")
     if "text/html" in accept:
-        # Browser navigated directly to backend callback — forward to Next.js frontend route
         state_param = f"&state={state}" if state else ""
-        frontend_url = f"http://localhost:3000/auth/callback/google?code={code}{state_param}"
+        frontend_url = f"/auth/callback/google?code={code}{state_param}"
         return RedirectResponse(url=frontend_url, status_code=status.HTTP_302_FOUND)
 
     device_ip = request.client.host if request.client else None
@@ -90,6 +278,12 @@ async def google_callback_get(
         device_ip=device_ip,
         user_agent=user_agent,
         code_verifier=code_verifier,
+    )
+    set_auth_cookies(
+        response=response,
+        access_token=tokens.access_token,
+        refresh_token=tokens.refresh_token,
+        access_token_expires_in=tokens.expires_in,
     )
     return APIResponse.ok(data=tokens, message="Successfully authenticated with Google")
 
@@ -102,6 +296,7 @@ async def google_callback_get(
 @limiter.limit("10/minute")
 async def google_callback_post(
     request: Request,
+    response: Response,
     body: OAuthCallbackRequest,
     service: AuthService = Depends(get_auth_service),
 ):
@@ -121,57 +316,70 @@ async def google_callback_post(
         user_agent=user_agent,
         code_verifier=body.code_verifier,
     )
+    set_auth_cookies(
+        response=response,
+        access_token=tokens.access_token,
+        refresh_token=tokens.refresh_token,
+        access_token_expires_in=tokens.expires_in,
+    )
     return APIResponse.ok(data=tokens, message="Successfully authenticated with Google")
 
 
+# ─── 5. Token Refresh, Logout, & Session Management ───────────────────────────
+
 @router.post(
     "/refresh",
-    summary="Refresh Access Token using Refresh Token (Token Rotation)",
+    summary="Refresh Access Token with Refresh Token",
     response_model=APIResponse[RefreshResponse],
 )
-@limiter.limit("20/minute")  # FIX #18: Limit token refresh to block token farming attacks
+@limiter.limit("30/minute")
 async def refresh_token(
     request: Request,
-    body: RefreshTokenRequest,
+    response: Response,
+    body: Optional[RefreshTokenRequest] = None,
     service: AuthService = Depends(get_auth_service),
 ):
+    from app.core.exceptions import UnauthorizedException
+    raw_token = (body.refresh_token if body and body.refresh_token else None) or request.cookies.get("refresh_token")
+    if not raw_token:
+        raise UnauthorizedException(
+            message="Refresh token missing",
+            error_code="REFRESH_TOKEN_REQUIRED",
+        )
+
     device_ip = request.client.host if request.client else None
     user_agent = request.headers.get("User-Agent")
 
-    new_tokens = await service.refresh_access_token(
-        raw_refresh_token=body.refresh_token,
+    tokens = await service.refresh_access_token(
+        raw_refresh_token=raw_token,
         device_ip=device_ip,
         user_agent=user_agent,
     )
-    return APIResponse.ok(data=new_tokens, message="Access token refreshed successfully")
+    set_auth_cookies(
+        response=response,
+        access_token=tokens.access_token,
+        refresh_token=tokens.refresh_token,
+        access_token_expires_in=tokens.expires_in,
+    )
+    return APIResponse.ok(data=tokens, message="Access token refreshed successfully")
 
 
 @router.post(
     "/logout",
-    summary="Logout Current Device Session",
+    summary="Revoke Current Refresh Token & Session",
     response_model=APIResponse[None],
 )
-@limiter.limit("30/minute")  # FIX #18: Prevent logout-flood attacks
 async def logout(
     request: Request,
-    body: LogoutRequest,
+    response: Response,
+    body: Optional[LogoutRequest] = None,
     service: AuthService = Depends(get_auth_service),
 ):
-    await service.logout(body.refresh_token)
-    return APIResponse.ok(message="Logged out successfully")
-
-
-@router.post(
-    "/logout-all",
-    summary="Revoke All Sessions for Current User",
-    response_model=APIResponse[None],
-)
-async def logout_all(
-    current_user: User = Depends(get_current_active_user),
-    service: AuthService = Depends(get_auth_service),
-):
-    await service.logout_all(current_user.id)
-    return APIResponse.ok(message="All active sessions terminated successfully")
+    raw_token = (body.refresh_token if body and body.refresh_token else None) or request.cookies.get("refresh_token")
+    if raw_token:
+        await service.logout(raw_token)
+    clear_auth_cookies(response)
+    return APIResponse.ok(data=None, message="Logged out successfully")
 
 
 @router.get(
@@ -182,34 +390,32 @@ async def logout_all(
 async def get_me(
     current_user: User = Depends(get_current_active_user),
 ):
-    return APIResponse.ok(
-        data=UserResponse.model_validate(current_user),
-        message="User profile retrieved successfully",
-    )
+    user_schema = UserResponse.model_validate(current_user)
+    return APIResponse.ok(data=user_schema, message="Current user profile retrieved")
 
 
 @router.get(
     "/sessions",
-    summary="List Active Device Sessions for User",
+    summary="List Active Sessions for Current User",
     response_model=APIResponse[List[SessionResponse]],
 )
-async def get_sessions(
+async def list_my_sessions(
     current_user: User = Depends(get_current_active_user),
     service: AuthService = Depends(get_auth_service),
 ):
-    sessions = await service.get_user_sessions(current_user.id)
-    return APIResponse.ok(data=sessions, message="Active sessions retrieved successfully")
+    sessions = await service.list_active_sessions(current_user.id)
+    return APIResponse.ok(data=sessions, message="Active sessions retrieved")
 
 
 @router.delete(
-    "/sessions/{id}",
-    summary="Revoke Specific Device Session by ID",
+    "/sessions/{session_id}",
+    summary="Revoke Specific Session by ID",
     response_model=APIResponse[None],
 )
-async def delete_session(
-    id: UUID,
+async def revoke_session(
+    session_id: UUID,
     current_user: User = Depends(get_current_active_user),
     service: AuthService = Depends(get_auth_service),
 ):
-    await service.delete_user_session(session_id=id, user_id=current_user.id)
-    return APIResponse.ok(message="Session removed successfully")
+    await service.revoke_session(current_user.id, session_id)
+    return APIResponse.ok(data=None, message="Session revoked successfully")
