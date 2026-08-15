@@ -37,17 +37,25 @@ export function useAuth() {
 
   // Google Auth URL query launcher
   const fetchGoogleAuthUrl = async () => {
-    const res = await apiClient.get<any, ApiResponse<{ url: string }>>('/auth/google');
-    return res.data.url;
+    const res: any = await apiClient.get('/auth/google');
+    const url = res?.data?.url || res?.url || (typeof res === 'string' ? res : null);
+    if (!url) {
+      throw new Error(res?.message || 'Server did not return a valid Google authentication URL');
+    }
+    return url;
   };
 
   // Google callback mutation
   const loginWithCodeMutation = useMutation({
     mutationFn: async (code: string) => {
-      const res = await apiClient.get<any, ApiResponse<{ access_token: string; refresh_token: string; user: UserProfile }>>(
+      const res: any = await apiClient.get(
         `/auth/google/callback?code=${encodeURIComponent(code)}`
       );
-      return res.data;
+      const payload = res?.data || res;
+      if (!payload?.access_token) {
+        throw new Error(res?.message || 'Failed to exchange authorization code for session tokens');
+      }
+      return payload;
     },
     onSuccess: (data) => {
       localStorage.setItem('access_token', data.access_token);

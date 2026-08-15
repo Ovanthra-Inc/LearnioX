@@ -10,10 +10,21 @@ export interface ApiResponse<T = any> {
   } | null;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api/v1';
+export const getApiBaseUrl = (): string => {
+  if (process.env.NEXT_PUBLIC_API_BASE_URL) {
+    return process.env.NEXT_PUBLIC_API_BASE_URL;
+  }
+  if (typeof window !== 'undefined') {
+    // If accessing Next.js directly on port 3000, target Nginx ingress on localhost
+    if (window.location.port === '3000') {
+      return `${window.location.protocol}//${window.location.hostname}/api/v1`;
+    }
+  }
+  return '/api/v1';
+};
 
 export const apiClient: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: getApiBaseUrl(),
   timeout: 20000,
   headers: {
     'Content-Type': 'application/json',
@@ -22,9 +33,10 @@ export const apiClient: AxiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Interceptor 1: Inject Bearer token
+// Interceptor 1: Inject Bearer token and ensure correct baseURL
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    config.baseURL = getApiBaseUrl();
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('access_token');
       if (token && config.headers) {
@@ -80,7 +92,7 @@ apiClient.interceptors.response.use(
 
       try {
         const refreshResponse = await axios.post<ApiResponse<{ access_token: string }>>(
-          `${BASE_URL}/auth/refresh`,
+          `${getApiBaseUrl()}/auth/refresh`,
           { refresh_token: refreshToken }
         );
 

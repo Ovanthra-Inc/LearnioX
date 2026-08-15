@@ -7,6 +7,12 @@ class GoogleAuthUrlResponse(BaseModel):
     url: str
 
 
+class OAuthCallbackRequest(BaseModel):
+    code: str = Field(..., description="Authorization code returned by OAuth provider")
+    state: Optional[str] = Field(None, description="CSRF state parameter")
+    code_verifier: Optional[str] = Field(None, description="Optional PKCE code verifier")
+
+
 class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str

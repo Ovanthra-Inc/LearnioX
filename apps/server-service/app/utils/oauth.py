@@ -69,67 +69,19 @@ def verify_signed_state(state: str) -> bool:
 
 
 def get_google_auth_url(state: Optional[str] = None) -> str:
-    base_url = "https://accounts.google.com/o/oauth2/v2/auth"
-    # HIGH-04: Always generate a signed state if none provided
-    signed_state = state if (state and verify_signed_state(state)) else create_signed_state(state or "")
-    params = {
-        "client_id": settings.GOOGLE_CLIENT_ID or "mock_client_id",
-        "redirect_uri": settings.GOOGLE_REDIRECT_URI,
-        "response_type": "code",
-        "scope": "openid email profile",
-        "access_type": "offline",
-        "prompt": "consent",
-        "state": signed_state,
-    }
-    return f"{base_url}?{urllib.parse.urlencode(params)}"
+    from app.oauth.manager import oauth_manager
+    google_provider = oauth_manager.get_provider("google")
+    return google_provider.get_authorization_url(state=state)
 
 
 async def verify_and_get_google_user(code: str) -> Dict[str, Any]:
-    # Development / Mock bypass when testing locally without active Google OAuth keys
-    if settings.ALLOW_DEV_LOGIN and (
-        not settings.GOOGLE_CLIENT_SECRET
-        or settings.GOOGLE_CLIENT_SECRET.startswith("mock")
-        or code.startswith("dev_")
-    ):
-        dev_email = f"dev_user_{code[:6]}@example.com" if code else "dev_user@example.com"
-        return {
-            "email": dev_email,
-            "name": "Dev User",
-            "picture": "https://lh3.googleusercontent.com/a/default-avatar",
-            "provider_id": f"google_dev_{code}",
-        }
-
-    token_url = "https://oauth2.googleapis.com/token"
-    data = {
-        "code": code,
-        "client_id": settings.GOOGLE_CLIENT_ID,
-        "client_secret": settings.GOOGLE_CLIENT_SECRET,
-        "redirect_uri": settings.GOOGLE_REDIRECT_URI,
-        "grant_type": "authorization_code",
+    from app.oauth.manager import oauth_manager
+    google_provider = oauth_manager.get_provider("google")
+    user_payload = await google_provider.authenticate_code(code=code)
+    return {
+        "email": user_payload.email,
+        "name": user_payload.name,
+        "picture": user_payload.picture,
+        "provider_id": user_payload.provider_id,
     }
 
-    async with httpx.AsyncClient() as client:
-        response = await client.post(token_url, data=data)
-        if response.status_code != 200:
-            raise UnauthorizedException(
-                message="Failed to exchange authorization code with Google",
-                error_code="GOOGLE_AUTH_FAILED",
-            )
-        token_data = response.json()
-        access_token_str = token_data.get("access_token")
-
-        user_info_url = "https://www.googleapis.com/oauth2/v2/userinfo"
-        headers = {"Authorization": f"Bearer {access_token_str}"}
-        user_response = await client.get(user_info_url, headers=headers)
-        if user_response.status_code != 200:
-            raise UnauthorizedException(
-                message="Failed to fetch user profile from Google",
-                error_code="GOOGLE_USER_INFO_FAILED",
-            )
-        info = user_response.json()
-        return {
-            "email": info["email"],
-            "name": info.get("name", info["email"].split("@")[0]),
-            "picture": info.get("picture"),
-            "provider_id": info.get("id"),
-        }

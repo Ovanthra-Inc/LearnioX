@@ -32,18 +32,21 @@ class AuthService:
         device_name: Optional[str] = None,
         device_ip: Optional[str] = None,
         user_agent: Optional[str] = None,
+        code_verifier: Optional[str] = None,
     ) -> TokenResponse:
-        user_info = await verify_and_get_google_user(code)
-        email = user_info["email"]
+        from app.oauth.manager import oauth_manager
+        google_provider = oauth_manager.get_provider("google")
+        user_payload = await google_provider.authenticate_code(code=code, code_verifier=code_verifier)
+        email = user_payload.email
 
         user = await self.user_repo.get_by_email(email)
         if not user:
             user = await self.user_repo.create(
                 email=email,
-                name=user_info["name"],
-                picture=user_info.get("picture"),
+                name=user_payload.name,
+                picture=user_payload.picture,
                 provider="google",
-                provider_id=user_info.get("provider_id"),
+                provider_id=user_payload.provider_id,
             )
         else:
             await self.user_repo.update_last_login(user.id)

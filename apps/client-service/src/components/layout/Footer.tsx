@@ -37,15 +37,9 @@ export function Footer() {
             <Link href="/institution" className="hover:text-foreground transition-colors cursor-pointer">
               Institutions
             </Link>
-            <a
-              href="http://localhost:8080/gateway/routes"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center hover:text-foreground transition-colors cursor-pointer"
-            >
-              <Terminal className="h-3 w-3 mr-1" />
-              Gateway API
-            </a>
+            <Link href="/dashboard" className="hover:text-foreground transition-colors cursor-pointer">
+              My Learning
+            </Link>
           </div>
 
         </div>

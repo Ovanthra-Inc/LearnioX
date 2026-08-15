@@ -32,10 +32,15 @@ function LoginContent() {
   const handleGoogleLogin = async () => {
     try {
       const authUrl = await fetchGoogleAuthUrl();
+      if (!authUrl) {
+        throw new Error('Google authorization URL was not returned by server');
+      }
       toast.loading('Redirecting to Google OAuth...');
       window.location.href = authUrl;
-    } catch {
-      toast.error('Failed to initiate Google OAuth');
+    } catch (err: any) {
+      console.error('Google login initiation error:', err);
+      const msg = err?.response?.data?.message || err?.message || 'Failed to initiate Google OAuth';
+      toast.error(msg);
     }
   };
 
