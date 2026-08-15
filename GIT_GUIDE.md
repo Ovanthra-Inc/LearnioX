@@ -270,3 +270,5 @@ git checkout other-branch
 | **Undo last commit (keep code)** | `git reset --soft HEAD~1` |
 | **Discard modifications to file** | `git restore <file>` |
 | **View commit history** | `git log --oneline -n 10` |
+
+---
