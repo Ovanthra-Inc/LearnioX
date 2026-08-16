@@ -1,174 +1,112 @@
-'use client';
+"use client"
 
-import React from 'react';
-import Link from 'next/link';
-import { useAuth } from '@/hooks/useAuth';
-import { useQuery } from '@tanstack/react-query';
-import { apiClient, ApiResponse } from '@/lib/api';
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
+import { useLearningProgress } from "@/hooks/useLearningProgress"
+import { AppSidebar } from "@/components/app-sidebar"
+import { NavUser } from "@/components/nav-user"
+import { CourseProgressCard } from "@/components/dashboard/course-progress-card"
+import { CourseFeedItem } from "@/components/dashboard/course-feed-item"
+import { DashboardStickyWidget } from "@/components/dashboard/dashboard-sticky-widget"
 import {
-  BookOpen,
-  CheckCircle2,
-  Clock,
-  PlayCircle,
-  TrendingUp,
-  Award,
-  Layers,
-  ArrowRight,
-} from 'lucide-react';
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+import { Loader2, Compass } from "lucide-react"
 
-export default function DashboardPage() {
-  const { user, isAuthenticated } = useAuth();
-  const hasToken = typeof window !== 'undefined' && Boolean(localStorage.getItem('access_token'));
+export default function Page() {
+  const router = useRouter()
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
+  const { activeCourse, courses, isLoading: isDataLoading } = useLearningProgress()
 
-  // Fetch student enrollments
-  const { data: enrollmentsData, isLoading } = useQuery({
-    queryKey: ['my-enrollments'],
-    queryFn: async () => {
-      const res = await apiClient.get<any, ApiResponse<{ items: any[]; total: number }>>(
-        '/users/me/enrollments'
-      );
-      return res.data;
-    },
-    enabled: hasToken,
-  });
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace("/login")
+    }
+  }, [isAuthLoading, isAuthenticated, router])
 
-
-  const enrollments = enrollmentsData?.items || [];
+  if (isAuthLoading) {
+    return (
+      <div className="flex min-h-svh items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
-      {/* Top Welcome Banner */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground font-sans">
-            Welcome back, {user?.name || 'Learner'} 👋
-          </h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Track your course progress, complete active modules, and access institution resources.
-          </p>
-        </div>
-        <Link
-          href="/courses"
-          className="inline-flex items-center space-x-2 rounded-md bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors self-start md:self-auto cursor-pointer"
-        >
-          <span>Explore Course Catalog</span>
-          <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
-      </div>
-
-      {/* Overview Stats Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm hover:border-primary/30 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Enrolled Courses</span>
-            <BookOpen className="h-4 w-4 text-primary" />
-          </div>
-          <p className="text-2xl font-bold text-foreground mt-2">{enrollments.length}</p>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset className="relative flex h-svh flex-col overflow-hidden bg-background text-foreground">
+        {/* Mobile Top Avatar Floating Header (Visible on smaller screens) */}
+        <div className="lg:hidden absolute top-3 right-4 z-30 flex items-center gap-2">
+          <NavUser />
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm hover:border-amber-500/30 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Active Progress</span>
-            <Clock className="h-4 w-4 text-amber-500" />
-          </div>
-          <p className="text-2xl font-bold text-foreground mt-2">
-            {enrollments.filter((e) => e.status === 'ACTIVE').length}
-          </p>
-        </div>
+        {/* Desktop 2-Column Fixed-Viewport Layout */}
+        <div className="flex flex-1 h-full overflow-hidden">
+          
+          {/* CENTER COLUMN: Independently Scrollable Main Feed */}
+          <main className="flex-1 h-full overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden px-4 sm:px-6 lg:px-8 pt-12 sm:pt-14 lg:pt-8 pb-16">
+            <div className="max-w-3xl xl:max-w-4xl mx-auto space-y-6">
+              
+              {/* 1. Top Featured Course Progress Card */}
+              <section aria-label="Current Course Progress">
+                <CourseProgressCard progress={activeCourse} />
+              </section>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm hover:border-emerald-500/30 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Completed Courses</span>
-            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-          </div>
-          <p className="text-2xl font-bold text-foreground mt-2">
-            {enrollments.filter((e) => e.status === 'COMPLETED').length}
-          </p>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm hover:border-purple-500/30 transition-colors">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Certificates</span>
-            <Award className="h-4 w-4 text-purple-500" />
-          </div>
-          <p className="text-2xl font-bold text-foreground mt-2">
-            {enrollments.filter((e) => e.status === 'COMPLETED').length}
-          </p>
-        </div>
-      </div>
-
-      {/* Active Courses List */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold tracking-tight text-foreground font-sans">
-            My Enrolled Courses
-          </h2>
-          <Link href="/courses" className="text-xs font-medium text-primary hover:underline cursor-pointer">
-            View All Catalog
-          </Link>
-        </div>
-
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[1, 2].map((n) => (
-              <div key={n} className="h-32 rounded-xl border border-border bg-card animate-pulse" />
-            ))}
-          </div>
-        ) : enrollments.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border bg-card/50 p-12 text-center space-y-3">
-            <Layers className="mx-auto h-8 w-8 text-muted-foreground" />
-            <h3 className="text-sm font-semibold text-foreground">No active enrollments yet</h3>
-            <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-              Browse our verified institution courses and start learning today.
-            </p>
-            <Link
-              href="/courses"
-              className="inline-flex items-center space-x-1.5 rounded-md bg-secondary hover:bg-accent px-3.5 py-2 text-xs font-semibold text-foreground transition-colors cursor-pointer"
-            >
-              Browse Catalog
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {enrollments.map((item: any) => (
-              <div
-                key={item.enrollment_id || item.id}
-                className="rounded-xl border border-border bg-card p-5 shadow-sm hover:border-primary/50 transition-colors flex flex-col justify-between"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-semibold text-primary">
-                      {item.access_type || 'ENROLLED'}
-                    </span>
-                    <span className="text-[11px] text-muted-foreground">
-                      Enrolled {new Date(item.enrolled_at).toLocaleDateString()}
-                    </span>
+              {/* 2. Main Course Feed (One by one single-column list) */}
+              <section aria-label="Course Curriculum Feed" className="space-y-4">
+                <div className="flex items-center justify-between pt-2">
+                  <div className="flex items-center gap-2">
+                    <Compass className="size-4 text-primary" />
+                    <h2 className="text-base font-bold tracking-tight text-foreground font-sans">
+                      Explore Curriculum & Tracks
+                    </h2>
                   </div>
-
-                  <h3 className="text-sm font-bold text-foreground line-clamp-1">
-                    Course ID: {item.course_id}
-                  </h3>
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
-                  <span className="text-xs font-medium text-emerald-500 flex items-center">
-                    <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
-                    Active Learning Status
+                  <span className="text-xs text-muted-foreground">
+                    {courses.length} Available Tracks
                   </span>
-                  <Link
-                    href={`/courses/${item.course_id}`}
-                    className="inline-flex items-center space-x-1 text-xs font-semibold text-primary hover:underline cursor-pointer"
-                  >
-                    <span>Continue</span>
-                    <PlayCircle className="h-3.5 w-3.5" />
-                  </Link>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
-    </div>
-  );
+                {/* Vertical list of single-column horizontal course cards */}
+                <div className="space-y-4">
+                  {isDataLoading ? (
+                    Array.from({ length: 3 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-36 rounded-xl border border-border bg-card animate-pulse"
+                      />
+                    ))
+                  ) : (
+                    courses.map((course, idx) => (
+                      <CourseFeedItem key={course.id} course={course} index={idx} />
+                    ))
+                  )}
+                </div>
+              </section>
+
+              {/* Mobile-only fallback widget placement at bottom of feed */}
+              <div className="lg:hidden pt-6">
+                <DashboardStickyWidget progress={activeCourse} />
+              </div>
+
+            </div>
+          </main>
+
+          {/* RIGHT COLUMN: Static Fixed Side Panel (Non-scrolling, avatar permanently at top right) */}
+          <aside className="hidden lg:flex w-80 xl:w-96 shrink-0 h-full flex-col border-l border-border/40 bg-card/20 p-5 xl:p-6 overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            {/* Top-Right Permanent Avatar */}
+            <div className="flex items-center justify-end pb-4 mb-1">
+              <NavUser />
+            </div>
+
+            {/* Side Widgets (Weekly Goal, Pending Tasks, Quick Navigation) */}
+            <DashboardStickyWidget progress={activeCourse} />
+          </aside>
+
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  )
 }

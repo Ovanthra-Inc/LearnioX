@@ -22,6 +22,7 @@ from app.core.middleware import (
 from app.core.response import APIResponse
 from app.database.base import Base
 from app.database.session import engine
+import app.models  # Registers all declarative models with Base.metadata for automatic table creation
 
 # Configure structured JSON logging before any other logging
 configure_json_logging(log_level="DEBUG" if settings.DEBUG else "INFO")
@@ -64,6 +65,23 @@ async def lifespan(app: FastAPI):
             if "postgresql" in str(engine.url):
                 await conn.execute(text("SELECT pg_advisory_xact_lock(123456789)"))
             await conn.run_sync(Base.metadata.create_all)
+            
+            # Idempotent migration for User model extensions & audit tables
+            if "postgresql" in str(engine.url):
+                alter_statements = [
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS hashed_password VARCHAR(255)",
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS signup_method VARCHAR(50) DEFAULT 'email_password'",
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login_method VARCHAR(50)",
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255)",
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token_expires_at TIMESTAMPTZ",
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_token VARCHAR(255)",
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_token_expires_at TIMESTAMPTZ",
+                ]
+                for stmt in alter_statements:
+                    try:
+                        await conn.execute(text(stmt))
+                    except Exception as sql_err:
+                        logger.debug(f"Non-critical migration notice: {sql_err}")
         logger.info("Database tables initialized successfully.")
     except Exception as e:
         logger.warning("Could not automatically create database tables on startup", extra={"error": str(e)})

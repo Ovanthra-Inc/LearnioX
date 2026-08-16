@@ -19,16 +19,18 @@ security_scheme = HTTPBearer(auto_error=False)
 
 
 async def get_current_user(
+    request: Request,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme),
     db: AsyncSession = Depends(get_db),
 ) -> User:
-    if not credentials or not credentials.credentials:
+    token: Optional[str] = credentials.credentials if (credentials and credentials.credentials) else request.cookies.get("access_token")
+
+    if not token:
         raise UnauthorizedException(
             message="Authorization token missing",
             error_code="MISSING_BEARER_TOKEN",
         )
 
-    token = credentials.credentials
     payload = decode_token(token)
 
     if payload.get("type") != "access":
@@ -74,18 +76,18 @@ async def get_current_active_user(
 
 
 async def get_optional_user(
+    request: Request,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme),
     db: AsyncSession = Depends(get_db),
 ) -> Optional[User]:
     """
-    MED-07: Only catches authentication/token errors gracefully.
-    Database errors (connection failures, timeouts) are re-raised so callers
-    receive a proper 503 instead of silently behaving as unauthenticated.
+    Catches authentication/token errors gracefully.
+    Inspects Authorization header first, then HttpOnly access_token cookie.
     """
-    if not credentials or not credentials.credentials:
+    token: Optional[str] = credentials.credentials if (credentials and credentials.credentials) else request.cookies.get("access_token")
+    if not token:
         return None
     try:
-        token = credentials.credentials
         payload = decode_token(token)
         if payload.get("type") != "access":
             return None
