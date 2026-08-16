@@ -298,36 +298,14 @@ export default function SettingsPage() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="bg-[#181818] text-[#cccccc]">
-        {/* Top Navbar */}
-        <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-[#2b2b2b] bg-[#1e1e1e] px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2">
-            <SidebarTrigger className="-ml-1 text-[#cccccc] hover:bg-[#2a2d2e] border-[#3c3c3c]" />
-            <Separator
-              orientation="vertical"
-              className="mr-2 h-4 bg-[#3c3c3c]"
-            />
-            <Breadcrumb>
-              <BreadcrumbList className="text-xs text-[#cccccc]">
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/dashboard" className="text-[#888888] hover:text-[#cccccc]">
-                    Dashboard
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block text-[#555555]" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="font-semibold text-[#ffffff]">Settings</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-          <div className="flex items-center gap-3">
-            <NavUser />
-          </div>
-        </header>
+      <SidebarInset className="relative bg-[#181818] text-[#cccccc]">
+        {/* Top-Right Corner Avatar (No Navbar) */}
+        <div className="absolute top-3 right-4 z-20 flex items-center gap-2">
+          <NavUser />
+        </div>
 
         {/* Main Settings Body */}
-        <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex flex-1 flex-col overflow-hidden pt-12 md:pt-14">
           {/* Top Search & Filter Bar */}
           <div className="p-4 pb-2 bg-[#1e1e1e] border-b border-[#2b2b2b]">
             <div className="relative flex items-center w-full max-w-4xl rounded-sm border border-[#3c3c3c] bg-[#252526] px-3 py-1.5 focus-within:border-[#007acc] focus-within:ring-1 focus-within:ring-[#007acc] transition-colors">

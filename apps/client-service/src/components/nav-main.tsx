@@ -33,13 +33,13 @@ export function NavMain({
               asChild
               tooltip={item.title}
               isActive={item.isActive}
-              className="w-full h-9 px-3 py-2 rounded-lg font-medium text-xs sm:text-sm text-sidebar-foreground transition-all duration-150 ease-in-out hover:bg-white hover:text-black data-[active=true]:bg-white data-[active=true]:text-black data-[active=true]:font-semibold cursor-pointer group"
+              className="w-full h-9 px-3 py-2 rounded-lg font-medium text-xs sm:text-sm text-sidebar-foreground transition-all duration-150 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-semibold cursor-pointer group"
             >
               <NavLink href={item.url} className="flex items-center gap-2.5 w-full">
                 {item.icon && (
-                  <item.icon className="size-4 text-muted-foreground group-hover:text-black group-data-[active=true]:text-black transition-colors shrink-0" />
+                  <item.icon className="size-4 text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground group-data-[active=true]:text-sidebar-accent-foreground transition-colors shrink-0" />
                 )}
-                <span className="truncate group-hover:text-black group-data-[active=true]:text-black">{item.title}</span>
+                <span className="truncate group-hover:text-sidebar-accent-foreground group-data-[active=true]:text-sidebar-accent-foreground">{item.title}</span>
               </NavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
