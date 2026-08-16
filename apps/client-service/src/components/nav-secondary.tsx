@@ -52,10 +52,10 @@ export function NavSecondary({
                 asChild
                 tooltip={item.title}
                 className={cn(
-                  "w-full h-9 px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-150 ease-in-out cursor-pointer text-sidebar-foreground hover:bg-white hover:text-black group",
+                  "w-full h-9 px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-150 ease-in-out cursor-pointer text-sidebar-foreground group",
                   item.isDestructive
-                    ? "hover:bg-white hover:text-black"
-                    : "data-[active=true]:bg-white data-[active=true]:text-black data-[active=true]:font-semibold"
+                    ? "hover:bg-destructive/10 hover:text-destructive text-destructive"
+                    : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-semibold"
                 )}
               >
                 <NavLink
@@ -63,8 +63,18 @@ export function NavSecondary({
                   onClick={(e) => handleAction(item, e)}
                   className="flex items-center gap-2.5 w-full"
                 >
-                  <item.icon className="size-4 text-muted-foreground group-hover:text-black group-data-[active=true]:text-black transition-colors shrink-0" />
-                  <span className="truncate group-hover:text-black group-data-[active=true]:text-black">{item.title}</span>
+                  <item.icon className={cn(
+                    "size-4 transition-colors shrink-0",
+                    item.isDestructive
+                      ? "text-destructive group-hover:text-destructive"
+                      : "text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground group-data-[active=true]:text-sidebar-accent-foreground"
+                  )} />
+                  <span className={cn(
+                    "truncate",
+                    item.isDestructive
+                      ? "group-hover:text-destructive"
+                      : "group-hover:text-sidebar-accent-foreground group-data-[active=true]:text-sidebar-accent-foreground"
+                  )}>{item.title}</span>
                 </NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
