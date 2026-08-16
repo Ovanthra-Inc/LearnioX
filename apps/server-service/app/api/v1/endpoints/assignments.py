@@ -9,11 +9,37 @@ from app.schemas.assessment import (
     AssignmentResponse,
     AssignmentStatisticsResponse,
     CreateAssignmentRequest,
+    GenerateAssignmentWithAIRequest,
     UpdateAssignmentRequest,
 )
 from app.services.assessment_service import AssessmentService
 
 router = APIRouter(tags=["Assignments"])
+
+
+@router.post(
+    "/lessons/{lesson_id}/assignments/generate-ai",
+    summary="Generate & Create Assignment in Lesson with AI (All 14 Types)",
+    response_model=APIResponse[AssignmentResponse],
+    status_code=status.HTTP_201_CREATED,
+)
+async def generate_assignment_with_ai(
+    lesson_id: UUID,
+    body: GenerateAssignmentWithAIRequest,
+    current_user: User = Depends(get_current_active_user),
+    service: AssessmentService = Depends(get_assessment_service),
+):
+    """
+    Synthesizes an assessment using the AI Question Generator engine across any of the 14
+    assessment types and persists it to the lesson.
+    """
+    result = await service.generate_and_create_assignment_with_ai(
+        lesson_id=lesson_id, user_id=current_user.id, payload=body
+    )
+    return APIResponse.ok(
+        data=result,
+        message=f"Assignment generated with AI as {result.assessment_type} and added to lesson",
+    )
 
 
 @router.post(

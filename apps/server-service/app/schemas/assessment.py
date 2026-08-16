@@ -148,14 +148,39 @@ class QuizResultResponse(BaseModel):
 class CreateAssignmentRequest(BaseModel):
     title: str = Field(..., min_length=3, max_length=255)
     description: str = Field(..., min_length=10)
+    assessment_type: str = Field(
+        default="CODING_QUESTION",
+        description="One of the 14 supported AssessmentType values",
+    )
+    rubric_guidelines: Optional[str] = None
+    reference_solution: Optional[str] = None
     total_marks: int = Field(100, ge=1)
     due_date: datetime
     allow_late_submission: bool = False
 
 
+class GenerateAssignmentWithAIRequest(BaseModel):
+    assessment_type: str = Field(
+        default="CODING_QUESTION",
+        description="One of the 14 supported AssessmentType values",
+    )
+    topic: str = Field(..., min_length=2, max_length=255, description="Primary subject / topic to generate assignment for")
+    difficulty: str = Field(default="MEDIUM", pattern="^(EASY|MEDIUM|HARD)$")
+    total_marks: int = Field(default=100, ge=1)
+    due_date: Optional[datetime] = None
+    allow_late_submission: bool = False
+    auto_save_to_lesson: bool = Field(
+        default=True,
+        description="Whether to immediately create the assignment record in database or return raw generated JSON",
+    )
+
+
 class UpdateAssignmentRequest(BaseModel):
     title: Optional[str] = Field(None, min_length=3, max_length=255)
     description: Optional[str] = Field(None, min_length=10)
+    assessment_type: Optional[str] = None
+    rubric_guidelines: Optional[str] = None
+    reference_solution: Optional[str] = None
     total_marks: Optional[int] = Field(None, ge=1)
     due_date: Optional[datetime] = None
     allow_late_submission: Optional[bool] = None
@@ -168,6 +193,9 @@ class AssignmentResponse(BaseModel):
     lesson_id: UUID
     title: str
     description: str
+    assessment_type: str = "CODING_QUESTION"
+    rubric_guidelines: Optional[str] = None
+    reference_solution: Optional[str] = None
     total_marks: int
     due_date: datetime
     allow_late_submission: bool
@@ -177,12 +205,32 @@ class AssignmentResponse(BaseModel):
 
 class SubmitAssignmentRequest(BaseModel):
     file_id: Optional[UUID] = None
-    remarks: Optional[str] = None
+    remarks: Optional[str] = Field(None, description="Student's submission text, code, essay or solution remarks")
 
 
 class GradeSubmissionRequest(BaseModel):
     marks: int = Field(..., ge=0)
     feedback: str = Field(..., min_length=1)
+
+
+class RubricCriterionSchema(BaseModel):
+    criterion_name: str
+    max_points: int
+    awarded_points: int
+    criterion_feedback: str
+
+
+class AIGradeSubmissionResponse(BaseModel):
+    assessment_type: str
+    score: int
+    total_marks: int
+    percentage: float
+    passed: bool
+    summary_feedback: str
+    rubric_breakdown: List[RubricCriterionSchema] = Field(default_factory=list)
+    strengths: List[str] = Field(default_factory=list)
+    areas_for_improvement: List[str] = Field(default_factory=list)
+    suggested_correction: Optional[str] = None
 
 
 class SubmissionResponse(BaseModel):

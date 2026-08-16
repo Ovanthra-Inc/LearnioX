@@ -366,11 +366,17 @@ class AssessmentRepository:
         total_marks: int,
         due_date: datetime,
         allow_late_submission: bool = False,
+        assessment_type: AssessmentType = AssessmentType.CODING_QUESTION,
+        rubric_guidelines: Optional[str] = None,
+        reference_solution: Optional[str] = None,
     ) -> Assignment:
         assignment = Assignment(
             lesson_id=lesson_id,
             title=title.strip(),
             description=description.strip(),
+            assessment_type=assessment_type,
+            rubric_guidelines=rubric_guidelines.strip() if rubric_guidelines else None,
+            reference_solution=reference_solution.strip() if reference_solution else None,
             total_marks=total_marks,
             due_date=due_date,
             allow_late_submission=allow_late_submission,

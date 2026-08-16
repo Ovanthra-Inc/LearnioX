@@ -30,6 +30,23 @@ class QuestionType(str, enum.Enum):
     SHORT_ANSWER = "SHORT_ANSWER"
 
 
+class AssessmentType(str, enum.Enum):
+    MCQ = "MCQ"
+    TRUE_FALSE = "TRUE_FALSE"
+    MULTIPLE_SELECT = "MULTIPLE_SELECT"
+    FILL_IN_BLANK = "FILL_IN_BLANK"
+    SHORT_ANSWER = "SHORT_ANSWER"
+    LONG_ANSWER_ESSAY = "LONG_ANSWER_ESSAY"
+    CODING_QUESTION = "CODING_QUESTION"
+    FILE_UPLOAD_ASSIGNMENT = "FILE_UPLOAD_ASSIGNMENT"
+    MATCHING = "MATCHING"
+    ORDERING = "ORDERING"
+    CASE_STUDY = "CASE_STUDY"
+    PROJECT = "PROJECT"
+    PRACTICAL_LAB = "PRACTICAL_LAB"
+    COURSE_FINAL_EXAM = "COURSE_FINAL_EXAM"
+
+
 class AttemptStatus(str, enum.Enum):
     STARTED = "STARTED"
     SUBMITTED = "SUBMITTED"
@@ -204,6 +221,13 @@ class Assignment(Base):
     )
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=False)
+    assessment_type = Column(
+        Enum(AssessmentType, native_enum=False),
+        default=AssessmentType.CODING_QUESTION,
+        nullable=False,
+    )
+    rubric_guidelines = Column(Text, nullable=True)
+    reference_solution = Column(Text, nullable=True)
     total_marks = Column(Integer, default=100, nullable=False)
     due_date = Column(DateTime(timezone=True), nullable=False)
     allow_late_submission = Column(Boolean, default=False, nullable=False)

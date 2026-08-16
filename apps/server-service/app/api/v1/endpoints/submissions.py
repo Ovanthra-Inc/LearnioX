@@ -6,6 +6,7 @@ from app.api.deps import get_current_active_user, get_assessment_service
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.assessment import (
+    AIGradeSubmissionResponse,
     GradeSubmissionRequest,
     SubmissionResponse,
     SubmitAssignmentRequest,
@@ -110,6 +111,25 @@ async def review_submission(
         submission_id=submission_id, user_id=current_user.id
     )
     return APIResponse.ok(data=result, message="Submission marked under review")
+
+
+@router.post(
+    "/submissions/{submission_id}/evaluate-ai",
+    summary="Evaluate Submission with AI Model",
+    response_model=APIResponse[AIGradeSubmissionResponse],
+)
+async def evaluate_submission_with_ai(
+    submission_id: UUID,
+    current_user: User = Depends(get_current_active_user),
+    service: AssessmentService = Depends(get_assessment_service),
+):
+    """
+    Evaluates the student's submission using the AI Assessment Engine and records the score and rubric feedback.
+    """
+    result = await service.evaluate_submission_with_ai(
+        submission_id=submission_id, user_id=current_user.id
+    )
+    return APIResponse.ok(data=result, message="Submission evaluated and graded by AI successfully")
 
 
 @router.get(
