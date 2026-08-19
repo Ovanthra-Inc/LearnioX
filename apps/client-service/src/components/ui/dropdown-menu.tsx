@@ -135,7 +135,7 @@ function DropdownMenuContent({
       data-slot="dropdown-menu-content"
       data-state={context.open ? "open" : "closed"}
       className={cn(
-        "absolute z-50 min-w-[12rem] overflow-hidden rounded-xl border border-[#333333] bg-[#1e1e1e] p-1.5 text-[#ffffff] shadow-2xl opacity-100 transition-all animate-in fade-in-0 zoom-in-95",
+        "absolute z-50 min-w-[12rem] overflow-hidden rounded-xl border border-border bg-popover p-1.5 text-popover-foreground shadow-2xl opacity-100 transition-all animate-in fade-in-0 zoom-in-95",
         alignmentClass,
         sideClass,
         className

@@ -26,6 +26,13 @@ import {
   Globe,
   Sparkles,
 } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export default function InstitutionAdminPage() {
   const params = useParams();
@@ -513,15 +520,19 @@ export default function InstitutionAdminPage() {
 
               <div>
                 <label className="block text-muted-foreground font-semibold mb-1">Role</label>
-                <select
+                <Select
                   value={inviteRole}
-                  onChange={(e) => setInviteRole(e.target.value)}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground cursor-pointer"
+                  onValueChange={(val) => setInviteRole(val)}
                 >
-                  <option value="STUDENT">Student</option>
-                  <option value="INSTRUCTOR">Instructor</option>
-                  <option value="ADMIN">Admin</option>
-                </select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="STUDENT">Student</SelectItem>
+                    <SelectItem value="INSTRUCTOR">Instructor</SelectItem>
+                    <SelectItem value="ADMIN">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
