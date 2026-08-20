@@ -16,6 +16,12 @@ class Settings(BaseSettings):
     AI_TEMPERATURE: float = 0.2
     AI_MAX_OUTPUT_TOKENS: int = 4096
 
+    # Speech-to-Text & Lecture Transcription Testing Settings
+    OPENAI_API_KEY: Optional[str] = None
+    WHISPER_MODEL: str = "whisper-1"
+    MAX_TRANSCRIPTION_FILE_SIZE_MB: int = 100
+    TRANSCRIPTION_STORAGE_DIR: str = "/app/storage/lecture_transcription_test"
+
     # Cross-Origin Resource Sharing (CORS)
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",

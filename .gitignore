@@ -51,4 +51,8 @@ Thumbs.db
 *.swp
 *.swo
 
-.gunicorn
+# Generated/runtime files
+.gunicorn/
+apps/server-service/.gunicorn/
+apps/ai-service/.cache/
+apps/ai-service/storage/

@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.exceptions import NotFoundException
 
 from app.models.assessment import (
+    AssessmentType,
     Assignment,
     AssignmentStatus,
     AssignmentSubmission,

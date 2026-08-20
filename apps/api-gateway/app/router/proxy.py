@@ -5,8 +5,8 @@ from app.registry.routes import resolve_target_service
 
 router = APIRouter(tags=["Proxy Engine"])
 
-# Shared HTTPX AsyncClient with connection pooling
-client = httpx.AsyncClient(timeout=30.0, follow_redirects=False)
+# Shared HTTPX AsyncClient with connection pooling and generous timeout for media uploads
+client = httpx.AsyncClient(timeout=httpx.Timeout(180.0, connect=10.0), follow_redirects=False)
 
 
 @router.api_route("/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"])
