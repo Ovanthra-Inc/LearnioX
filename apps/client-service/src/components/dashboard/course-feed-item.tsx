@@ -11,6 +11,7 @@ import {
   Sparkles,
   GraduationCap,
   CheckCircle2,
+  MessagesSquare,
 } from "lucide-react"
 import { Course } from "@/hooks/useCourses"
 import { cn } from "@/lib/utils"
@@ -50,6 +51,14 @@ export function CourseFeedItem({ course, index = 0 }: CourseFeedItemProps) {
   ]
 
   const theme = thumbnailThemes[index % thumbnailThemes.length]
+
+  // Map course id / slug to community channel id
+  const communityChannelId =
+    course.id === "c2" || course.slug?.includes("ai")
+      ? "comm-ai-rag"
+      : course.id === "c3" || course.slug?.includes("devops")
+      ? "comm-dist-sys"
+      : "comm-fullstack"
 
   return (
     <Link
@@ -99,7 +108,7 @@ export function CourseFeedItem({ course, index = 0 }: CourseFeedItemProps) {
               </h3>
             </div>
 
-            {/* Top-Right Crown / Diamond Badge (No price tag) */}
+            {/* Top-Right Crown / Diamond Badge */}
             <div
               title="Verified Course"
               className="flex size-7 shrink-0 items-center justify-center rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 shadow-xs"
@@ -117,7 +126,7 @@ export function CourseFeedItem({ course, index = 0 }: CourseFeedItemProps) {
           </p>
         </div>
 
-        {/* Bottom Details & Action Button */}
+        {/* Bottom Details & Action Buttons */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-border/60 text-xs text-muted-foreground">
           {/* Module & Lesson Stats */}
           <div className="flex items-center gap-3">
@@ -131,10 +140,27 @@ export function CourseFeedItem({ course, index = 0 }: CourseFeedItemProps) {
             </span>
           </div>
 
-          {/* Action CTA */}
-          <div className="inline-flex items-center gap-1 font-semibold text-foreground group-hover:text-primary transition-colors text-xs">
-            <span>Explore Course</span>
-            <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          {/* Action CTAs: Community Connect + Explore */}
+          <div className="flex items-center gap-2">
+            {/* Community Connect Icon Button */}
+            <span
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                window.location.href = `/community?channel=${communityChannelId}`
+              }}
+              title="Connect to Course Community Channel"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary shadow-2xs hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer"
+            >
+              <MessagesSquare className="size-3.5" />
+              <span>Community Connect</span>
+            </span>
+
+            {/* Explore Course CTA */}
+            <div className="inline-flex items-center gap-1 font-semibold text-foreground group-hover:text-primary transition-colors text-xs">
+              <span>Explore Course</span>
+              <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </div>
           </div>
         </div>
       </div>
