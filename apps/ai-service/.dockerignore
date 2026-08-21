@@ -10,6 +10,8 @@ __pycache__/
 .pytest_cache/
 .coverage
 htmlcov/
+.cache/
+.huggingface/
 
 # Virtual Environments
 venv/
@@ -33,6 +35,9 @@ thumbnails/*
 !thumbnails/.gitkeep
 storages/*
 !storages/.gitkeep
+storage/*
+!storage/.gitkeep
+models/*
 
 # Documentation & IDE
 .vscode/

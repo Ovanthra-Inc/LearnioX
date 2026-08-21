@@ -218,7 +218,7 @@ export default function InstitutionScopedCoursePage() {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
-      <SidebarInset className="relative flex min-h-svh flex-col bg-background text-foreground">
+      <SidebarInset className="relative flex min-h-svh flex-col bg-background text-foreground w-full max-w-full overflow-x-hidden">
         
         {/* Top Institutional Header Navbar */}
         <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/70">

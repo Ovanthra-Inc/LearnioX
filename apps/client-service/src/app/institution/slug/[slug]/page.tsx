@@ -180,7 +180,7 @@ export default function IndividualInstitutionProfilePage() {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
-      <SidebarInset className="relative flex min-h-svh flex-col bg-background text-foreground">
+      <SidebarInset className="relative flex min-h-svh flex-col bg-background text-foreground w-full max-w-full overflow-x-hidden">
         
         {/* Top Institutional Header Navbar */}
         <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/70">
@@ -273,27 +273,31 @@ export default function IndividualInstitutionProfilePage() {
       </header>
 
       {/* Main Page Body */}
-      <main className="flex-grow">
+      <main className="flex-grow w-full max-w-full overflow-x-hidden">
         
         {/* 1. HERO SECTION */}
         <section id="initiatives" className="relative pt-16 sm:pt-24 pb-20 sm:pb-32 px-4 sm:px-8 max-w-7xl mx-auto overflow-hidden">
           
           {/* Subtle Background Glow Spheres */}
-          <div className="absolute top-1/4 right-0 -mt-12 -mr-12 size-96 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-10 size-80 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
+          <div className="absolute top-1/4 right-0 -mt-12 size-96 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-10 size-80 rounded-full bg-cyan-500/15 blur-3xl pointer-events-none" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* Left Hero Content */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
-                <BadgeCheck className="size-4 fill-primary/20 text-primary" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400 backdrop-blur-md shadow-xs">
+                <span className="relative flex size-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full size-2 bg-emerald-500"></span>
+                </span>
+                <BadgeCheck className="size-4 text-emerald-400" />
                 <span>Verified Global Institution</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground font-sans leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground font-sans leading-[1.15]">
                 Advancing Knowledge, <br />
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-cyan-400 to-sky-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-teal-200 font-black">
                   Shaping the Future.
                 </span>
               </h1>
@@ -302,29 +306,35 @@ export default function IndividualInstitutionProfilePage() {
                 {description}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-3">
+              <div className="flex flex-col sm:flex-row gap-3.5 pt-3">
                 <a
                   href="#cta"
-                  className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 rounded-lg text-xs font-bold shadow-md shadow-primary/20 transition-all cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3.5 rounded-xl text-xs font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all cursor-pointer group"
                 >
-                  Apply Now
+                  <span>Apply Now</span>
+                  <ArrowRight className="size-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </a>
                 <Link
                   href={`/institution/slug/${slug}/courses`}
-                  className="inline-flex items-center justify-center border border-border bg-card/60 hover:bg-card text-foreground px-8 py-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 border border-border bg-card/60 hover:bg-card hover:border-border/80 text-foreground px-8 py-3.5 rounded-xl text-xs font-semibold backdrop-blur-md transition-all cursor-pointer"
                 >
-                  Explore Curriculum
+                  <BookOpen className="size-3.5 text-muted-foreground" />
+                  <span>Explore Curriculum</span>
                 </Link>
               </div>
             </div>
 
             {/* Right Hero Glass Card: Key Metrics */}
             <div id="impact" className="lg:col-span-5">
-              <div className="rounded-2xl border border-border/80 bg-card/70 backdrop-blur-xl p-8 shadow-xl space-y-6 relative overflow-hidden">
+              <div className="rounded-3xl border border-border/80 bg-card/75 backdrop-blur-2xl p-7 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden group hover:border-primary/40 transition-all duration-300">
+                {/* Internal ambient radial glow */}
+                <div className="absolute -right-12 -top-12 size-40 rounded-full bg-primary/15 blur-2xl pointer-events-none" />
+                <div className="absolute -left-12 -bottom-12 size-40 rounded-full bg-cyan-500/15 blur-2xl pointer-events-none" />
+
                 {/* Header of card */}
-                <div className="flex items-center gap-4 border-b border-border/60 pb-5">
-                  <div className="size-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shrink-0">
-                    <School className="size-7 text-primary" />
+                <div className="flex items-center gap-4 border-b border-border/60 pb-5 relative z-10">
+                  <div className="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shrink-0 shadow-inner">
+                    <School className="size-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-foreground font-sans">
@@ -337,8 +347,8 @@ export default function IndividualInstitutionProfilePage() {
                 </div>
 
                 {/* 2x2 Stats Grid */}
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-1">
+                <div className="grid grid-cols-2 gap-4 sm:gap-6 relative z-10">
+                  <div className="space-y-1 p-3.5 rounded-2xl bg-background/50 border border-border/50 hover:border-primary/30 transition-all">
                     <div className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight font-sans">
                       {studentsCount}
                     </div>
@@ -347,7 +357,7 @@ export default function IndividualInstitutionProfilePage() {
                     </div>
                   </div>
 
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-3.5 rounded-2xl bg-background/50 border border-border/50 hover:border-primary/30 transition-all">
                     <div className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight font-sans">
                       {fallback.years_excellence}
                     </div>
@@ -356,7 +366,7 @@ export default function IndividualInstitutionProfilePage() {
                     </div>
                   </div>
 
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-3.5 rounded-2xl bg-background/50 border border-border/50 hover:border-primary/30 transition-all">
                     <div className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight font-sans">
                       {fallback.global_ranking}
                     </div>
@@ -365,7 +375,7 @@ export default function IndividualInstitutionProfilePage() {
                     </div>
                   </div>
 
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-3.5 rounded-2xl bg-background/50 border border-border/50 hover:border-primary/30 transition-all">
                     <div className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight font-sans">
                       {fallback.placement_rate}
                     </div>
@@ -382,47 +392,48 @@ export default function IndividualInstitutionProfilePage() {
         </section>
 
         {/* 2. SCROLLING MARQUEE BANNER */}
-        <section className="py-8 border-y border-border/60 bg-card/20 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-8 mb-4 text-center">
+        <section className="py-8 border-y border-border/60 bg-card/20 overflow-hidden relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-8 mb-5 text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
               Trusted by Leading Global Research & Enterprise Consortia
             </p>
           </div>
 
-          <div className="flex overflow-x-hidden whitespace-nowrap select-none">
-            <div className="flex items-center gap-12 px-6 py-2 animate-pulse opacity-75">
-              <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Globe className="size-5 text-primary" />
-                <span>Global Partners</span>
-              </div>
-              <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Cpu className="size-5 text-cyan-400" />
-                <span>Research Tech Consortium</span>
-              </div>
-              <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Landmark className="size-5 text-amber-400" />
-                <span>EduFund Alliance</span>
-              </div>
-              <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Microscope className="size-5 text-emerald-400" />
-                <span>BioCorp Genetics</span>
-              </div>
-              <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Binary className="size-5 text-purple-400" />
-                <span>Quantum Systems Group</span>
-              </div>
-              <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Globe className="size-5 text-primary" />
-                <span>Global Partners</span>
-              </div>
-              <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Cpu className="size-5 text-cyan-400" />
-                <span>Research Tech Consortium</span>
-              </div>
-              <div className="flex items-center gap-2 text-foreground font-bold text-sm">
-                <Landmark className="size-5 text-amber-400" />
-                <span>EduFund Alliance</span>
-              </div>
+          {/* Infinite Marquee Track with gradient masks */}
+          <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="flex w-max animate-marquee space-x-12 select-none py-1">
+              {[1, 2].map((iter) => (
+                <div key={iter} className="flex items-center gap-12 shrink-0">
+                  <div className="flex items-center gap-2.5 text-foreground font-semibold text-sm">
+                    <Globe className="size-5 text-primary" />
+                    <span>Global Partners</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-foreground font-semibold text-sm">
+                    <Cpu className="size-5 text-cyan-400" />
+                    <span>Research Tech Consortium</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-foreground font-semibold text-sm">
+                    <Landmark className="size-5 text-amber-400" />
+                    <span>EduFund Alliance</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-foreground font-semibold text-sm">
+                    <Microscope className="size-5 text-emerald-400" />
+                    <span>BioCorp Genetics</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-foreground font-semibold text-sm">
+                    <Binary className="size-5 text-purple-400" />
+                    <span>Quantum Systems Group</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-foreground font-semibold text-sm">
+                    <Shield className="size-5 text-sky-400" />
+                    <span>CyberTrust Foundation</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-foreground font-semibold text-sm">
+                    <GraduationCap className="size-5 text-indigo-400" />
+                    <span>European Academic Guild</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

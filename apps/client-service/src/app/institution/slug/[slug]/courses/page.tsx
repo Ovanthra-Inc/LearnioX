@@ -441,7 +441,7 @@ export default function InstitutionCoursesPage() {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
-      <SidebarInset className="relative flex min-h-svh flex-col bg-background text-foreground">
+      <SidebarInset className="relative flex min-h-svh flex-col bg-background text-foreground w-full max-w-full overflow-x-hidden">
         
         {/* Top Navigation Bar */}
         <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/70">
@@ -498,7 +498,7 @@ export default function InstitutionCoursesPage() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-grow">
+      <main className="flex-grow w-full max-w-full overflow-x-hidden">
         
         {/* 1. HERO SECTION: FEATURED COURSE SHOWCASE */}
         {featuredCourse && (
