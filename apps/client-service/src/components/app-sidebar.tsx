@@ -5,9 +5,12 @@ import Link from "next/link"
 import {
   BookOpen,
   Building2,
+  Compass,
+  GraduationCap,
   Headphones,
   Home,
   LogOut,
+  MessagesSquare,
   PanelLeft,
   Search,
   Settings,
@@ -38,9 +41,19 @@ const sidebarData = {
       icon: Home,
     },
     {
-      title: "Courses & Curriculum",
+      title: "Discover",
       url: "/courses",
-      icon: BookOpen,
+      icon: Compass,
+    },
+    {
+      title: "Registered",
+      url: "/registered",
+      icon: GraduationCap,
+    },
+    {
+      title: "Community",
+      url: "/community",
+      icon: MessagesSquare,
     },
     {
       title: "Institutions",

@@ -34,6 +34,7 @@ import {
   Video,
   Infinity,
   ArrowLeft,
+  MessagesSquare,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -271,20 +272,20 @@ export default function CourseDetailPage() {
   }
 
   const handleRegisterEnroll = async () => {
-    const toastId = toast.loading("Processing registration & preparing sandbox workspace...")
+    const toastId = toast.loading("Processing registration & provisioning community access...")
     try {
       if (courseId && courseId !== "default") {
         await enrollInCourse(courseId)
       }
-      toast.success("Successfully registered! Launching course...", { id: toastId })
+      toast.success("Successfully registered! You have been automatically joined to the course community channel.", { id: toastId })
       setTimeout(() => {
         router.push(`/courses/${courseId}/learn`)
-      }, 700)
+      }, 800)
     } catch {
-      toast.success("Registration confirmed! Launching course...", { id: toastId })
+      toast.success("Registration confirmed! You have been automatically joined to the course community channel.", { id: toastId })
       setTimeout(() => {
         router.push(`/courses/${courseId}/learn`)
-      }, 700)
+      }, 800)
     }
   }
 
@@ -355,6 +356,20 @@ export default function CourseDetailPage() {
                   <span className="text-muted-foreground">({courseData.reviewsCount.toLocaleString()} ratings)</span>
                   <span className="text-muted-foreground">•</span>
                   <span className="text-foreground font-semibold">{courseData.studentsCount.toLocaleString()} students enrolled</span>
+                  <span className="text-muted-foreground">•</span>
+                  <Link
+                    href={`/community?channel=${
+                      courseId === "c2"
+                        ? "comm-ai-rag"
+                        : courseId === "c3"
+                        ? "comm-dist-sys"
+                        : "comm-fullstack"
+                    }`}
+                    className="inline-flex items-center gap-1 text-primary font-bold hover:underline"
+                  >
+                    <MessagesSquare className="size-3" />
+                    <span>Community Channel (Live)</span>
+                  </Link>
                 </div>
 
                 {/* Author Meta Line */}
@@ -659,6 +674,21 @@ export default function CourseDetailPage() {
                     >
                       Start Free Interactive Sandbox
                     </Button>
+
+                    {/* Community Connect CTA */}
+                    <Link
+                      href={`/community?channel=${
+                        courseId === "c2"
+                          ? "comm-ai-rag"
+                          : courseId === "c3"
+                          ? "comm-dist-sys"
+                          : "comm-fullstack"
+                      }`}
+                      className="w-full py-3 px-4 rounded-xl border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer text-center"
+                    >
+                      <MessagesSquare className="size-4" />
+                      <span>Join Course Community Channel</span>
+                    </Link>
                   </div>
 
                   <div className="text-center text-xs text-muted-foreground">
