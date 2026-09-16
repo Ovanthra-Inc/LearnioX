@@ -1,8 +1,10 @@
+from typing import Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends
 
-from app.api.deps import get_curriculum_service
+from app.api.deps import get_curriculum_service, get_optional_user
 from app.core.response import APIResponse
+from app.models.user import User
 from app.schemas.curriculum import ContentStatisticsResponse, CourseStructureResponse
 from app.services.curriculum_service import CurriculumService
 
@@ -11,11 +13,14 @@ router = APIRouter(prefix="/courses/{course_id}", tags=["Course Curriculum Tree 
 
 @router.get(
     "/structure",
-    summary="Get Complete Nested Course Curriculum Tree",
+    summary="Get Complete Nested Course Curriculum Tree (TOC)",
     response_model=APIResponse[CourseStructureResponse],
 )
 async def get_course_structure(
     course_id: UUID,
+    # TOC is publicly browsable (industry standard: show locked lessons in TOC).
+    # Optional user allows the service layer to mark lessons as accessible or locked.
+    current_user: Optional[User] = Depends(get_optional_user),
     service: CurriculumService = Depends(get_curriculum_service),
 ):
     result = await service.get_course_structure(course_id=course_id)

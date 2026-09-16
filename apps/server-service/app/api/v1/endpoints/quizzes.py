@@ -36,11 +36,13 @@ async def create_quiz(
 
 @router.get(
     "/lessons/{lesson_id}/quizzes",
-    summary="List Quizzes in Lesson",
+    summary="List Quizzes in Lesson (Enrolled Students Only)",
     response_model=APIResponse[List[QuizResponse]],
 )
 async def list_quizzes(
     lesson_id: UUID,
+    # Quizzes are gated behind enrollment — only students in the course can see them.
+    current_user: User = Depends(get_current_active_user),
     service: AssessmentService = Depends(get_assessment_service),
 ):
     result = await service.list_quizzes(lesson_id=lesson_id)

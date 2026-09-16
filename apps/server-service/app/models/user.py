@@ -18,7 +18,7 @@ class User(Base, TimestampMixin):
     name = Column(String(255), nullable=False)
     hashed_password = Column(String(255), nullable=True)
     picture = Column(Text, nullable=True)
-    avatar_file_id = Column(UUID(as_uuid=True), ForeignKey("files.id", ondelete="SET NULL"), nullable=True)
+    avatar_file_id = Column(UUID(as_uuid=True), ForeignKey("files.id", ondelete="SET NULL", use_alter=True), nullable=True)
     provider = Column(String(50), default="google", nullable=False)
     provider_id = Column(String(255), nullable=True)
     signup_method = Column(String(50), default="email_password", nullable=False)
@@ -32,6 +32,22 @@ class User(Base, TimestampMixin):
     last_login = Column(DateTime(timezone=True), nullable=True)
     language = Column(String(10), default="en", nullable=False)
     theme = Column(String(20), default="light", nullable=False)
+
+    @property
+    def avatar_url(self) -> Optional[str]:
+        return self.picture
+
+    @avatar_url.setter
+    def avatar_url(self, value: Optional[str]) -> None:
+        self.picture = value
+
+    @property
+    def is_superuser(self) -> bool:
+        return False
+
+    @is_superuser.setter
+    def is_superuser(self, value: bool) -> None:
+        pass
 
     refresh_tokens = relationship(
         "RefreshToken", back_populates="user", cascade="all, delete-orphan"

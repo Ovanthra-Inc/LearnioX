@@ -1,0 +1,44 @@
+# ==============================================================================
+# LearnioX live-service .dockerignore
+# ==============================================================================
+
+# Version Control
+.git/
+.gitignore
+.gitattributes
+
+# Python Cache & Testing
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Environment Files & Secrets
+.env
+.env.*
+!.env.example
+
+# Local Databases & Media
+*.db
+*.sqlite*
+uploads/*
+!uploads/.gitkeep
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+README.md

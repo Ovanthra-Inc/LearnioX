@@ -2,7 +2,7 @@ from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, Query, status
 
-from app.api.deps import get_current_active_user, get_member_service
+from app.api.deps import get_current_active_user, get_member_service, require_permission
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.member import (
@@ -40,7 +40,7 @@ async def invite_member(
 
 @router.get(
     "/members",
-    summary="List Institution Members",
+    summary="List Institution Members (Admin Only)",
     response_model=APIResponse[MemberListResponse],
 )
 async def list_members(
@@ -50,6 +50,8 @@ async def list_members(
     status: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
     sort: str = Query("desc", pattern="^(asc|desc)$"),
+    # Team member lists are private — must have active membership + view permission.
+    _: bool = Depends(require_permission("member.view")),
     current_user: User = Depends(get_current_active_user),
     service: MemberService = Depends(get_member_service),
 ):

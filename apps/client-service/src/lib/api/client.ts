@@ -10,8 +10,9 @@ export const getApiBaseUrl = (): string => {
     if (window.location.port === '3000') {
       return `${window.location.protocol}//${window.location.hostname}/api/v1`;
     }
+    return '/api/v1';
   }
-  return '/api/v1';
+  return process.env.INTERNAL_API_URL || 'http://localhost/api/v1';
 };
 
 export const apiClient: AxiosInstance = axios.create({

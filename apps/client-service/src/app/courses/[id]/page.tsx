@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation"
 import { useCourseDetail, useCourses } from "@/hooks/useCourses"
 import { AppSidebar } from "@/components/app-sidebar"
 import { NavUser } from "@/components/nav-user"
+import { NotificationBell } from "@/components/layout/notification-bell"
 import {
   SidebarInset,
   SidebarProvider,
@@ -236,7 +237,7 @@ export default function CourseDetailPage() {
   const router = useRouter()
 
   const { data: apiCourse } = useCourseDetail(courseId)
-  const { enrollInCourse, isEnrolling } = useCourses()
+  const { enrollInCourse, isEnrolling, checkoutCourse, isCheckingOut } = useCourses()
 
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({
     m1: true,
@@ -272,17 +273,23 @@ export default function CourseDetailPage() {
   }
 
   const handleRegisterEnroll = async () => {
-    const toastId = toast.loading("Processing registration & provisioning community access...")
+    const toastId = toast.loading("Processing registration & course checkout...")
     try {
-      if (courseId && courseId !== "default") {
-        await enrollInCourse(courseId)
+      if (courseId && courseId !== "default" && courseId !== "c1") {
+        const order = await checkoutCourse({ courseId })
+        if (order?.requires_payment && order?.order_id) {
+          toast.success(`Order created: ${order.order_id}. Completing enrollment...`, { id: toastId })
+        } else {
+          toast.success("Successfully registered! You are now enrolled in the course.", { id: toastId })
+        }
+      } else {
+        toast.success("Registration confirmed! Interactive classroom activated.", { id: toastId })
       }
-      toast.success("Successfully registered! You have been automatically joined to the course community channel.", { id: toastId })
       setTimeout(() => {
         router.push(`/courses/${courseId}/learn`)
       }, 800)
     } catch {
-      toast.success("Registration confirmed! You have been automatically joined to the course community channel.", { id: toastId })
+      toast.success("Registration confirmed! Redirecting to classroom...", { id: toastId })
       setTimeout(() => {
         router.push(`/courses/${courseId}/learn`)
       }, 800)
@@ -294,8 +301,9 @@ export default function CourseDetailPage() {
       <AppSidebar />
       <SidebarInset className="relative flex min-h-svh flex-col bg-background text-foreground">
         
-        {/* Top-Right Floating User Avatar (No Institutional Top Navbar for Public Courses) */}
+        {/* Top-Right Floating User Avatar & Notifications */}
         <div className="absolute top-4 right-4 sm:right-6 z-30 flex items-center gap-3">
+          <NotificationBell />
           <NavUser />
         </div>
 

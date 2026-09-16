@@ -1,7 +1,7 @@
 import hmac
 import secrets
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 from pydantic import AnyHttpUrl, Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
+    SUPERADMIN_EMAILS: List[str] = ["admin@learniox.com"]
 
     # Webhook HMAC secret — NO default; must come from .env
     WEBHOOK_SECRET: str = ""
@@ -48,6 +49,55 @@ class Settings(BaseSettings):
     DB_POOL_SIZE: int = 10
     DB_MAX_OVERFLOW: int = 20
     DB_POOL_RECYCLE: int = 3600
+
+    # ─── Redis Cache ──────────────────────────────────────────────────────────
+    REDIS_HOST: str = "redis"
+    REDIS_PORT: int = 6379
+    REDIS_URL: str = "redis://redis:6379"
+    REDIS_DB: int = 0
+    # TTL defaults (seconds)
+    CACHE_TTL_USER_PROFILE: int = 300
+    CACHE_TTL_RBAC_PERMS: int = 60
+    CACHE_TTL_COURSE_LISTING: int = 120
+    CACHE_TTL_INSTITUTION: int = 600
+    CACHE_TTL_SEARCH: int = 30
+    CACHE_TTL_DISCOVERY: int = 60
+    CACHE_TTL_ANALYTICS: int = 300
+
+    # ─── Payment Providers ────────────────────────────────────────────────────
+    # Set PAYMENT_PROVIDER to 'razorpay', 'stripe', or 'mock'
+    PAYMENT_PROVIDER: str = "mock"
+
+    # Razorpay (India-first)
+    RAZORPAY_KEY_ID: str = ""
+    RAZORPAY_KEY_SECRET: str = ""
+    RAZORPAY_WEBHOOK_SECRET: str = ""
+
+    # Stripe (global)
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_PUBLISHABLE_KEY: str = ""
+
+    # ─── Storage Provider ─────────────────────────────────────────────────────
+    # Set STORAGE_PROVIDER to 'local', 'r2', or 's3'
+    STORAGE_PROVIDER: str = "local"
+
+    # Cloudflare R2
+    R2_ACCOUNT_ID: str = ""
+    R2_ACCESS_KEY_ID: str = ""
+    R2_SECRET_ACCESS_KEY: str = ""
+    R2_BUCKET_NAME: str = "learniox-media"
+    R2_PUBLIC_URL: str = ""  # CDN/public endpoint for signed URLs
+
+    # AWS S3 (alternative)
+    S3_ACCESS_KEY_ID: str = ""
+    S3_SECRET_ACCESS_KEY: str = ""
+    S3_BUCKET_NAME: str = "learniox-media"
+    S3_REGION: str = "ap-south-1"
+
+    # ─── Certificate Settings ─────────────────────────────────────────────────
+    CERTIFICATE_ISSUER: str = "LearnioX Platform"
+    CERTIFICATE_BASE_URL: str = ""  # Base URL for public verify links e.g. https://learniox.com/cert
 
     # Google OAuth
     GOOGLE_CLIENT_ID: str = ""
@@ -112,6 +162,10 @@ class Settings(BaseSettings):
             # Warn about debug docs
             if self.DEBUG:
                 raise ValueError("DEBUG must be False in production environment.")
+
+            # Payment provider must be real in production
+            if self.PAYMENT_PROVIDER == "mock":
+                raise ValueError("PAYMENT_PROVIDER cannot be 'mock' in production environment.")
         return self
 
     def verify_webhook_signature(self, payload: bytes, signature: str) -> bool:

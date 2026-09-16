@@ -61,9 +61,16 @@ class EnrollmentService:
 
         existing = await self.repo.find_enrollment(user_id, course_id)
         if existing and existing.status == EnrollmentStatus.ACTIVE:
-            raise ConflictException(
-                message="User is already actively enrolled in this course",
-                error_code="ALREADY_ENROLLED",
+            # GAP-08: Idempotent duplicate handling — return existing active enrollment
+            return EnrollmentResponse(
+                enrollment_id=existing.id,
+                course_id=existing.course_id,
+                user_id=existing.user_id,
+                status=existing.status.value if hasattr(existing.status, "value") else str(existing.status),
+                access_type=existing.access_type.value if hasattr(existing.access_type, "value") else str(existing.access_type),
+                enrolled_at=existing.enrolled_at,
+                completed_at=existing.completed_at,
+                expires_at=existing.expires_at,
             )
 
         access_type = EnrollmentAccessType(payload.access_type)

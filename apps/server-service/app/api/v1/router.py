@@ -29,6 +29,12 @@ from app.api.v1.endpoints.access import router as access_router
 from app.api.v1.endpoints.search import router as search_router
 from app.api.v1.endpoints.discovery_courses import router as discovery_courses_router
 from app.api.v1.endpoints.discovery_institutions import router as discovery_institutions_router
+from app.api.v1.endpoints.webhooks import router as webhooks_router
+from app.api.v1.endpoints.notifications import router as notifications_router
+from app.api.v1.endpoints.reviews import router as reviews_router
+from app.api.v1.endpoints.certificates import router as certificates_router
+from app.api.v1.endpoints.discussions import router as discussions_router
+from app.api.v1.endpoints.analytics import router as analytics_router
 
 api_v1_router = APIRouter()
 api_v1_router.include_router(auth_router)
@@ -61,3 +67,9 @@ api_v1_router.include_router(payments_router)
 api_v1_router.include_router(coupons_router)
 api_v1_router.include_router(access_router)
 api_v1_router.include_router(search_router)
+api_v1_router.include_router(webhooks_router)
+api_v1_router.include_router(notifications_router)
+api_v1_router.include_router(reviews_router)
+api_v1_router.include_router(certificates_router)
+api_v1_router.include_router(discussions_router)
+api_v1_router.include_router(analytics_router)

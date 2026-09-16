@@ -5,6 +5,14 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 
+from app.cache.redis_client import (
+    get_redis,
+    cache_get,
+    cache_set,
+    user_key,
+    tenant_key,
+)
+from app.core.config import settings
 from app.core.exceptions import ForbiddenException, NotFoundException, UnauthorizedException
 from app.core.security import decode_token
 from app.database.session import get_db
@@ -22,6 +30,7 @@ async def get_current_user(
     request: Request,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme),
     db: AsyncSession = Depends(get_db),
+    redis=Depends(get_redis),
 ) -> User:
     token: Optional[str] = credentials.credentials if (credentials and credentials.credentials) else request.cookies.get("access_token")
 
@@ -46,6 +55,23 @@ async def get_current_user(
             error_code="INVALID_TOKEN_PAYLOAD",
         )
 
+    # ── Cache-Aside: check Redis before hitting DB ────────────────────────────
+    cache_key = user_key(user_id_str, "profile")
+    cached = await cache_get(redis, cache_key)
+    if cached:
+        # Reconstruct minimal User ORM object from cached dict
+        # We only cache safe non-sensitive fields; sensitive fields still come from DB on first load
+        user = User(
+            id=UUID(cached["id"]),
+            name=cached["name"],
+            email=cached["email"],
+            is_active=cached["is_active"],
+            is_verified=cached.get("is_verified", True),
+            picture=cached.get("picture") or cached.get("avatar_url"),
+        )
+        return user
+
+    # ── Cache miss: load from DB and populate cache ───────────────────────────
     user_repo = UserRepository(db)
     user = await user_repo.get_by_id(UUID(user_id_str))
 
@@ -61,6 +87,18 @@ async def get_current_user(
             error_code="USER_DEACTIVATED",
         )
 
+    # Populate cache with safe non-sensitive user fields
+    await cache_set(redis, cache_key, {
+        "id": str(user.id),
+        "name": user.name,
+        "email": user.email,
+        "is_active": user.is_active,
+        "is_verified": getattr(user, "is_verified", True),
+        "is_superuser": getattr(user, "is_superuser", False),
+        "picture": getattr(user, "picture", None),
+        "avatar_url": getattr(user, "avatar_url", None) or getattr(user, "picture", None),
+    }, ttl=settings.CACHE_TTL_USER_PROFILE)
+
     return user
 
 
@@ -71,6 +109,23 @@ async def get_current_active_user(
         raise UnauthorizedException(
             message="Inactive user account",
             error_code="USER_INACTIVE",
+        )
+    return current_user
+
+
+async def require_platform_admin(
+    current_user: User = Depends(get_current_active_user),
+) -> User:
+    """Only platform superusers (LearnioX staff) can manage global categories and tags."""
+    superadmin_emails = getattr(settings, "SUPERADMIN_EMAILS", ["admin@learniox.com"])
+    is_admin = bool(
+        getattr(current_user, "is_superuser", False)
+        or (current_user.email and current_user.email in superadmin_emails)
+    )
+    if not is_admin:
+        raise ForbiddenException(
+            message="Platform admin access required",
+            error_code="PLATFORM_ADMIN_REQUIRED",
         )
     return current_user
 
@@ -108,14 +163,43 @@ def require_permission(permission_code: str) -> Callable:
         institution_id: UUID,
         current_user: User = Depends(get_current_active_user),
         db: AsyncSession = Depends(get_db),
+        redis=Depends(get_redis),
     ) -> bool:
-        inst_repo = InstitutionRepository(db)
-        inst = await inst_repo.get_by_id(institution_id)
-        if not inst:
-            raise NotFoundException(message="Institution not found", error_code="INSTITUTION_NOT_FOUND")
-        if inst.owner_id == current_user.id:
+        # ── Short-circuit for institution owner (no DB needed) ────────────────
+        # We still need institution for owner check — but use cache first
+        inst_cache_key = tenant_key(institution_id, "profile")
+        inst_cached = await cache_get(redis, inst_cache_key)
+        if inst_cached:
+            owner_id = inst_cached.get("owner_id")
+            if owner_id and str(current_user.id) == owner_id:
+                return True
+        else:
+            inst_repo = InstitutionRepository(db)
+            inst = await inst_repo.get_by_id(institution_id)
+            if not inst:
+                raise NotFoundException(message="Institution not found", error_code="INSTITUTION_NOT_FOUND")
+            # Cache the institution profile
+            await cache_set(redis, inst_cache_key, {
+                "id": str(inst.id),
+                "owner_id": str(inst.owner_id),
+                "name": inst.name,
+                "slug": inst.slug,
+            }, ttl=settings.CACHE_TTL_INSTITUTION)
+            if inst.owner_id == current_user.id:
+                return True
+
+        # ── Cache-Aside for RBAC permissions ─────────────────────────────────
+        perms_cache_key = tenant_key(institution_id, "member", str(current_user.id), "perms")
+        cached_perms = await cache_get(redis, perms_cache_key)
+        if cached_perms is not None:
+            if permission_code not in cached_perms:
+                raise ForbiddenException(
+                    message=f"Missing required permission: {permission_code}",
+                    error_code="PERMISSION_DENIED",
+                )
             return True
 
+        # ── Cache miss: full DB RBAC resolution ───────────────────────────────
         member_repo = MemberRepository(db)
         member = await member_repo.get_member_by_user_and_inst(current_user.id, institution_id)
         if not member or member.status != MemberStatus.ACTIVE:
@@ -123,6 +207,10 @@ def require_permission(permission_code: str) -> Callable:
 
         role_repo = RoleRepository(db)
         effective = await role_repo.get_member_effective_permissions(member.id, current_user.id, institution_id)
+
+        # Cache the resolved permissions set
+        await cache_set(redis, perms_cache_key, list(effective), ttl=settings.CACHE_TTL_RBAC_PERMS)
+
         if permission_code not in effective:
             raise ForbiddenException(
                 message=f"Missing required permission: {permission_code}",
@@ -206,6 +294,24 @@ def require_institution_owner() -> Callable:
     return owner_checker
 
 
+async def require_platform_admin(
+    current_user: User = Depends(get_current_active_user),
+) -> User:
+    """
+    Restricts access to LearnioX platform-level admin operations
+    (e.g. creating/deleting global categories and tags).
+
+    Only users whose is_superuser flag is True (set directly on the DB row)
+    can pass this guard. Regular institution owners cannot.
+    """
+    if not getattr(current_user, "is_superuser", False):
+        raise ForbiddenException(
+            message="Platform administrator access required for this operation.",
+            error_code="PLATFORM_ADMIN_REQUIRED",
+        )
+    return current_user
+
+
 # ─── Service DI Factories ─────────────────────────────────────────────────────
 # Use these as FastAPI Depends() instead of instantiating services inline.
 # Benefit: in tests, override with app.dependency_overrides[get_xxx_service].
@@ -260,9 +366,9 @@ def get_assessment_service(db: AsyncSession = Depends(get_db)):
     return AssessmentService(db)
 
 
-def get_payment_service(db: AsyncSession = Depends(get_db)):
+def get_payment_service(db: AsyncSession = Depends(get_db), redis=Depends(get_redis)):
     from app.services.payment_service import PaymentService
-    return PaymentService(db)
+    return PaymentService(db, redis=redis)
 
 
 def get_search_service(db: AsyncSession = Depends(get_db)):
@@ -273,3 +379,28 @@ def get_search_service(db: AsyncSession = Depends(get_db)):
 def get_access_service(db: AsyncSession = Depends(get_db)):
     from app.services.access_service import AccessService
     return AccessService(db)
+
+
+def get_notification_service(db: AsyncSession = Depends(get_db)):
+    from app.services.notification_service import NotificationService
+    return NotificationService(db)
+
+
+def get_review_service(db: AsyncSession = Depends(get_db), redis=Depends(get_redis)):
+    from app.services.review_service import ReviewService
+    return ReviewService(db, redis=redis)
+
+
+def get_certificate_service(db: AsyncSession = Depends(get_db)):
+    from app.services.certificate_service import CertificateService
+    return CertificateService(db)
+
+
+def get_discussion_service(db: AsyncSession = Depends(get_db)):
+    from app.services.discussion_service import DiscussionService
+    return DiscussionService(db)
+
+
+def get_analytics_service(db: AsyncSession = Depends(get_db), redis=Depends(get_redis)):
+    from app.services.analytics_service import AnalyticsService
+    return AnalyticsService(db, redis=redis)

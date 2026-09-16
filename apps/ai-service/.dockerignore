@@ -1,5 +1,9 @@
+# ==============================================================================
+# LearnioX ai-service .dockerignore
+# ==============================================================================
+
 # Git & Version Control
-.git
+.git/
 .gitignore
 .gitattributes
 
@@ -7,7 +11,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyo
+*.pyd
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 .cache/
@@ -19,6 +27,7 @@ venv/
 env/
 .env
 .env.*
+!.env.example
 
 # Local Media & Storage Files
 *.db
@@ -44,3 +53,5 @@ models/*
 .idea/
 *.swp
 README.md
+.DS_Store
+Thumbs.db

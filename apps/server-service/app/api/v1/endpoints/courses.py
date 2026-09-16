@@ -2,7 +2,7 @@ from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, Query, status
 
-from app.api.deps import get_current_active_user, get_course_service
+from app.api.deps import get_current_active_user, get_optional_user, get_course_service
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.course import (
@@ -141,7 +141,7 @@ async def get_recommended_courses(
 
 @router.get(
     "",
-    summary="List Courses (Admin / Discovery)",
+    summary="List Courses (Discovery)",
     response_model=APIResponse[CourseListResponse],
 )
 async def list_courses(
@@ -154,16 +154,26 @@ async def list_courses(
     visibility: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
     sort: str = Query("desc", pattern="^(asc|desc)$"),
+    current_user: Optional[User] = Depends(get_optional_user),
     service: CourseService = Depends(get_course_service),
 ):
+    # Enforce safe defaults for unauthenticated requests so drafts and private
+    # courses are never exposed. Authenticated users (instructors/admins) may
+    # override to view all statuses/visibilities within their own courses.
+    if current_user is None:
+        status_filter = "PUBLISHED"
+        visibility_filter = "PUBLIC"
+    else:
+        status_filter = status
+        visibility_filter = visibility
     result = await service.list_courses(
         page=page,
         limit=limit,
         institution_id=institution,
         category_id=category,
         level=level,
-        status=status,
-        visibility=visibility,
+        status=status_filter,
+        visibility=visibility_filter,
         search=search,
         sort=sort,
     )

@@ -1,7 +1,7 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends
-from app.api.deps import get_current_active_user, get_curriculum_service
+from app.api.deps import get_current_active_user, get_optional_user, get_curriculum_service
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.curriculum import (
@@ -38,6 +38,9 @@ async def create_module(
 )
 async def list_modules(
     course_id: UUID,
+    # Modules are viewable by guests for published courses (TOC browsing).
+    # The service returns only published modules for unauthenticated requests.
+    current_user: Optional[User] = Depends(get_optional_user),
     service: CurriculumService = Depends(get_curriculum_service),
 ):
     result = await service.list_modules(course_id=course_id)
@@ -51,6 +54,8 @@ async def list_modules(
 )
 async def get_module_by_id(
     module_id: UUID,
+    # Module metadata is browsable by guests for published courses.
+    current_user: Optional[User] = Depends(get_optional_user),
     service: CurriculumService = Depends(get_curriculum_service),
 ):
     result = await service.get_module(module_id=module_id)

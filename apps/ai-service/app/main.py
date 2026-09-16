@@ -44,6 +44,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from app.middleware.auth import AIAuthRateLimitMiddleware
+app.add_middleware(AIAuthRateLimitMiddleware)
+
 
 @app.middleware("http")
 async def request_logging_middleware(request: Request, call_next):
@@ -52,6 +55,22 @@ async def request_logging_middleware(request: Request, call_next):
     response = await call_next(request)
     response.headers["x-request-id"] = request_id
     return response
+
+
+from app.core.exceptions import AIServiceException
+
+
+@app.exception_handler(AIServiceException)
+async def ai_service_exception_handler(request: Request, exc: AIServiceException):
+    logger.warning(f"AI Service Domain Exception on {request.url.path}: {exc.message} ({exc.code})")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=APIResponse.fail(
+            message=exc.message,
+            code=exc.code,
+            details=exc.details,
+        ).model_dump(),
+    )
 
 
 # Global Exception Handler

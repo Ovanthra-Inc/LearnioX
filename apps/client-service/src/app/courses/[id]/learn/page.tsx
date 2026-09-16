@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
@@ -32,6 +32,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { useCourseStructure, useCourseDetail, useCurriculumMutations } from "@/hooks/useCourses"
 
 interface Lesson {
   id: string
@@ -41,6 +42,8 @@ interface Lesson {
   completed: boolean
   description?: string
   transcript?: string
+  videoUrl?: string
+  contentType?: string
 }
 
 interface Module {
@@ -151,9 +154,52 @@ export default function CourseLearningWorkspacePage() {
   const courseId = (params?.id as string) || "default"
   const router = useRouter()
 
+  const { data: structureData } = useCourseStructure(courseId)
+  const { data: courseDetail } = useCourseDetail(courseId)
+  const { updateProgress, completeLesson } = useCurriculumMutations()
+
+  const modules: Module[] = useMemo(() => {
+    if (structureData?.modules && structureData.modules.length > 0) {
+      return structureData.modules.map((mod) => ({
+        id: mod.id,
+        title: mod.title.toUpperCase(),
+        lessons: mod.lessons.map((l) => {
+          const mins = Math.floor((l.duration || 600) / 60)
+          const secs = (l.duration || 600) % 60
+          const fileId = l.content?.file_id
+          const videoUrl = fileId
+            ? `/api/v1/storage/preview/${fileId}`
+            : l.content?.file_url || l.content?.external_url
+          return {
+            id: l.id,
+            title: l.title,
+            duration: `${mins}:${secs < 10 ? "0" : ""}${secs}`,
+            readTime: `${Math.max(1, Math.round(mins / 3))} min read`,
+            completed: l.status === "COMPLETED",
+            description: l.description || "Video lecture and interactive lesson walkthrough.",
+            transcript: l.content?.text_content || undefined,
+            videoUrl: videoUrl || undefined,
+            contentType: l.content?.content_type || l.lesson_type,
+          }
+        }),
+      }))
+    }
+    return COURSE_PLAYLIST_DATA.modules
+  }, [structureData])
+
   // Active Lesson State
-  const [activeLessonId, setActiveLessonId] = useState<string>("l-1")
+  const [activeLessonId, setActiveLessonId] = useState<string>("")
   const [activeTab, setActiveTab] = useState<"live" | "qa" | "notes" | "discussions" | "resources">("live")
+
+  // Update activeLessonId when modules change
+  useEffect(() => {
+    if (modules.length > 0 && modules[0].lessons.length > 0) {
+      const allL = modules.flatMap((m) => m.lessons)
+      if (!allL.some((l) => l.id === activeLessonId)) {
+        setActiveLessonId(allL[0].id)
+      }
+    }
+  }, [modules, activeLessonId])
 
   // Video Player Controls State
   const [isPlaying, setIsPlaying] = useState(false)
@@ -195,13 +241,44 @@ export default function CourseLearningWorkspacePage() {
   ])
   const [newQuestion, setNewQuestion] = useState("")
 
+  // 15-second heartbeat to record progress when playing
+  useEffect(() => {
+    if (!isPlaying || !activeLessonId || activeLessonId === "empty") return
+    const timer = setInterval(() => {
+      updateProgress({
+        lessonId: activeLessonId,
+        watchTime: 15,
+        lastPosition: 15,
+      }).catch(() => {})
+    }, 15000)
+    return () => clearInterval(timer)
+  }, [isPlaying, activeLessonId, updateProgress])
+
+  const handleCompleteActiveLesson = async () => {
+    if (!activeLessonId || activeLessonId === "empty") return
+    try {
+      await completeLesson(activeLessonId)
+      toast.success("Lesson marked as complete! Your progress has been updated.")
+    } catch (err: any) {
+      console.error("Failed to complete lesson:", err)
+      toast.info("Lesson marked complete locally.")
+    }
+  }
+
   // Flattened lesson list for easy previous/next navigation
   const allLessons = useMemo(() => {
-    return COURSE_PLAYLIST_DATA.modules.flatMap((mod) => mod.lessons)
-  }, [])
+    return modules.flatMap((mod) => mod.lessons)
+  }, [modules])
 
   const currentLessonIndex = allLessons.findIndex((l) => l.id === activeLessonId)
-  const currentLesson = allLessons[currentLessonIndex] || allLessons[0]
+  const currentLesson = allLessons[currentLessonIndex] || allLessons[0] || {
+    id: "empty",
+    title: "No Lessons Available",
+    duration: "00:00",
+    readTime: "0 min",
+    completed: false,
+    description: "This course does not contain published lessons yet.",
+  }
 
   const completedCount = allLessons.filter((l) => l.completed).length
   const totalCount = allLessons.length
@@ -274,15 +351,24 @@ export default function CourseLearningWorkspacePage() {
             {/* ======================================================== */}
             <main className="lg:col-span-8 space-y-6">
               
-              {/* Back to Course Overview Link */}
-              <div>
+              {/* Back to Course Overview Link and Mark Complete Action */}
+              <div className="flex items-center justify-between gap-3">
                 <Link
                   href={`/courses/${courseId}`}
                   className="inline-flex items-center gap-2 rounded-lg border border-border/80 bg-card px-3.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer shadow-xs"
                 >
                   <ArrowLeft className="size-3.5" />
-                  <span>← Previous</span>
+                  <span>← Back to Course</span>
                 </Link>
+
+                <button
+                  type="button"
+                  onClick={handleCompleteActiveLesson}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 px-3.5 py-1.5 text-xs font-semibold hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                >
+                  <CheckCircle2 className="size-3.5" />
+                  <span>{currentLesson?.completed ? "Lesson Completed" : "Mark as Complete"}</span>
+                </button>
               </div>
 
               {/* Dynamic Lesson Title */}
@@ -295,96 +381,136 @@ export default function CourseLearningWorkspacePage() {
                 </p>
               </div>
 
-              {/* Main 16:9 Interactive Video Player */}
-              <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border/80 bg-neutral-950 shadow-2xl flex flex-col justify-between group">
-                {/* Visual Background Canvas Texture */}
-                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
-                <div className="absolute inset-0 bg-radial from-primary/15 via-transparent to-black/80 pointer-events-none" />
-
-                {/* Video Watermark Badge */}
-                <div className="relative z-10 flex items-center justify-between p-4">
-                  <span className="inline-flex items-center gap-1.5 rounded-md bg-black/60 backdrop-blur-md px-2.5 py-1 text-[11px] font-semibold text-white border border-white/10">
-                    <span className="size-2 rounded-full bg-emerald-400 animate-ping mr-1" />
-                    HD 1080p • 60fps
-                  </span>
-
-                  <span className="text-[11px] font-mono text-neutral-400">
-                    LearnioX Player v2.4
-                  </span>
-                </div>
-
-                {/* Big Center Play / Pause Indicator Button */}
-                <button
-                  type="button"
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  className="relative z-10 m-auto flex size-16 sm:size-20 items-center justify-center rounded-full bg-primary/90 text-primary-foreground shadow-2xl transition-all duration-200 hover:scale-110 hover:bg-primary cursor-pointer"
-                >
-                  {isPlaying ? (
-                    <Pause className="size-8 fill-current" />
-                  ) : (
-                    <Play className="size-8 fill-current ml-1" />
-                  )}
-                </button>
-
-                {/* Bottom Video Controls Scrubber Bar */}
-                <div className="relative z-10 p-4 space-y-2 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-                  {/* Timeline Scrubber */}
-                  <div className="group/track relative h-1.5 w-full rounded-full bg-white/20 cursor-pointer overflow-hidden transition-all hover:h-2.5">
-                    <div
-                      className="h-full rounded-full bg-primary transition-all duration-150"
-                      style={{ width: isPlaying ? "42%" : "25%" }}
-                    />
+              {/* Main 16:9 Interactive Video Player or Live Classroom Portal */}
+              {currentLesson?.contentType === "LIVE" ? (
+                <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-rose-500/30 bg-neutral-950 shadow-2xl flex flex-col items-center justify-center p-8 text-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-rose-950/30 via-neutral-950 to-neutral-950">
+                  <div className="size-16 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-500 mb-4 animate-pulse">
+                    <Radio className="size-8" />
                   </div>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-none bg-rose-500/10 text-rose-400 text-xs font-mono font-semibold tracking-wider uppercase mb-3 border border-rose-500/20">
+                    <span className="size-2 rounded-full bg-rose-500 animate-ping mr-1" />
+                    Interactive Live Session
+                  </span>
+                  <h3 className="text-xl font-bold tracking-tight text-white mb-2">
+                    {currentLesson.title}
+                  </h3>
+                  <p className="text-xs text-neutral-400 max-w-md mb-6 font-mono">
+                    This lesson takes place in the LearnioX Virtual Classroom with live audio/video, screen sharing, interactive polls, collaborative whiteboard, and real-time Q&A.
+                  </p>
+                  <Link
+                    href={`/live/${currentLesson.id}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-none bg-rose-600 hover:bg-rose-500 text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors shadow-lg shadow-rose-600/20 cursor-pointer"
+                  >
+                    <Radio className="size-4 animate-pulse" />
+                    Enter Live Classroom
+                  </Link>
+                </div>
+              ) : (
+                <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border/80 bg-neutral-950 shadow-2xl flex flex-col justify-between group">
+                  {currentLesson?.videoUrl ? (
+                    <video
+                      key={currentLesson.videoUrl}
+                      src={currentLesson.videoUrl}
+                      controls
+                      autoPlay={isPlaying}
+                      className="size-full object-contain bg-black"
+                      onPlay={() => setIsPlaying(true)}
+                      onPause={() => setIsPlaying(false)}
+                      onEnded={handleCompleteActiveLesson}
+                    />
+                  ) : (
+                  <>
+                    {/* Visual Background Canvas Texture */}
+                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+                    <div className="absolute inset-0 bg-radial from-primary/15 via-transparent to-black/80 pointer-events-none" />
 
-                  {/* Controls Row */}
-                  <div className="flex items-center justify-between text-xs text-white">
-                    <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setIsPlaying(!isPlaying)}
-                        className="hover:text-primary transition-colors cursor-pointer"
-                      >
-                        {isPlaying ? <Pause className="size-4" /> : <Play className="size-4" />}
-                      </button>
+                    {/* Video Watermark Badge */}
+                    <div className="relative z-10 flex items-center justify-between p-4">
+                      <span className="inline-flex items-center gap-1.5 rounded-md bg-black/60 backdrop-blur-md px-2.5 py-1 text-[11px] font-semibold text-white border border-white/10">
+                        <span className="size-2 rounded-full bg-emerald-400 animate-ping mr-1" />
+                        HD 1080p • 60fps
+                      </span>
 
-                      <button
-                        type="button"
-                        onClick={() => setIsMuted(!isMuted)}
-                        className="hover:text-primary transition-colors cursor-pointer"
-                      >
-                        {isMuted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
-                      </button>
-
-                      <span className="font-mono text-[11px] text-neutral-300">
-                        {isPlaying ? "07:45" : "04:15"} / {currentLesson.duration}
+                      <span className="text-[11px] font-mono text-neutral-400">
+                        LearnioX Player v2.4
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      {/* Playback Speed Picker */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const speeds = ["1x", "1.25x", "1.5x", "2x"]
-                          const nextIdx = (speeds.indexOf(playbackSpeed) + 1) % speeds.length
-                          setPlaybackSpeed(speeds[nextIdx])
-                        }}
-                        className="rounded px-1.5 py-0.5 font-mono text-[10px] font-bold bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
-                      >
-                        {playbackSpeed}
-                      </button>
+                    {/* Big Center Play / Pause Indicator Button */}
+                    <button
+                      type="button"
+                      onClick={() => setIsPlaying(!isPlaying)}
+                      className="relative z-10 m-auto flex size-16 sm:size-20 items-center justify-center rounded-full bg-primary/90 text-primary-foreground shadow-2xl transition-all duration-200 hover:scale-110 hover:bg-primary cursor-pointer"
+                    >
+                      {isPlaying ? (
+                        <Pause className="size-8 fill-current" />
+                      ) : (
+                        <Play className="size-8 fill-current ml-1" />
+                      )}
+                    </button>
 
-                      <button
-                        type="button"
-                        onClick={() => toast.info("Fullscreen toggled")}
-                        className="hover:text-primary transition-colors cursor-pointer"
-                      >
-                        <Maximize2 className="size-4" />
-                      </button>
+                    {/* Bottom Video Controls Scrubber Bar */}
+                    <div className="relative z-10 p-4 space-y-2 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+                      {/* Timeline Scrubber */}
+                      <div className="group/track relative h-1.5 w-full rounded-full bg-white/20 cursor-pointer overflow-hidden transition-all hover:h-2.5">
+                        <div
+                          className="h-full rounded-full bg-primary transition-all duration-150"
+                          style={{ width: isPlaying ? "42%" : "25%" }}
+                        />
+                      </div>
+
+                      {/* Controls Row */}
+                      <div className="flex items-center justify-between text-xs text-white">
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setIsPlaying(!isPlaying)}
+                            className="hover:text-primary transition-colors cursor-pointer"
+                          >
+                            {isPlaying ? <Pause className="size-4" /> : <Play className="size-4" />}
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setIsMuted(!isMuted)}
+                            className="hover:text-primary transition-colors cursor-pointer"
+                          >
+                            {isMuted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+                          </button>
+
+                          <span className="font-mono text-[11px] text-neutral-300">
+                            {isPlaying ? "07:45" : "04:15"} / {currentLesson.duration}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          {/* Playback Speed Picker */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const speeds = ["1x", "1.25x", "1.5x", "2x"]
+                              const nextIdx = (speeds.indexOf(playbackSpeed) + 1) % speeds.length
+                              setPlaybackSpeed(speeds[nextIdx])
+                            }}
+                            className="rounded px-1.5 py-0.5 font-mono text-[10px] font-bold bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
+                          >
+                            {playbackSpeed}
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => toast.info("Fullscreen toggled")}
+                            className="hover:text-primary transition-colors cursor-pointer"
+                          >
+                            <Maximize2 className="size-4" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
+              )}
 
               {/* ======================================================== */}
               {/* TRANSPARENT TAB BAR & CONTEXTUAL CONTENT AREA            */}
@@ -665,19 +791,19 @@ export default function CourseLearningWorkspacePage() {
                 <div className="space-y-2 border-b border-border/60 pb-3">
                   <div className="flex items-center justify-between">
                     <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-extrabold tracking-wider text-primary font-mono uppercase">
-                      {COURSE_PLAYLIST_DATA.tag}
+                      {courseDetail?.category?.name || COURSE_PLAYLIST_DATA.tag}
                     </span>
                     <span className="text-xs font-bold font-mono text-primary">
-                      {currentLessonIndex + 1} / {totalCount}
+                      {Math.max(1, currentLessonIndex + 1)} / {Math.max(1, totalCount)}
                     </span>
                   </div>
 
                   <h2 className="text-sm font-bold tracking-tight text-foreground font-sans leading-snug">
-                    {COURSE_PLAYLIST_DATA.title}
+                    {courseDetail?.title || COURSE_PLAYLIST_DATA.title}
                   </h2>
 
                   <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
-                    {COURSE_PLAYLIST_DATA.subtitle}
+                    {courseDetail?.subtitle || COURSE_PLAYLIST_DATA.subtitle}
                   </p>
 
                   {/* Playlist Progress Track */}
@@ -686,7 +812,7 @@ export default function CourseLearningWorkspacePage() {
                       <div
                         className="h-full rounded-full bg-primary transition-all duration-300"
                         style={{
-                          width: `${Math.round(((currentLessonIndex + 1) / totalCount) * 100)}%`,
+                          width: `${Math.round(((currentLessonIndex + 1) / Math.max(1, totalCount)) * 100)}%`,
                         }}
                       />
                     </div>
@@ -695,7 +821,7 @@ export default function CourseLearningWorkspacePage() {
 
                 {/* Scrollable Playlist Modules & Lessons */}
                 <div className="max-h-[380px] overflow-y-auto no-scrollbar space-y-4 pr-1">
-                  {COURSE_PLAYLIST_DATA.modules.map((mod) => (
+                  {modules.map((mod) => (
                     <div key={mod.id} className="space-y-1.5">
                       {/* Module Section Title Header */}
                       <div className="px-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 font-sans">

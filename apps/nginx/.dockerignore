@@ -1,5 +1,9 @@
+# ==============================================================================
+# LearnioX nginx .dockerignore
+# ==============================================================================
+
 # Version Control
-.git
+.git/
 .gitignore
 .gitattributes
 
@@ -7,7 +11,10 @@
 *.log
 *.tmp
 
-# Documentation & IDE
+# Documentation, IDE & OS
 .vscode/
 .idea/
 README.md
+.DS_Store
+Thumbs.db
+*.swp

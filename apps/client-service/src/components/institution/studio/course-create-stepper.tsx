@@ -26,6 +26,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { useCurriculumMutations } from "@/hooks/useCourses"
 
 interface LessonDraft {
   id: string
@@ -51,6 +52,7 @@ export function CourseCreateStepper({
   onCancel,
   onComplete,
 }: CourseCreateStepperProps) {
+  const { createCourse, createModule, createLesson } = useCurriculumMutations()
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
   const [isPublishing, setIsPublishing] = useState(false)
 
@@ -160,7 +162,7 @@ export function CourseCreateStepper({
     setNewObjective("")
   }
 
-  const handlePublishCourse = () => {
+  const handlePublishCourse = async () => {
     if (!title.trim()) {
       toast.error("Please enter a course title.")
       setStep(1)
@@ -168,16 +170,54 @@ export function CourseCreateStepper({
     }
 
     setIsPublishing(true)
-    setTimeout(() => {
-      setIsPublishing(false)
+    try {
+      const course = await createCourse({
+        institution_id: institutionId,
+        title: title.trim(),
+        subtitle: tagline.trim() || undefined,
+        description: description.trim() || `${title.trim()} complete masterclass curriculum.`,
+        level: level.toUpperCase(),
+        access_type: isFree ? "FREE" : "PAID",
+        price: isFree ? 0 : parseFloat(price) || 0,
+        currency: "USD",
+      })
+
+      if (course?.id) {
+        for (const mod of modules) {
+          const createdMod = await createModule({
+            courseId: course.id,
+            title: mod.title,
+            is_free: isFree,
+          })
+          if (createdMod?.id) {
+            for (const les of mod.lessons) {
+              await createLesson({
+                moduleId: createdMod.id,
+                courseId: course.id,
+                title: les.title,
+                lesson_type: les.type,
+                visibility: isFree ? "PUBLIC" : "ENROLLED",
+                is_preview: false,
+              })
+            }
+          }
+        }
+      }
+
       toast.success(
         enableCommunitySync
-          ? `Course "${title}" created successfully! #${title.toLowerCase().replace(/[^a-z0-9]/g, "-")} community channel initialized.`
-          : `Course "${title}" created successfully!`
+          ? `Course "${title}" published! #${title.toLowerCase().replace(/[^a-z0-9]/g, "-")} community channel initialized.`
+          : `Course "${title}" published successfully!`
       )
       if (onComplete) onComplete()
       else onCancel()
-    }, 1000)
+    } catch (err: any) {
+      console.error("Failed to publish course:", err)
+      const msg = err?.response?.data?.message || err?.message || "Failed to publish course"
+      toast.error(`Course publication failed: ${msg}`)
+    } finally {
+      setIsPublishing(false)
+    }
   }
 
   const totalLessonsCount = modules.reduce((acc, m) => acc + m.lessons.length, 0)

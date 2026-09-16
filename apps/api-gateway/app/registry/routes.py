@@ -32,6 +32,12 @@ SERVICE_REGISTRY: List[ServiceRoute] = [
         name="marketing-service",
         description="Marketing landing pages, email notifications, and conversion tracking service",
     ),
+    ServiceRoute(
+        path_prefix="/api/v1/live",
+        target=settings.LIVE_SERVICE_URL,
+        name="live-service",
+        description="Live virtual classroom, WebRTC signaling, chat, polls, Q&A, and attendance tracking service",
+    ),
     # Default fallback route for core backend
     ServiceRoute(
         path_prefix="/api/v1",

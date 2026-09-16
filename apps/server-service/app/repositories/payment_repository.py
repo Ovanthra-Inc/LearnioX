@@ -163,13 +163,18 @@ class PaymentRepository:
         amount: Decimal,
         currency: str = "INR",
         provider: str = "MOCK",
+        provider_order_id: Optional[str] = None,
+        provider_payment_id: Optional[str] = None,
+        idempotency_key: Optional[str] = None,
         payment_method: str = "CARD",
         metadata_json: Optional[str] = None,
         status: PaymentStatus = PaymentStatus.PENDING,  # CRIT-01: default PENDING, not SUCCESS
     ) -> Payment:
         payment = Payment(
             provider=provider,
-            provider_payment_id=f"pay_mock_{uuid.uuid4().hex[:12]}",
+            provider_order_id=provider_order_id,
+            provider_payment_id=provider_payment_id or (f"pay_mock_{uuid.uuid4().hex[:12]}" if provider == "MOCK" else None),
+            idempotency_key=idempotency_key,
             amount=amount,
             currency=currency,
             status=status,
@@ -181,18 +186,29 @@ class PaymentRepository:
         await self.db.refresh(payment)
         return payment
 
-    async def confirm_payment(self, payment_id: UUID) -> Optional["Payment"]:
+    async def confirm_payment(self, payment_id: UUID, provider_payment_id: Optional[str] = None) -> Optional["Payment"]:
         """Atomically mark a payment as SUCCESS. Called after provider confirmation."""
+        values = {"status": PaymentStatus.SUCCESS}
+        if provider_payment_id:
+            values["provider_payment_id"] = provider_payment_id
         await self.db.execute(
             update(Payment)
             .where(Payment.id == payment_id)
-            .values(status=PaymentStatus.SUCCESS)
+            .values(**values)
         )
         await self.db.flush()
         return await self.get_payment_by_id(payment_id)
 
     async def get_payment_by_id(self, payment_id: UUID) -> Optional[Payment]:
         res = await self.db.execute(select(Payment).where(Payment.id == payment_id))
+        return res.scalars().first()
+
+    async def get_payment_by_provider_order_id(self, provider_order_id: str) -> Optional[Payment]:
+        res = await self.db.execute(select(Payment).where(Payment.provider_order_id == provider_order_id))
+        return res.scalars().first()
+
+    async def get_payment_by_idempotency_key(self, idempotency_key: str) -> Optional[Payment]:
+        res = await self.db.execute(select(Payment).where(Payment.idempotency_key == idempotency_key))
         return res.scalars().first()
 
     async def create_course_purchase(

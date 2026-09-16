@@ -187,8 +187,8 @@ class CurriculumService:
             raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
         return await self._to_lesson_response(lesson)
 
-    async def list_lessons(self, module_id: UUID) -> List[LessonResponse]:
-        lessons = await self.repo.list_lessons(module_id)
+    async def list_lessons(self, module_id: UUID, preview_only: bool = False) -> List[LessonResponse]:
+        lessons = await self.repo.list_lessons(module_id, preview_only=preview_only)
         return [await self._to_lesson_response(l) for l in lessons]
 
     async def search_lessons(

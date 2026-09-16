@@ -7,12 +7,14 @@ from sqlalchemy import (
     DateTime,
     Enum,
     ForeignKey,
+    Integer,
     Numeric,
     String,
     Table,
     Text,
+    UniqueConstraint,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, TSVECTOR
 from sqlalchemy.orm import relationship
 from app.database.base import Base
 
@@ -99,9 +101,19 @@ class Course(Base):
         nullable=False,
     )
     title = Column(String(255), nullable=False)
-    slug = Column(String(255), unique=True, index=True, nullable=False)
+    # GAP-11 FIX: slug is unique per-institution, not globally.
+    # UniqueConstraint("institution_id", "slug") is defined in __table_args__.
+    slug = Column(String(255), nullable=False, index=True)
     subtitle = Column(String(255), nullable=True)
     description = Column(Text, nullable=False)
+
+    # Full-text search vector (populated by startup migration + update trigger)
+    # GAP-02 FIX: GIN-indexed tsvector column for high-performance FTS
+    search_vector = Column(TSVECTOR, nullable=True)
+
+    # Review aggregate stats (updated by review_service on write)
+    avg_rating = Column(Numeric(3, 2), default=0.00, nullable=True)
+    review_count = Column(Integer, default=0, nullable=True)
 
     thumbnail_file_id = Column(
         UUID(as_uuid=True),
@@ -162,3 +174,9 @@ class Course(Base):
     thumbnail_file = relationship("FileRecord", foreign_keys=[thumbnail_file_id])
     intro_video_file = relationship("FileRecord", foreign_keys=[intro_video_file_id])
     tags = relationship("CourseTag", secondary=course_tag_map, lazy="selectin")
+
+    __table_args__ = (
+        # GAP-11 FIX: course slug must be unique within an institution, not globally.
+        # This lets Institution A and Institution B both have a course named "python-basics".
+        UniqueConstraint("institution_id", "slug", name="uq_course_slug_per_institution"),
+    )

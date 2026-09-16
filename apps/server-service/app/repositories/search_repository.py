@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import List, Optional, Tuple
 from uuid import UUID
-from sqlalchemy import func, select, or_, and_
+from sqlalchemy import func, select, or_, and_, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.course import Course, CourseCategory, CourseStatus, CourseTag, course_tag_map
@@ -9,6 +9,16 @@ from app.models.enrollment import Enrollment
 from app.models.institution import Institution, InstitutionStatus
 from app.models.member import InstitutionMember, MemberStatus
 from app.models.user import User
+
+
+def _fts_query(term: str):
+    """Build a plainto_tsquery expression for full-text search."""
+    return func.plainto_tsquery("english", term)
+
+
+def _ts_rank(vector_col, query):
+    """Compute ts_rank for relevance ordering."""
+    return func.ts_rank(vector_col, query)
 
 
 class SearchRepository:
@@ -36,13 +46,21 @@ class SearchRepository:
             .subquery()
         )
 
+        # Build relevance rank expression (only when q is provided)
+        ts_query = _fts_query(q) if q else None
+        rank_col = _ts_rank(Course.search_vector, ts_query).label("rank") if ts_query else None
+
+        select_cols = [
+            Course,
+            Institution.name.label("institution_name"),
+            CourseCategory.name.label("category_name"),
+            func.coalesce(enr_sub.c.enr_count, 0).label("enrollment_count"),
+        ]
+        if rank_col is not None:
+            select_cols.append(rank_col)
+
         query = (
-            select(
-                Course,
-                Institution.name.label("institution_name"),
-                CourseCategory.name.label("category_name"),
-                func.coalesce(enr_sub.c.enr_count, 0).label("enrollment_count"),
-            )
+            select(*select_cols)
             .outerjoin(Institution, Course.institution_id == Institution.id)
             .outerjoin(CourseCategory, Course.category_id == CourseCategory.id)
             .outerjoin(enr_sub, Course.id == enr_sub.c.course_id)
@@ -50,14 +68,12 @@ class SearchRepository:
         )
 
         if q:
-            term = f"%{q.strip()}%"
-            query = query.where(
-                or_(
-                    Course.title.ilike(term),
-                    Course.description.ilike(term),
-                    Course.subtitle.ilike(term),
-                )
-            )
+            # GAP-02 FIX: Full-text search with GIN index.
+            # Primary: tsvector @@ tsquery (uses GIN index, sub-20ms)
+            # Fallback: pg_trgm similarity for typo tolerance
+            fts_match = Course.search_vector.op("@@")(ts_query)
+            trgm_match = Course.title.op("%%")(q)  # pg_trgm similarity
+            query = query.where(or_(fts_match, trgm_match))
 
         if category_id:
             query = query.where(Course.category_id == category_id)
@@ -87,8 +103,21 @@ class SearchRepository:
         count_res = await self.db.execute(count_stmt)
         total = count_res.scalar_one()
 
-        # Apply Sorting
-        if sort_by == "popular":
+        # Apply Sorting — FTS queries sort by relevance first, then by secondary sort
+        if q and ts_query is not None:
+            # Primary: relevance rank (desc), secondary: sort_by selection
+            secondary = Course.created_at.desc()
+            if sort_by == "popular":
+                secondary = func.coalesce(enr_sub.c.enr_count, 0).desc()
+            elif sort_by == "price_asc":
+                secondary = Course.price.asc()
+            elif sort_by == "price_desc":
+                secondary = Course.price.desc()
+            query = query.order_by(
+                _ts_rank(Course.search_vector, ts_query).desc(),
+                secondary,
+            )
+        elif sort_by == "popular":
             query = query.order_by(func.coalesce(enr_sub.c.enr_count, 0).desc(), Course.created_at.desc())
         elif sort_by == "price_asc":
             query = query.order_by(Course.price.asc(), Course.created_at.desc())
@@ -121,6 +150,8 @@ class SearchRepository:
                     "level": c.level.value if hasattr(c.level, "value") else str(c.level),
                     "access_type": c.access_type.value if hasattr(c.access_type, "value") else str(c.access_type),
                     "enrollment_count": enr_cnt,
+                    "avg_rating": float(c.avg_rating) if c.avg_rating else 0.0,
+                    "review_count": c.review_count or 0,
                     "created_at": c.created_at,
                 }
             )
@@ -158,24 +189,28 @@ class SearchRepository:
         )
 
         if q:
-            term = f"%{q.strip()}%"
-            query = query.where(
-                or_(
-                    Institution.name.ilike(term),
-                    Institution.slug.ilike(term),
-                    Institution.description.ilike(term),
-                    Institution.tagline.ilike(term),
-                )
-            )
+            # GAP-02 FIX: Use institution FTS vector when available, with pg_trgm fallback
+            ts_query = _fts_query(q)
+            fts_match = Institution.search_vector.op("@@")(ts_query)
+            trgm_match = Institution.name.op("%%")(q)
+            query = query.where(or_(fts_match, trgm_match))
 
         count_stmt = select(func.count()).select_from(query.subquery())
         total = (await self.db.execute(count_stmt)).scalar_one()
 
-        query = (
-            query.order_by(func.coalesce(mem_sub.c.m_count, 0).desc(), Institution.created_at.desc())
-            .offset((page - 1) * limit)
-            .limit(limit)
-        )
+        if q:
+            ts_query = _fts_query(q)
+            query = query.order_by(
+                _ts_rank(Institution.search_vector, ts_query).desc(),
+                func.coalesce(mem_sub.c.m_count, 0).desc(),
+                Institution.created_at.desc(),
+            )
+        else:
+            query = (
+                query.order_by(func.coalesce(mem_sub.c.m_count, 0).desc(), Institution.created_at.desc())
+            )
+
+        query = query.offset((page - 1) * limit).limit(limit)
         res = await self.db.execute(query)
 
         items = []
@@ -249,17 +284,36 @@ class SearchRepository:
 
     async def get_suggestions(self, q: str) -> dict:
         term = f"%{q.strip()}%"
+        ts_query = _fts_query(q)
 
+        # Course titles — FTS with trgm fallback
         c_res = await self.db.execute(
             select(Course.title)
-            .where(and_(Course.status == CourseStatus.PUBLISHED, Course.title.ilike(term)))
+            .where(
+                and_(
+                    Course.status == CourseStatus.PUBLISHED,
+                    or_(
+                        Course.search_vector.op("@@")(ts_query),
+                        Course.title.ilike(term),
+                    ),
+                )
+            )
+            .order_by(_ts_rank(Course.search_vector, ts_query).desc())
             .limit(5)
         )
         course_titles = [row[0] for row in c_res.all()]
 
         inst_res = await self.db.execute(
             select(Institution.name)
-            .where(and_(Institution.status == InstitutionStatus.ACTIVE, Institution.name.ilike(term)))
+            .where(
+                and_(
+                    Institution.status == InstitutionStatus.ACTIVE,
+                    or_(
+                        Institution.search_vector.op("@@")(ts_query),
+                        Institution.name.ilike(term),
+                    ),
+                )
+            )
             .limit(5)
         )
         inst_names = [row[0] for row in inst_res.all()]

@@ -65,7 +65,26 @@ async def gateway_health():
 
 
 @app.get("/gateway/routes", tags=["Routes"])
-async def list_gateway_routes():
+async def list_gateway_routes(request: Request):
+    """
+    Internal diagnostic endpoint — lists the active microservice routing table.
+    Requires X-Internal-Key header matching the INTERNAL_API_KEY env var.
+    This endpoint MUST NOT be exposed in production without proper network-level
+    access controls (e.g., only accessible from the internal Docker network).
+    """
+    internal_key = settings.INTERNAL_API_KEY
+    provided_key = request.headers.get("X-Internal-Key", "")
+    if not internal_key or provided_key != internal_key:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=403,
+            content={
+                "success": False,
+                "message": "Access denied: valid X-Internal-Key header required.",
+                "data": None,
+                "error": {"code": "FORBIDDEN", "details": []},
+            },
+        )
     return {
         "success": True,
         "message": "Active Microservice Route Registry",

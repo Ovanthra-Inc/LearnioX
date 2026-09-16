@@ -76,6 +76,10 @@ from app.models.payment import (
     PaymentStatus,
     DiscountType,
 )
+from app.models.notification import Notification, NotificationType
+from app.models.review import CourseReview
+from app.models.certificate import Certificate
+from app.models.discussion import Discussion
 
 __all__ = [
     "User",
@@ -141,4 +145,9 @@ __all__ = [
     "SubscriptionStatus",
     "PaymentStatus",
     "DiscountType",
+    "Notification",
+    "NotificationType",
+    "CourseReview",
+    "Certificate",
+    "Discussion",
 ]

@@ -1,5 +1,9 @@
+# ==============================================================================
+# LearnioX client-service .dockerignore
+# ==============================================================================
+
 # Version Control
-.git
+.git/
 .gitignore
 .gitattributes
 
@@ -8,6 +12,7 @@
 out/
 build/
 dist/
+.turbo/
 
 # Dependency Lock & Node Modules
 node_modules/
@@ -21,9 +26,10 @@ yarn-error.log*
 .env.*
 !.env.example
 
-# IDE & OS
+# IDE, OS & Docs
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
 README.md
+*.swp

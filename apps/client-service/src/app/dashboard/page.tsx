@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { useLearningProgress } from "@/hooks/useLearningProgress"
 import { AppSidebar } from "@/components/app-sidebar"
 import { NavUser } from "@/components/nav-user"
+import { NotificationBell } from "@/components/layout/notification-bell"
 import { CourseProgressCard } from "@/components/dashboard/course-progress-card"
 import { CourseFeedItem } from "@/components/dashboard/course-feed-item"
 import { DashboardStickyWidget } from "@/components/dashboard/dashboard-sticky-widget"
@@ -40,6 +41,7 @@ export default function Page() {
       <SidebarInset className="relative flex h-svh flex-col overflow-hidden bg-background text-foreground">
         {/* Mobile Top Avatar Floating Header (Visible on smaller screens) */}
         <div className="lg:hidden absolute top-3 right-4 z-30 flex items-center gap-2">
+          <NotificationBell />
           <NavUser />
         </div>
 
@@ -96,8 +98,9 @@ export default function Page() {
 
           {/* RIGHT COLUMN: Static Fixed Side Panel (Non-scrolling, avatar permanently at top right) */}
           <aside className="hidden lg:flex w-80 xl:w-96 shrink-0 h-full flex-col border-l border-border/40 bg-card/20 p-5 xl:p-6 overflow-y-auto no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            {/* Top-Right Permanent Avatar */}
-            <div className="flex items-center justify-end pb-4 mb-1">
+            {/* Top-Right Permanent Avatar & Notifications */}
+            <div className="flex items-center justify-end pb-4 mb-1 gap-2">
+              <NotificationBell />
               <NavUser />
             </div>
 

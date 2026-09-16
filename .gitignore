@@ -1,21 +1,23 @@
-data
+# ==============================================================================
+# LearnioX Root .gitignore
+# ==============================================================================
 
-# CRIT-06: Never commit secrets or environment files
+# ── 1. Secrets & Environment Configurations ───────────────────────────────────
+# CRIT: Never commit secrets, credentials, or local environment files
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+*.cert
+*.crt
 
-# LOW-08: Test databases should not be committed
-*.db
-*.sqlite3
-*.sqlite
-
-# Python
+# ── 2. Python & Testing Artifacts ─────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
-*.pyc
 *.pyo
+*.pyd
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
@@ -29,30 +31,75 @@ build/
 *.egg
 .eggs/
 
-# Uploads (runtime data)
-uploads/
+# ── 3. Virtual Environments ───────────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
 
-# Logs
-*.log
-logs/
-
-# Node / Frontend
+# ── 4. Node.js & Frontend Artifacts ───────────────────────────────────────────
 node_modules/
 .next/
 out/
+.turbo/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
-# OS
-.DS_Store
-Thumbs.db
+# ── 5. Runtime Storage & Uploads ──────────────────────────────────────────────
+uploads/*
+!uploads/.gitkeep
+apps/server-service/uploads/*
+!apps/server-service/uploads/**/.gitkeep
+data/
+data/*
+storages/*
+!storages/.gitkeep
+storage/*
+!storage/.gitkeep
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# ── 6. Local Database Files & Volume Mounts ───────────────────────────────────
+*.db
+test_*.db
+*.sqlite
+*.sqlite3
+postgres_data/
+redis_data/
+uploads_data/
+.local/
+**/.local/
 
-# Generated/runtime files
+# ── 7. Application & Service Logs ─────────────────────────────────────────────
+*.log
+logs/
+*.gunicorn/
 .gunicorn/
 apps/server-service/.gunicorn/
 apps/ai-service/.cache/
 apps/ai-service/storage/
+
+# ── 8. Operating System Junk ──────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# ── 9. IDE & Editor Artifacts ─────────────────────────────────────────────────
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~

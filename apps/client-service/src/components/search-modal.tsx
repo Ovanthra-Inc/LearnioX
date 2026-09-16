@@ -24,6 +24,7 @@ import {
 import { useTheme } from "@/providers/ThemeProvider"
 import { useAuth } from "@/hooks/useAuth"
 import { cn } from "@/lib/utils"
+import { apiClient, ApiResponse } from "@/lib/api"
 
 interface SearchItem {
   id: string
@@ -49,6 +50,8 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   const [debouncedQuery, setDebouncedQuery] = React.useState("")
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [isDebouncing, setIsDebouncing] = React.useState(false)
+  const [remoteResults, setRemoteResults] = React.useState<SearchItem[]>([])
+  const [isSearchingRemote, setIsSearchingRemote] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   // Debounce logic (180ms)
@@ -61,6 +64,61 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
 
     return () => clearTimeout(timer)
   }, [query])
+
+  // Live backend search integration
+  React.useEffect(() => {
+    const q = debouncedQuery.trim()
+    if (q.length < 2) {
+      setRemoteResults([])
+      return
+    }
+
+    let isCancelled = false
+    setIsSearchingRemote(true)
+    apiClient
+      .get<any, ApiResponse<{ courses: any[]; institutions: any[]; instructors?: any[] }>>(
+        `/search?q=${encodeURIComponent(q)}`
+      )
+      .then((res) => {
+        if (isCancelled || !res?.data) return
+        const liveItems: SearchItem[] = []
+        if (res.data.courses) {
+          res.data.courses.forEach((c: any) => {
+            liveItems.push({
+              id: `course-${c.id}`,
+              title: c.title,
+              subtitle: c.subtitle || c.description || "Course Curriculum Track",
+              category: "Courses & Catalog",
+              icon: BookOpen,
+              url: `/courses/${c.id}`,
+            })
+          })
+        }
+        if (res.data.institutions) {
+          res.data.institutions.forEach((inst: any) => {
+            liveItems.push({
+              id: `inst-${inst.id}`,
+              title: inst.name,
+              subtitle: inst.headline || "Verified Academy Workspace",
+              category: "Navigation",
+              icon: Building2,
+              url: `/institution/${inst.id}`,
+            })
+          })
+        }
+        setRemoteResults(liveItems)
+      })
+      .catch(() => {
+        if (!isCancelled) setRemoteResults([])
+      })
+      .finally(() => {
+        if (!isCancelled) setIsSearchingRemote(false)
+      })
+
+    return () => {
+      isCancelled = true
+    }
+  }, [debouncedQuery])
 
   // Focus input when opened
   React.useEffect(() => {
@@ -197,7 +255,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
         subtitle: "Switch between Claude 3.5 Sonnet, GPT-4o, and Gemini 1.5 Pro",
         category: "Settings",
         icon: Sliders,
-        url: "/dashboard/settings",
+        url: "/settings",
         keywords: ["model", "claude", "gpt", "gemini", "ai", "provider"],
       },
       {
@@ -206,7 +264,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
         subtitle: "HttpOnly cookie rotation and token lifetime settings",
         category: "Settings",
         icon: Shield,
-        url: "/dashboard/settings",
+        url: "/settings",
         keywords: ["security", "cookies", "auth", "tokens", "session"],
       },
     ],
@@ -220,14 +278,22 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
       return searchItems.slice(0, 7)
     }
 
-    return searchItems.filter((item) => {
+    const localMatches = searchItems.filter((item) => {
       const matchTitle = item.title.toLowerCase().includes(q)
       const matchSubtitle = item.subtitle?.toLowerCase().includes(q)
       const matchKeywords = item.keywords?.some((k) => k.toLowerCase().includes(q))
       const matchCategory = item.category.toLowerCase().includes(q)
       return matchTitle || matchSubtitle || matchKeywords || matchCategory
     })
-  }, [debouncedQuery, searchItems])
+
+    const combined = [...remoteResults]
+    for (const item of localMatches) {
+      if (!combined.some((r) => r.id === item.id || r.title === item.title)) {
+        combined.push(item)
+      }
+    }
+    return combined
+  }, [debouncedQuery, searchItems, remoteResults])
 
   // Reset selected index when filtered list changes
   React.useEffect(() => {

@@ -2,7 +2,7 @@ from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, Query, status
 
-from app.api.deps import get_current_active_user, get_optional_user, get_institution_service
+from app.api.deps import get_current_active_user, get_optional_user, get_institution_service, require_permission
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.institution import (
@@ -159,7 +159,7 @@ async def get_institution_by_slug(
 
 @router.get(
     "",
-    summary="List Institutions (Admin / Discovery)",
+    summary="List Institutions (Discovery)",
     response_model=APIResponse[InstitutionListResponse],
 )
 async def list_institutions(
@@ -169,14 +169,24 @@ async def list_institutions(
     status: Optional[str] = Query(None),
     visibility: Optional[str] = Query(None),
     sort: str = Query("desc", pattern="^(asc|desc)$"),
+    current_user: Optional[User] = Depends(get_optional_user),
     service: InstitutionService = Depends(get_institution_service),
 ):
+    # Enforce safe defaults for unauthenticated requests.
+    # Only authenticated users (potential institution admins) may override these
+    # filters to view drafts, private, or suspended institutions.
+    if current_user is None:
+        status_filter = "ACTIVE"
+        visibility_filter = "PUBLIC"
+    else:
+        status_filter = status
+        visibility_filter = visibility
     result = await service.list_institutions(
         page=page,
         limit=limit,
         search=search,
-        status_filter=status,
-        visibility_filter=visibility,
+        status_filter=status_filter,
+        visibility_filter=visibility_filter,
         sort=sort,
     )
     return APIResponse.ok(data=result, message="Institutions listed successfully")
@@ -355,11 +365,14 @@ async def update_favicon(
 # Settings Endpoints
 @router.get(
     "/{id}/settings",
-    summary="Get Institution Settings",
+    summary="Get Institution Settings (Admin Only)",
     response_model=APIResponse[InstitutionSettingsResponse],
 )
 async def get_settings(
     id: UUID,
+    # Settings contain payment config, storage quotas, and notification keys —
+    # must be restricted to institution members with appropriate permission.
+    _: bool = Depends(require_permission("institution.settings.view")),
     service: InstitutionService = Depends(get_institution_service),
 ):
     result = await service.get_settings(institution_id=id)
@@ -453,11 +466,13 @@ async def delete_social_link(
 # Statistics & Landing Page Endpoints
 @router.get(
     "/{id}/statistics",
-    summary="Get Institution Summary Statistics",
+    summary="Get Institution Summary Statistics (Admin Only)",
     response_model=APIResponse[InstitutionStatisticsResponse],
 )
 async def get_statistics(
     id: UUID,
+    # Statistics include revenue, enrollment counts — restrict to institution admins.
+    _: bool = Depends(require_permission("analytics.view")),
     service: InstitutionService = Depends(get_institution_service),
 ):
     result = await service.get_statistics(institution_id=id)

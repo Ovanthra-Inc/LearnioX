@@ -1,5 +1,9 @@
+# ==============================================================================
+# LearnioX api-gateway .dockerignore
+# ==============================================================================
+
 # Git & Version Control
-.git
+.git/
 .gitignore
 .gitattributes
 
@@ -7,7 +11,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyo
+*.pyd
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 .cache/
@@ -18,9 +26,12 @@ venv/
 env/
 .env
 .env.*
+!.env.example
 
-# Documentation & IDE
+# Documentation, IDE & OS
 .vscode/
 .idea/
 *.swp
 README.md
+.DS_Store
+Thumbs.db

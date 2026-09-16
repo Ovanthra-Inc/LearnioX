@@ -1,19 +1,65 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Header, status
 
 from app.api.deps import get_current_active_user, get_payment_service
 from app.core.response import APIResponse
 from app.models.user import User
-from app.schemas.payment import CoursePurchaseResponse, PurchaseCourseRequest
+from app.schemas.payment import (
+    CoursePurchaseResponse,
+    PaymentOrderResponse,
+    PaymentVerifyRequest,
+    PaymentVerifyResponse,
+    PurchaseCourseRequest,
+)
 from app.services.payment_service import PaymentService
 
 router = APIRouter(tags=["Course Purchases"])
 
 
 @router.post(
+    "/courses/{course_id}/checkout",
+    summary="Initiate Course Purchase Order (Razorpay / Stripe / Mock)",
+    response_model=APIResponse[PaymentOrderResponse],
+    status_code=status.HTTP_200_OK,
+)
+async def checkout_course(
+    course_id: UUID,
+    body: PurchaseCourseRequest = PurchaseCourseRequest(),
+    idempotency_key: Optional[str] = Header(None, alias="Idempotency-Key"),
+    current_user: User = Depends(get_current_active_user),
+    service: PaymentService = Depends(get_payment_service),
+):
+    result = await service.initiate_course_purchase(
+        course_id=course_id,
+        user_id=current_user.id,
+        payload=body,
+        idempotency_key=idempotency_key,
+    )
+    return APIResponse.ok(data=result, message="Order initiated successfully")
+
+
+@router.post(
+    "/purchases/verify",
+    summary="Verify Client Payment Signature & Activate Enrollment",
+    response_model=APIResponse[PaymentVerifyResponse],
+    status_code=status.HTTP_200_OK,
+)
+async def verify_payment(
+    body: PaymentVerifyRequest,
+    current_user: User = Depends(get_current_active_user),
+    service: PaymentService = Depends(get_payment_service),
+):
+    result = await service.verify_course_payment(
+        user_id=current_user.id,
+        payload=body,
+    )
+    return APIResponse.ok(data=result, message=result.message)
+
+
+@router.post(
     "/courses/{course_id}/purchase",
-    summary="One-Time Course Purchase Checkout",
+    summary="One-Time Course Purchase Checkout (Direct / Legacy)",
     response_model=APIResponse[CoursePurchaseResponse],
     status_code=status.HTTP_201_CREATED,
 )

@@ -32,6 +32,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
+import { useMyEnrollments } from "@/hooks/useCourses"
 
 interface EnrolledCourse {
   id: string
@@ -159,20 +160,73 @@ const REGISTERED_COURSES: EnrolledCourse[] = [
 ]
 
 export default function RegisteredPage() {
+  const { data: enrollments, isLoading } = useMyEnrollments()
   const [activeTab, setActiveTab] = useState<"ALL" | "IN_PROGRESS" | "COMPLETED" | "CERTIFICATES">("ALL")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCertificate, setSelectedCertificate] = useState<EnrolledCourse | null>(null)
 
+  const registeredCoursesList: EnrolledCourse[] = useMemo(() => {
+    if (enrollments && enrollments.length > 0) {
+      return enrollments.map((enr, idx) => {
+        const c = enr.course || ({} as any)
+        const isCompleted = enr.status === "COMPLETED"
+        const themes = [
+          {
+            bg: "from-blue-600/20 via-indigo-600/20 to-purple-600/20",
+            border: "border-indigo-500/30",
+            iconColor: "text-indigo-400",
+            accent: "bg-indigo-500/10 text-indigo-400",
+          },
+          {
+            bg: "from-purple-600/20 via-fuchsia-600/20 to-pink-600/20",
+            border: "border-fuchsia-500/30",
+            iconColor: "text-fuchsia-400",
+            accent: "bg-fuchsia-500/10 text-fuchsia-400",
+          },
+          {
+            bg: "from-emerald-600/20 via-teal-600/20 to-cyan-600/20",
+            border: "border-emerald-500/30",
+            iconColor: "text-emerald-400",
+            accent: "bg-emerald-500/10 text-emerald-400",
+          },
+        ]
+        const th = themes[idx % themes.length]
+
+        return {
+          id: enr.id,
+          courseId: enr.course_id,
+          title: c.title || "Course Track",
+          slug: c.slug || enr.course_id,
+          subtitle: c.subtitle || c.description || "Comprehensive institution curriculum track.",
+          institutionName: c.institution?.name || "Institution Academy",
+          level: c.level || "INTERMEDIATE",
+          thumbnailTheme: th,
+          totalModules: c.modules_count || 4,
+          totalLessons: c.lessons_count || 12,
+          completedLessons: isCompleted ? (c.lessons_count || 12) : 1,
+          progressPercentage: isCompleted ? 100 : 25,
+          lastAccessedLesson: "Active Curriculum Track",
+          lastAccessedAt: "Recently",
+          status: (isCompleted ? "COMPLETED" : "IN_PROGRESS") as "IN_PROGRESS" | "COMPLETED",
+          certificateId: isCompleted ? `LX-CERT-${enr.id.slice(0, 8).toUpperCase()}` : undefined,
+          certificateIssuedAt: enr.completed_at ? new Date(enr.completed_at).toLocaleDateString() : undefined,
+          communityChannelId: `comm-${enr.course_id.slice(0, 8)}`,
+        }
+      })
+    }
+    return REGISTERED_COURSES
+  }, [enrollments])
+
   // Metrics calculation
-  const totalCourses = REGISTERED_COURSES.length
-  const inProgressCount = REGISTERED_COURSES.filter((c) => c.status === "IN_PROGRESS").length
-  const completedCount = REGISTERED_COURSES.filter((c) => c.status === "COMPLETED").length
+  const totalCourses = registeredCoursesList.length
+  const inProgressCount = registeredCoursesList.filter((c) => c.status === "IN_PROGRESS").length
+  const completedCount = registeredCoursesList.filter((c) => c.status === "COMPLETED").length
   const totalHoursLearned = 38.5
   const streakDays = 7
 
   // Filter courses
   const filteredCourses = useMemo(() => {
-    return REGISTERED_COURSES.filter((course) => {
+    return registeredCoursesList.filter((course) => {
       // Tab filter
       if (activeTab === "IN_PROGRESS" && course.status !== "IN_PROGRESS") return false
       if (activeTab === "COMPLETED" && course.status !== "COMPLETED") return false
@@ -191,7 +245,7 @@ export default function RegisteredPage() {
 
       return true
     })
-  }, [activeTab, searchQuery])
+  }, [activeTab, searchQuery, registeredCoursesList])
 
   const handleCopyCertificateLink = (certId: string) => {
     if (typeof window !== "undefined") {
@@ -503,10 +557,10 @@ export default function RegisteredPage() {
 
                         {/* Resume / Continue Learning */}
                         <Link
-                          href={`/courses/${course.courseId}`}
+                          href={`/courses/${course.courseId}/learn`}
                           className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-1.5 text-xs font-bold text-primary-foreground shadow-xs hover:bg-primary/90 transition-transform active:scale-95 cursor-pointer"
                         >
-                          <span>{course.status === "COMPLETED" ? "Review Course" : "Continue Learning"}</span>
+                          <span>{course.status === "COMPLETED" ? "Review Classroom" : "Continue Learning"}</span>
                           <ArrowUpRight className="size-3.5" />
                         </Link>
 

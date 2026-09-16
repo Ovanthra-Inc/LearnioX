@@ -2,7 +2,12 @@ from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, Query, status
 
-from app.api.deps import get_current_active_user, get_optional_user, get_curriculum_service
+from app.api.deps import (
+    get_access_service,
+    get_current_active_user,
+    get_optional_user,
+    get_curriculum_service,
+)
 from app.core.exceptions import ForbiddenException
 from app.core.response import APIResponse
 from app.models.user import User
@@ -51,9 +56,17 @@ async def create_lesson(
 )
 async def list_lessons(
     module_id: UUID,
+    # Optional user: guests see published preview-only lessons;
+    # authenticated enrolled users see all accessible lessons.
+    current_user: Optional[User] = Depends(get_optional_user),
     service: CurriculumService = Depends(get_curriculum_service),
 ):
-    result = await service.list_lessons(module_id=module_id)
+    # For unauthenticated users, only list published lessons marked as free preview.
+    # Instructors/enrolled users get the full list (service layer enforces enrollment).
+    result = await service.list_lessons(
+        module_id=module_id,
+        preview_only=(current_user is None),
+    )
     return APIResponse.ok(data=result, message="Module lessons listed successfully")
 
 
@@ -90,9 +103,9 @@ async def get_lesson_by_id(
     # FIX #24: Use optional user — public/preview lessons still work without auth
     current_user: Optional[User] = Depends(get_optional_user),
     service: CurriculumService = Depends(get_curriculum_service),
+    access_svc: AccessService = Depends(get_access_service),
 ):
     # Enforce content access gate before returning lesson data
-    access_svc = AccessService(db)
     access = await access_svc.can_access_lesson(
         lesson_id=lesson_id,
         user_id=current_user.id if current_user else None,
@@ -175,13 +188,26 @@ async def attach_content(
 
 @router.get(
     "/lessons/{lesson_id}/content",
-    summary="Get Lesson Content",
+    summary="Get Lesson Content (Enrolled Students Only)",
     response_model=APIResponse[LessonContentResponse],
 )
 async def get_lesson_content(
     lesson_id: UUID,
+    # SECURITY: Lesson content (video URL, PDF, HTML) is paywalled IP.
+    # Must always require auth + enrollment/access validation.
+    current_user: User = Depends(get_current_active_user),
     service: CurriculumService = Depends(get_curriculum_service),
+    access_svc: AccessService = Depends(get_access_service),
 ):
+    access = await access_svc.can_access_lesson(
+        lesson_id=lesson_id,
+        user_id=current_user.id,
+    )
+    if not access.allowed:
+        raise ForbiddenException(
+            message=f"Access denied: {access.reason}",
+            error_code="LESSON_ACCESS_DENIED",
+        )
     result = await service.get_content(lesson_id=lesson_id)
     return APIResponse.ok(data=result, message="Lesson content retrieved")
 
@@ -238,13 +264,26 @@ async def add_resource(
 
 @router.get(
     "/lessons/{lesson_id}/resources",
-    summary="List Lesson Resources",
+    summary="List Lesson Resources (Enrolled Students Only)",
     response_model=APIResponse[List[ResourceResponse]],
 )
 async def list_resources(
     lesson_id: UUID,
+    # Resources (PDFs, slides) are gated behind lesson access.
+    # Free-preview lessons expose resources to all; paid lessons require enrollment.
+    current_user: Optional[User] = Depends(get_optional_user),
     service: CurriculumService = Depends(get_curriculum_service),
+    access_svc: AccessService = Depends(get_access_service),
 ):
+    access = await access_svc.can_access_lesson(
+        lesson_id=lesson_id,
+        user_id=current_user.id if current_user else None,
+    )
+    if not access.allowed:
+        raise ForbiddenException(
+            message=f"Access denied: {access.reason}",
+            error_code="LESSON_ACCESS_DENIED",
+        )
     result = await service.list_resources(lesson_id=lesson_id)
     return APIResponse.ok(data=result, message="Lesson resources listed successfully")
 

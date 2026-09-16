@@ -1,35 +1,72 @@
-FROM python:3.11-slim
+# ==============================================================================
+# LearnioX Server-Service Multi-Stage Dockerfile
+# ==============================================================================
+
+# ── Stage 1: Build & Dependencies ─────────────────────────────────────────────
+FROM python:3.11-slim AS builder
+
+WORKDIR /build
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Install compiler toolchain and native development headers for compilation
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create isolated virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r requirements.txt
+
+# ── Stage 2: Hardened Minimal Runtime ─────────────────────────────────────────
+FROM python:3.11-slim AS runner
 
 WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    PATH="/opt/venv/bin:$PATH" \
     HOME=/app
 
-
+# Install ONLY runtime shared libraries (no compilers or build headers)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    libpq-dev \
+    libpq5 \
+    curl \
+    libpango-1.0-0 \
+    libpangoft2-1.0-0 \
+    libgdk-pixbuf-2.0-0 \
+    shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy isolated virtual environment from builder stage
+COPY --from=builder /opt/venv /opt/venv
 
-COPY . .
+# Create unprivileged system user
+RUN addgroup --system --gid 1001 appgroup && \
+    adduser --system --uid 1001 --ingroup appgroup appuser
 
-# LOW (Security): Run as a non-root user inside the container
-# This limits the blast radius of any container escape vulnerability.
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
-RUN chown -R appuser:appgroup /app
+# Pre-create upload and runtime directories with correct ownership
+RUN mkdir -p /app/uploads && chown -R appuser:appgroup /app
+
+# Copy application code
+COPY --chown=appuser:appgroup . .
+
 USER appuser
 
 EXPOSE 8000
 
-# HIGH-14 + MED-10: Use gunicorn with UvicornWorker for multi-process / graceful shutdown.
-# --workers: number of worker processes (auto-scales with CPU cores via $(nproc))
-# --timeout: graceful shutdown timeout in seconds (allows in-flight requests to drain)
-# --graceful-timeout: time to wait for workers to finish their current request on SIGTERM
-# --keep-alive: HTTP keep-alive timeout
+# Container Healthcheck
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Production Gunicorn with UvicornWorker
 CMD ["sh", "-c", "gunicorn app.main:app \
     -k uvicorn.workers.UvicornWorker \
     --workers ${GUNICORN_WORKERS:-2} \

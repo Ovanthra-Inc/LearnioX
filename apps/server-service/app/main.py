@@ -1,6 +1,6 @@
 import logging
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -22,6 +22,12 @@ from app.core.middleware import (
 from app.core.response import APIResponse
 from app.database.base import Base
 from app.database.session import engine
+from app.cache.redis_client import (
+    create_redis_pool,
+    set_redis_pool,
+    get_redis,
+    check_redis_health,
+)
 import app.models  # Registers all declarative models with Base.metadata for automatic table creation
 
 # Configure structured JSON logging before any other logging
@@ -58,17 +64,28 @@ class RequestBodySizeLimitMiddleware(BaseHTTPMiddleware):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # ── 1. Initialize Redis Connection Pool ───────────────────────────────────
+    logger.info("Initializing Redis connection pool...")
+    try:
+        pool = create_redis_pool()
+        set_redis_pool(pool)
+        logger.info("Redis connection pool initialized.", extra={"url": settings.REDIS_URL})
+    except Exception as e:
+        logger.warning("Redis pool initialization failed — caching will be disabled.", extra={"error": str(e)})
+
+    # ── 2. Initialize PostgreSQL Schema ───────────────────────────────────────
     logger.info("Initializing database tables...", extra={"service": settings.PROJECT_NAME})
     try:
         async with engine.begin() as conn:
-            # Use PostgreSQL transaction advisory lock to serialize table initialization across multi-process workers
+            # Advisory lock to serialize table initialization across multi-process workers
             if "postgresql" in str(engine.url):
                 await conn.execute(text("SELECT pg_advisory_xact_lock(123456789)"))
             await conn.run_sync(Base.metadata.create_all)
-            
-            # Idempotent migration for User model extensions & audit tables
+
+            # ── Idempotent column & index migrations ─────────────────────────
             if "postgresql" in str(engine.url):
-                alter_statements = [
+                migrations = [
+                    # User model extensions
                     "ALTER TABLE users ADD COLUMN IF NOT EXISTS hashed_password VARCHAR(255)",
                     "ALTER TABLE users ADD COLUMN IF NOT EXISTS signup_method VARCHAR(50) DEFAULT 'email_password'",
                     "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login_method VARCHAR(50)",
@@ -76,19 +93,83 @@ async def lifespan(app: FastAPI):
                     "ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token_expires_at TIMESTAMPTZ",
                     "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_token VARCHAR(255)",
                     "ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_token_expires_at TIMESTAMPTZ",
+
+                    # ── Phase 1.2: Full-Text Search columns ──────────────────
+                    "ALTER TABLE courses ADD COLUMN IF NOT EXISTS search_vector tsvector",
+                    "ALTER TABLE institutions ADD COLUMN IF NOT EXISTS search_vector tsvector",
+
+                    # ── Phase 5.2: Review stats on courses ───────────────────
+                    "ALTER TABLE courses ADD COLUMN IF NOT EXISTS avg_rating NUMERIC(3,2) DEFAULT 0.00",
+                    "ALTER TABLE courses ADD COLUMN IF NOT EXISTS review_count INTEGER DEFAULT 0",
+
+                    # ── Phase 2: Payment idempotency & provider order ─────────
+                    "ALTER TABLE payments ADD COLUMN IF NOT EXISTS idempotency_key VARCHAR(255)",
+                    "ALTER TABLE payments ADD COLUMN IF NOT EXISTS provider_order_id VARCHAR(255)",
+                    "ALTER TABLE payments ALTER COLUMN provider_payment_id DROP NOT NULL",
                 ]
-                for stmt in alter_statements:
+                for stmt in migrations:
                     try:
                         await conn.execute(text(stmt))
                     except Exception as sql_err:
                         logger.debug(f"Non-critical migration notice: {sql_err}")
-        logger.info("Database tables initialized successfully.")
+
+        # ── Idempotent index creation (outside transaction for CONCURRENT builds)
+        async with engine.begin() as conn:
+            if "postgresql" in str(engine.url):
+                index_statements = [
+                    # FTS GIN indexes
+                    "CREATE EXTENSION IF NOT EXISTS pg_trgm",
+                    "CREATE INDEX IF NOT EXISTS idx_courses_search_vector ON courses USING GIN(search_vector)",
+                    "CREATE INDEX IF NOT EXISTS idx_institutions_search_vector ON institutions USING GIN(search_vector)",
+                    "CREATE INDEX IF NOT EXISTS idx_courses_title_trgm ON courses USING GIN(title gin_trgm_ops)",
+
+                    # Backfill FTS vectors for existing data
+                    """
+                    UPDATE courses SET search_vector =
+                        to_tsvector('english',
+                            coalesce(title,'') || ' ' ||
+                            coalesce(subtitle,'') || ' ' ||
+                            coalesce(description,''))
+                    WHERE search_vector IS NULL
+                    """,
+                    """
+                    UPDATE institutions SET search_vector =
+                        to_tsvector('english',
+                            coalesce(name,'') || ' ' ||
+                            coalesce(tagline,'') || ' ' ||
+                            coalesce(description,''))
+                    WHERE search_vector IS NULL
+                    """,
+
+                    # ── Phase 1.4: Composite performance indexes ──────────────
+                    "CREATE INDEX IF NOT EXISTS idx_enrollments_user_status ON enrollments(user_id, status)",
+                    "CREATE INDEX IF NOT EXISTS idx_lesson_progress_user_lesson ON lesson_progress(user_id, lesson_id)",
+                    "CREATE INDEX IF NOT EXISTS idx_courses_institution_status ON courses(institution_id, status)",
+                    "CREATE INDEX IF NOT EXISTS idx_course_purchases_user_course ON course_purchases(user_id, course_id)",
+                    "CREATE INDEX IF NOT EXISTS idx_lessons_module_status ON lessons(module_id, status)",
+                    "CREATE INDEX IF NOT EXISTS idx_quiz_attempts_user_quiz ON quiz_attempts(user_id, quiz_id)",
+                    "CREATE INDEX IF NOT EXISTS idx_assignment_submissions_student ON assignment_submissions(student_id, assignment_id)",
+
+                    # Idempotency key index
+                    "CREATE UNIQUE INDEX IF NOT EXISTS idx_payments_idempotency ON payments(idempotency_key) WHERE idempotency_key IS NOT NULL",
+                ]
+                for stmt in index_statements:
+                    try:
+                        await conn.execute(text(stmt))
+                    except Exception as sql_err:
+                        logger.debug(f"Non-critical index migration notice: {sql_err}")
+
+        logger.info("Database schema initialized successfully.")
     except Exception as e:
         logger.warning("Could not automatically create database tables on startup", extra={"error": str(e)})
+
     yield
+
+    # ── Shutdown ──────────────────────────────────────────────────────────────
     logger.info("Shutting down application...")
-    # Allow in-flight requests to drain before closing the DB pool
+    pool = get_redis().connection_pool if get_redis is not None else None  # type: ignore
     await engine.dispose()
+    logger.info("Database connection pool closed.")
 
 
 # Disable OpenAPI docs & Swagger UI in production
@@ -141,8 +222,55 @@ app.include_router(api_v1_router, prefix=settings.API_V1_STR)
 
 @app.get("/health", tags=["Health"])
 async def health_check():
-    """Health check endpoint for Docker / Kubernetes liveness probes."""
+    """Lightweight health check for Docker/Kubernetes liveness probes."""
     return APIResponse.ok(
         data={"status": "healthy", "service": settings.PROJECT_NAME},
         message="Server Service is healthy and operational",
     )
+
+
+@app.get("/health/detailed", tags=["Health"])
+async def detailed_health_check():
+    """
+    Deep health check verifying all critical dependencies.
+    Returns status of DB connectivity and Redis cache.
+    """
+    from app.database.session import engine as db_engine
+    from sqlalchemy import text as _text
+
+    # Check PostgreSQL
+    db_ok = False
+    try:
+        async with db_engine.connect() as conn:
+            await conn.execute(_text("SELECT 1"))
+        db_ok = True
+    except Exception:
+        pass
+
+    # Check Redis
+    redis_client = await get_redis()
+    redis_ok = await check_redis_health(redis_client)
+
+    overall = "healthy" if (db_ok and redis_ok) else "degraded"
+    status_code = 200 if overall == "healthy" else 207
+
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "success": overall == "healthy",
+            "message": f"Service is {overall}",
+            "data": {
+                "status": overall,
+                "service": settings.PROJECT_NAME,
+                "dependencies": {
+                    "postgresql": "ok" if db_ok else "error",
+                    "redis": "ok" if redis_ok else "error",
+                    "storage": settings.STORAGE_PROVIDER,
+                    "payment_provider": settings.PAYMENT_PROVIDER,
+                },
+            },
+            "error": None,
+        },
+    )
+

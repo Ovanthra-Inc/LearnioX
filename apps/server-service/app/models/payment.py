@@ -134,7 +134,9 @@ class Payment(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     provider = Column(String(50), default="MOCK", nullable=False)
-    provider_payment_id = Column(String(255), nullable=False, unique=True, index=True)
+    provider_payment_id = Column(String(255), nullable=True, index=True)
+    provider_order_id = Column(String(255), nullable=True, index=True)
+    idempotency_key = Column(String(255), nullable=True, index=True)
     amount = Column(Numeric(10, 2), nullable=False)
     currency = Column(String(10), default="INR", nullable=False)
     status = Column(

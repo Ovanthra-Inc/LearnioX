@@ -64,7 +64,7 @@ const sidebarData = {
   navSecondary: [
     {
       title: "Support",
-      url: "/dashboard/support",
+      url: "mailto:support@learniox.com",
       icon: Headphones,
     },
     {

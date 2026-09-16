@@ -23,11 +23,13 @@ class GatewaySettings(BaseSettings):
 
     SECRET_KEY: str = "learniox_super_secret_jwt_key_2026_change_in_production"
     ALGORITHM: str = "HS256"
+    INTERNAL_API_KEY: str = "learniox_internal_diagnostic_key_2026"
 
     # Microservice Endpoints
     SERVER_SERVICE_URL: str = "http://server-service:8000"
     AI_SERVICE_URL: str = "http://ai-service:8001"
     MARKETING_SERVICE_URL: str = "http://marketing-service:8002"
+    LIVE_SERVICE_URL: str = "http://live-service:8003"
 
     # Redis Rate Limiting
     REDIS_HOST: str = "redis"

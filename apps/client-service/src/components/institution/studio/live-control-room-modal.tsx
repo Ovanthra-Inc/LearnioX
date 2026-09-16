@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import Link from "next/link"
 import {
   Radio,
   Video,
@@ -140,6 +141,15 @@ export function LiveControlRoomModal({
           </div>
 
           <div className="flex items-center gap-3">
+            <Link
+              href={`/live/${stream.id || "live-active"}`}
+              target="_blank"
+              className="px-3.5 py-2 rounded-xl text-xs font-bold border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 shadow-sm transition-transform active:scale-95 cursor-pointer flex items-center gap-1.5"
+            >
+              <Radio className="size-3.5 animate-pulse text-rose-500" />
+              <span>LAUNCH VIRTUAL CLASSROOM</span>
+            </Link>
+
             <button
               type="button"
               onClick={() => {

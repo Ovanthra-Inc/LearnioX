@@ -94,6 +94,32 @@ class PaymentResponse(BaseModel):
     created_at: datetime
 
 
+class PaymentOrderResponse(BaseModel):
+    order_id: str
+    payment_id: UUID
+    amount: Decimal
+    currency: str
+    provider: str
+    key_id: Optional[str] = None
+    course_id: Optional[UUID] = None
+    plan_id: Optional[UUID] = None
+    requires_payment: bool = True
+
+
+class PaymentVerifyRequest(BaseModel):
+    payment_id: UUID
+    provider_payment_id: str
+    provider_order_id: Optional[str] = None
+    signature: Optional[str] = None
+
+
+class PaymentVerifyResponse(BaseModel):
+    success: bool
+    payment_id: UUID
+    status: str
+    message: str
+
+
 # Coupon Schemas
 class CouponRequest(BaseModel):
     code: str = Field(..., min_length=3, max_length=50)

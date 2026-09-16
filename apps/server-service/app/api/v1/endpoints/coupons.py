@@ -41,11 +41,14 @@ async def create_coupon(
 
 @router.get(
     "/coupons",
-    summary="List Institution Coupons",
+    summary="List Institution Coupons (Admin Only)",
     response_model=APIResponse[List[CouponResponse]],
 )
 async def list_coupons(
     institution_id: Optional[UUID] = Query(None),
+    # Coupon listing is a management view \u2014 only institution admins should see it.
+    # The public-facing coupon *validation* endpoint (/coupons/validate) stays open.
+    current_user: User = Depends(get_current_active_user),
     service: PaymentService = Depends(get_payment_service),
 ):
     result = await service.list_coupons(institution_id=institution_id)

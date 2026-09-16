@@ -12,7 +12,7 @@ from sqlalchemy import (
     and_,
 )
 
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, TSVECTOR
 from sqlalchemy.orm import relationship
 from app.database.base import Base, TimestampMixin
 
@@ -41,6 +41,8 @@ class Institution(Base, TimestampMixin):
     slug = Column(String(255), unique=True, index=True, nullable=False)
     tagline = Column(String(255), nullable=True)
     description = Column(Text, nullable=True)
+    # Full-text search vector (populated by startup migration)
+    search_vector = Column(TSVECTOR, nullable=True)
     email = Column(String(255), nullable=True)
     phone = Column(String(30), nullable=True)
     website = Column(String(255), nullable=True)

@@ -134,12 +134,19 @@ class CurriculumRepository:
         res = await self.db.execute(select(Lesson).where(Lesson.id == lesson_id))
         return res.scalars().first()
 
-    async def list_lessons(self, module_id: UUID) -> List[Lesson]:
-        res = await self.db.execute(
+    async def list_lessons(self, module_id: UUID, preview_only: bool = False) -> List[Lesson]:
+        query = (
             select(Lesson)
             .where(Lesson.module_id == module_id)
             .order_by(Lesson.position.asc())
         )
+        if preview_only:
+            # Unauthenticated guests only see published lessons flagged as free preview.
+            query = query.where(
+                Lesson.is_preview == True,  # noqa: E712
+                Lesson.status == "PUBLISHED",
+            )
+        res = await self.db.execute(query)
         return list(res.scalars().all())
 
     async def search_lessons(

@@ -19,6 +19,7 @@ from app.core.exceptions import (
     ValidationException,
 )
 from app.repositories.storage_repository import StorageRepository
+from app.services.storage_provider import get_storage_provider, StorageProvider
 from app.schemas.storage import (
     FileListResponse,
     FileResponse,
@@ -68,6 +69,7 @@ class StorageService:
     def __init__(self, db: AsyncSession):
         self.db = db
         self.repo = StorageRepository(db)
+        self.provider = get_storage_provider()
         self.base_upload_dir = Path(settings.UPLOAD_DIR).resolve()
         self._ensure_directories()
 
@@ -177,31 +179,17 @@ class StorageService:
         ext = self._get_extension(original_name)
         stored_name = f"{uuid.uuid4()}{'.' + ext if ext else ''}"
 
-        target_dir = self.base_upload_dir / folder
-        target_dir.mkdir(parents=True, exist_ok=True)
-        file_path = target_dir / stored_name
-
-        hasher = hashlib.sha256()
-        total_size = 0
-        header_bytes = b""  # Capture first bytes for magic-byte check
-        first_chunk = True
-
-        with open(file_path, "wb") as f:
-            while True:
-                chunk = await upload_file.read(_CHUNK_SIZE)
-                if not chunk:
-                    break
-                if first_chunk:
-                    header_bytes = chunk[:16]
-                    first_chunk = False
-                f.write(chunk)
-                hasher.update(chunk)
-                total_size += len(chunk)
+        total_size, checksum, header_bytes = await self.provider.save_stream(
+            upload_file=upload_file,
+            folder=folder,
+            stored_name=stored_name,
+            chunk_size=_CHUNK_SIZE,
+        )
 
         # Validate magic bytes after first chunk
         self._validate_magic_bytes(header_bytes, ext)
 
-        checksum = hasher.hexdigest()
+        checksum = checksum
         relative_path = str(Path(folder) / stored_name).replace("\\", "/")
         # MED-05: Always derive MIME from extension — do NOT trust client Content-Type
         mime_type = upload_file.content_type or "application/octet-stream"
@@ -306,9 +294,35 @@ class StorageService:
         )
 
     async def download_file(self, file_id: UUID, user_id: UUID) -> FastAPIFileResponse:
-        record = await self.repo.get_file_by_id(file_id, user_id=user_id)
+        record = await self.repo.get_file_by_id(file_id)
         if not record:
             raise NotFoundException(message="File not found", error_code="FILE_NOT_FOUND")
+
+        public_folders = {"avatars", "institutions/logos", "institutions/banners", "courses/thumbnails"}
+        is_owner = bool(user_id and record.uploaded_by == user_id)
+        is_asset = record.is_public or record.folder in public_folders
+
+        if not (is_owner or is_asset):
+            from app.models.curriculum import LessonContent, LessonResource
+            from app.services.access_service import AccessService
+            from sqlalchemy import select
+
+            access_svc = AccessService(self.db)
+            content_q = select(LessonContent.lesson_id).where(LessonContent.file_id == file_id)
+            content_res = await self.db.execute(content_q)
+            lesson_id = content_res.scalars().first()
+
+            if not lesson_id:
+                resource_q = select(LessonResource.lesson_id).where(LessonResource.file_id == file_id)
+                resource_res = await self.db.execute(resource_q)
+                lesson_id = resource_res.scalars().first()
+
+            if lesson_id:
+                access = await access_svc.can_access_lesson(lesson_id, user_id=user_id)
+                if not access.allowed:
+                    raise ForbiddenException(message=f"Access denied: {access.reason}", error_code="FILE_ACCESS_DENIED")
+            else:
+                raise ForbiddenException(message="Access denied to file", error_code="FILE_ACCESS_DENIED")
 
         full_path = self.base_upload_dir / record.path
         if not full_path.exists():
@@ -322,10 +336,38 @@ class StorageService:
             media_type=record.mime_type,
         )
 
-    async def preview_file(self, file_id: UUID, user_id: UUID) -> FastAPIFileResponse:
-        record = await self.repo.get_file_by_id(file_id, user_id=user_id)
+    async def preview_file(self, file_id: UUID, user_id: Optional[UUID] = None) -> FastAPIFileResponse:
+        record = await self.repo.get_file_by_id(file_id)
         if not record:
             raise NotFoundException(message="File not found", error_code="FILE_NOT_FOUND")
+
+        # Public assets (avatars, logos, banners, thumbnails, or explicitly public files)
+        public_folders = {"avatars", "institutions/logos", "institutions/banners", "courses/thumbnails"}
+        is_owner = bool(user_id and record.uploaded_by == user_id)
+        is_asset = record.is_public or record.folder in public_folders
+
+        if not (is_owner or is_asset):
+            # Check if file is attached to course lesson content or resource that requester has access to
+            from app.models.curriculum import LessonContent, LessonResource
+            from app.services.access_service import AccessService
+            from sqlalchemy import select
+
+            access_svc = AccessService(self.db)
+            content_q = select(LessonContent.lesson_id).where(LessonContent.file_id == file_id)
+            content_res = await self.db.execute(content_q)
+            lesson_id = content_res.scalars().first()
+
+            if not lesson_id:
+                resource_q = select(LessonResource.lesson_id).where(LessonResource.file_id == file_id)
+                resource_res = await self.db.execute(resource_q)
+                lesson_id = resource_res.scalars().first()
+
+            if lesson_id:
+                access = await access_svc.can_access_lesson(lesson_id, user_id=user_id)
+                if not access.allowed:
+                    raise ForbiddenException(message=f"Access denied: {access.reason}", error_code="FILE_ACCESS_DENIED")
+            else:
+                raise ForbiddenException(message="Access denied to file", error_code="FILE_ACCESS_DENIED")
 
         full_path = self.base_upload_dir / record.path
         if not full_path.exists():
@@ -408,10 +450,7 @@ class StorageService:
         if record.uploaded_by != user_id:
             raise ForbiddenException(message="Permission denied", error_code="FORBIDDEN")
 
-        full_path = self.base_upload_dir / record.path
-        if full_path.exists():
-            os.remove(full_path)
-
+        await self.provider.delete_file(record.path)
         await self.repo.force_delete(file_id)
 
     # Folder operations

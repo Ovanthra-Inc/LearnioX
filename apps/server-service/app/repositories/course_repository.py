@@ -42,7 +42,7 @@ class CourseRepository:
         )
         return res.scalars().first()
 
-    async def list_categories() -> List[CourseCategory]:
+    async def list_categories(self) -> List[CourseCategory]:
         res = await self.db.execute(
             select(CourseCategory).order_by(CourseCategory.name.asc())
         )
@@ -78,7 +78,7 @@ class CourseRepository:
         res = await self.db.execute(select(CourseTag).where(CourseTag.id == tag_id))
         return res.scalars().first()
 
-    async def list_tags() -> List[CourseTag]:
+    async def list_tags(self) -> List[CourseTag]:
         res = await self.db.execute(select(CourseTag).order_by(CourseTag.name.asc()))
         return list(res.scalars().all())
 

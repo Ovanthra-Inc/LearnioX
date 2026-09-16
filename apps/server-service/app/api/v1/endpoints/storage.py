@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, File, Form, Query, UploadFile, status
 from fastapi.responses import FileResponse as FastAPIFileResponse
 
-from app.api.deps import get_current_active_user, get_storage_service
+from app.api.deps import get_current_active_user, get_optional_user, get_storage_service
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.storage import (
@@ -197,10 +197,12 @@ async def download_file(
 
 @router.get(
     "/files/{id}/preview",
-    summary="Inline File Preview Stream",
+    summary="Inline File Preview Stream (Auth Required)",
 )
 async def preview_file(
     id: UUID,
+    # Auth required: prevents anonymous probing of file IDs.
+    # The service layer additionally enforces ownership checks.
     current_user: User = Depends(get_current_active_user),
     service: StorageService = Depends(get_storage_service),
 ):

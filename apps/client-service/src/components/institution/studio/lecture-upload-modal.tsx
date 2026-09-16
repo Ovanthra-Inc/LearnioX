@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import {
   Upload,
   Video,
@@ -28,6 +28,8 @@ import {
 import { VideoVisibility, StudioLecture } from "@/types/studio"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { useCurriculumMutations } from "@/hooks/useCourses"
+import { apiClient, ApiResponse } from "@/lib/api"
 
 interface LectureUploadModalProps {
   isOpen: boolean
@@ -42,6 +44,9 @@ export function LectureUploadModal({
   courses,
   onUploadComplete,
 }: LectureUploadModalProps) {
+  const { createModule, createLesson, attachLessonContent } = useCurriculumMutations()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
   const [fileSelected, setFileSelected] = useState<boolean>(true)
   const [fileName, setFileName] = useState<string>("FastAPI_Async_Architecture_Lesson.mp4")
@@ -68,28 +73,93 @@ export function LectureUploadModal({
 
   if (!isOpen) return null
 
-  const handleFinishUpload = () => {
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const f = e.target.files[0]
+      setSelectedFile(f)
+      setFileSelected(true)
+      setFileName(f.name)
+      setFileSize(`${(f.size / (1024 * 1024)).toFixed(1)} MB`)
+      if (!title) {
+        setTitle(f.name.replace(/\.[^/.]+$/, ""))
+      }
+    }
+  }
+
+  const handleFinishUpload = async () => {
     if (!title.trim()) {
       toast.error("Please provide a lecture title.")
       setStep(1)
       return
     }
 
-    setIsPublishing(true)
-    const chosenCourse = courses.find((c) => c.id === selectedCourseId)
+    const targetCourseId = selectedCourseId || courses[0]?.id
+    if (!targetCourseId) {
+      toast.error("Please select a course to attach this lecture to.")
+      return
+    }
 
-    setTimeout(() => {
+    setIsPublishing(true)
+    try {
+      let fileId: string | undefined
+
+      if (selectedFile) {
+        const formData = new FormData()
+        formData.append("video", selectedFile)
+        const uploadRes = await apiClient.post<any, ApiResponse<{ id: string; url: string }>>(
+          "/storage/upload/video",
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        )
+        fileId = uploadRes.data?.id
+      }
+
+      let targetModuleId = ""
+      const structRes = await apiClient.get<any, ApiResponse<{ modules: any[] }>>(
+        `/courses/${targetCourseId}/structure`
+      )
+      const existingModules = structRes.data?.modules || []
+      if (existingModules.length > 0) {
+        targetModuleId = existingModules[0].id
+      } else {
+        const newMod = await createModule({
+          courseId: targetCourseId,
+          title: "Module 1: General Curriculum",
+          is_free: false,
+        })
+        targetModuleId = newMod.id
+      }
+
+      const createdLesson = await createLesson({
+        moduleId: targetModuleId,
+        courseId: targetCourseId,
+        title: title.trim(),
+        description: description.trim() || undefined,
+        lesson_type: "VIDEO",
+        visibility: visibility === "PUBLIC" ? "PUBLIC" : "ENROLLED",
+        is_preview: visibility === "PUBLIC",
+      })
+
+      if (fileId && createdLesson?.id) {
+        await attachLessonContent({
+          lessonId: createdLesson.id,
+          fileId: fileId,
+          contentType: "VIDEO",
+        })
+      }
+
+      const chosenCourse = courses.find((c) => c.id === targetCourseId)
       onUploadComplete({
-        id: `lec-${Date.now()}`,
+        id: createdLesson?.id || `lec-${Date.now()}`,
         title: title.trim(),
         description: description.trim() || "Comprehensive video lecture and coding walkthrough.",
-        duration: "24:15",
-        durationSeconds: 1455,
+        duration: "15:00",
+        durationSeconds: 900,
         thumbnailUrl: thumbnailUrl,
-        courseId: selectedCourseId,
-        courseTitle: chosenCourse?.title || "Full-Stack Web Development & Microservices Mastery",
-        moduleId: "m1",
-        moduleTitle: "Module 1: Core Architectures",
+        courseId: targetCourseId,
+        courseTitle: chosenCourse?.title || "Course Curriculum Track",
+        moduleId: targetModuleId,
+        moduleTitle: "Module 1",
         visibility: visibility,
         status: "READY",
         createdAt: "Just now",
@@ -102,14 +172,19 @@ export function LectureUploadModal({
         hasQuiz: hasQuiz,
       })
 
-      setIsPublishing(false)
       toast.success(
         enableCommunityAnnouncement
           ? `Lecture "${title}" published! Automatic notification sent to the course community channel.`
           : `Lecture "${title}" published successfully!`
       )
       onClose()
-    }, 1000)
+    } catch (err: any) {
+      console.error("Failed to upload/publish lecture:", err)
+      const msg = err?.response?.data?.message || err?.message || "Failed to publish lecture"
+      toast.error(`Lecture upload failed: ${msg}`)
+    } finally {
+      setIsPublishing(false)
+    }
   }
 
   return (
@@ -130,13 +205,33 @@ export function LectureUploadModal({
               <h3 className="text-base font-black text-foreground font-sans">
                 {title ? title : "Upload Course Video & Lecture"}
               </h3>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>{fileName}</span>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="video/*"
+                  className="hidden"
+                  onChange={onFileChange}
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="hover:underline hover:text-foreground font-semibold cursor-pointer"
+                >
+                  {fileName}
+                </button>
                 <span>•</span>
                 <span>{fileSize}</span>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="text-primary hover:underline text-[11px] font-semibold cursor-pointer"
+                >
+                  (Browse File)
+                </button>
                 <span className="inline-flex items-center gap-1 text-emerald-500 font-semibold text-[11px]">
                   <CheckCircle2 className="size-3" />
-                  <span>Upload complete (100%)</span>
+                  <span>{selectedFile ? "Ready to upload" : "Selected"}</span>
                 </span>
               </div>
             </div>

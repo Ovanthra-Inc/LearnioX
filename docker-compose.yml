@@ -25,6 +25,7 @@ services:
     image: redis:7-alpine
     container_name: learniox-redis
     restart: always
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru --save 60 1
     ports:
       - "6379:6379"
     healthcheck:
@@ -72,7 +73,10 @@ services:
       - "8080:8080"
     depends_on:
       - server-service
+      - live-service
       - redis
+    volumes:
+      - ./apps/api-gateway:/app
     networks:
       - learniox-network
 
@@ -94,7 +98,28 @@ services:
     networks:
       - learniox-network
 
-  # 6. Nginx Ingress Reverse Proxy
+  # 6. Live Virtual Classroom & WebSockets Microservice
+  live-service:
+    build:
+      context: ./apps/live-service
+      dockerfile: Dockerfile
+    container_name: learniox-live-service
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8003:8003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps/live-service:/app
+    networks:
+      - learniox-network
+
+  # 7. Nginx Ingress Reverse Proxy
   nginx:
     build:
       context: ./apps/nginx
@@ -106,6 +131,7 @@ services:
       - "443:443"
     depends_on:
       - api-gateway
+      - live-service
     volumes:
       - uploads_data:/app/uploads:ro
     networks:
