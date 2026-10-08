@@ -35,11 +35,13 @@ import {
   Share2,
   Check,
   RotateCcw,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -160,6 +162,13 @@ export default function InstitutionCoursePlayPage() {
   const router = useRouter();
   const slug = params.slug as string;
   const courseId = (params?.courseId as string) || 'default';
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+
+  React.useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace(`/login?redirect=${encodeURIComponent(`/institution/slug/${slug}/courses/${courseId}/learn`)}`);
+    }
+  }, [isAuthLoading, isAuthenticated, router, slug, courseId]);
 
   // 1. Fetch institution data
   const { data: instData } = useQuery({
@@ -326,6 +335,14 @@ Execution time: 42ms`);
       toast.success('Quantum circuit simulated successfully!');
     }, 1200);
   };
+
+  if (isAuthLoading || !isAuthenticated) {
+    return (
+      <div className="flex min-h-svh items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider defaultOpen={false}>

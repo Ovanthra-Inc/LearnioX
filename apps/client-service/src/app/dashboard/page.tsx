@@ -23,11 +23,11 @@ export default function Page() {
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
-      router.replace("/login")
+      router.replace("/login?redirect=/dashboard")
     }
   }, [isAuthLoading, isAuthenticated, router])
 
-  if (isAuthLoading) {
+  if (isAuthLoading || !isAuthenticated) {
     return (
       <div className="flex min-h-svh items-center justify-center bg-background">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />

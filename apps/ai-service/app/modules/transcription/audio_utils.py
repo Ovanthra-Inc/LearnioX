@@ -26,8 +26,26 @@ class AudioProcessingUtils:
         self.legacy_upload_dir = storage_base / "test_uploads"
         self.legacy_results_dir = storage_base / "test_results"
 
-        self.upload_dir.mkdir(parents=True, exist_ok=True)
-        self.results_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            self.upload_dir.mkdir(parents=True, exist_ok=True)
+            self.results_dir.mkdir(parents=True, exist_ok=True)
+        except (PermissionError, OSError) as exc:
+            import tempfile
+
+            logger.warning(
+                f"Failed to create transcription storage directories at {storage_base}: {exc}. "
+                "Falling back to system temporary directory."
+            )
+            fallback_base = Path(tempfile.gettempdir()) / "learniox_ai" / "transcription"
+            self.upload_dir = fallback_base / "uploads"
+            self.results_dir = fallback_base / "results"
+            self.legacy_upload_dir = fallback_base / "test_uploads"
+            self.legacy_results_dir = fallback_base / "test_results"
+            try:
+                self.upload_dir.mkdir(parents=True, exist_ok=True)
+                self.results_dir.mkdir(parents=True, exist_ok=True)
+            except Exception as fallback_exc:
+                logger.error(f"Failed to create fallback transcription directories: {fallback_exc}")
 
     def validate_file(self, filename: str, content_length: int) -> Tuple[bool, str]:
         """Validates extension and file size against configurable limit."""

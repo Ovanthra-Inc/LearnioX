@@ -74,6 +74,10 @@ class CoursePurchaseResponse(BaseModel):
     created_at: datetime
 
 
+class RefundPurchaseRequest(BaseModel):
+    reason: Optional[str] = None
+
+
 class PaymentRequest(BaseModel):
     amount: Decimal = Field(..., gt=0)
     currency: str = Field("INR", max_length=10)
@@ -101,6 +105,7 @@ class PaymentOrderResponse(BaseModel):
     currency: str
     provider: str
     key_id: Optional[str] = None
+    client_secret: Optional[str] = None
     course_id: Optional[UUID] = None
     plan_id: Optional[UUID] = None
     requires_payment: bool = True

@@ -302,20 +302,6 @@ class PaymentService:
                             error_code="COUPON_LIMIT_REACHED",
                         )
 
-        # CRIT-01: Create payment PENDING, then confirm via mock provider
-        if final_price > Decimal("0.00"):
-            payment_rec = await self.repo.create_payment(
-                amount=final_price, provider="MOCK",
-                status=PaymentStatus.PENDING,
-            )
-            # For the mock provider, immediately confirm. Real providers would
-            # update status via webhook (CRIT-05) after payment gateway confirms.
-            session = await self.provider.create_payment_session(
-                amount=final_price, currency="INR"
-            )
-            if session.get("status") == "SUCCESS":
-                await self.repo.confirm_payment(payment_rec.id)
-
         expires_at = None
         now = datetime.now(timezone.utc)
         if plan.billing_cycle == BillingCycle.MONTHLY:
@@ -323,23 +309,87 @@ class PaymentService:
         elif plan.billing_cycle == BillingCycle.YEARLY:
             expires_at = now + timedelta(days=365)
 
+        metadata_dict = {
+            "plan_id": str(plan_id),
+            "user_id": str(user_id),
+            "institution_id": str(plan.institution_id),
+            "billing_cycle": plan.billing_cycle.value if hasattr(plan.billing_cycle, "value") else str(plan.billing_cycle),
+        }
+
+        # 1. Free plan ($0.00)
+        if final_price <= Decimal("0.00"):
+            payment_rec = await self.repo.create_payment(
+                amount=Decimal("0.00"),
+                currency="USD",
+                provider="FREE",
+                metadata_json=json.dumps(metadata_dict),
+                status=PaymentStatus.SUCCESS,
+            )
+            subscription = await self.repo.create_subscription(
+                user_id=user_id, plan_id=plan_id, expires_at=expires_at
+            )
+            # Auto-enroll user in all mapped courses
+            course_ids = await self.repo.get_plan_course_ids(plan_id)
+            for c_id in course_ids:
+                c = await self.course_repo.get_course_by_id(c_id)
+                if c:
+                    enr = await self.enrollment_repo.find_enrollment(user_id, c_id)
+                    if not enr:
+                        await self.enrollment_repo.create_enrollment(
+                            user_id=user_id,
+                            course_id=c_id,
+                            institution_id=c.institution_id,
+                            access_type=EnrollmentAccessType.MEMBERSHIP,
+                        )
+            return SubscriptionResponse(
+                subscription_id=subscription.id,
+                user_id=subscription.user_id,
+                plan_id=subscription.plan_id,
+                status=subscription.status.value if hasattr(subscription.status, "value") else str(subscription.status),
+                started_at=subscription.started_at,
+                expires_at=subscription.expires_at,
+                cancelled_at=subscription.cancelled_at,
+            )
+
+        # 2. Paid Plan: Create order via active PaymentProvider with idempotency
+        idempotency_key = f"sub_{user_id}_{plan_id}_{int(now.timestamp())}"
+        order_data = await self.provider.create_order(
+            amount=final_price,
+            currency="USD",
+            receipt=f"rcpt_sub_{uuid.uuid4().hex[:8]}",
+            notes=metadata_dict,
+            idempotency_key=idempotency_key,
+        )
+
+        payment_rec = await self.repo.create_payment(
+            amount=final_price,
+            currency="USD",
+            provider=order_data.get("provider", "MOCK"),
+            provider_order_id=order_data.get("provider_order_id"),
+            idempotency_key=idempotency_key,
+            metadata_json=json.dumps(metadata_dict),
+            status=PaymentStatus.PENDING,
+        )
+
         subscription = await self.repo.create_subscription(
             user_id=user_id, plan_id=plan_id, expires_at=expires_at
         )
 
-        # Auto-enroll user in all mapped courses
-        course_ids = await self.repo.get_plan_course_ids(plan_id)
-        for c_id in course_ids:
-            c = await self.course_repo.get_course_by_id(c_id)
-            if c:
-                enr = await self.enrollment_repo.find_enrollment(user_id, c_id)
-                if not enr:
-                    await self.enrollment_repo.create_enrollment(
-                        user_id=user_id,
-                        course_id=c_id,
-                        institution_id=c.institution_id,
-                        access_type=EnrollmentAccessType.MEMBERSHIP,
-                    )
+        # In mock mode, immediately confirm; in real mode, webhook or client verify activates it
+        if order_data.get("provider") == "MOCK":
+            await self.repo.confirm_payment(payment_rec.id)
+            course_ids = await self.repo.get_plan_course_ids(plan_id)
+            for c_id in course_ids:
+                c = await self.course_repo.get_course_by_id(c_id)
+                if c:
+                    enr = await self.enrollment_repo.find_enrollment(user_id, c_id)
+                    if not enr:
+                        await self.enrollment_repo.create_enrollment(
+                            user_id=user_id,
+                            course_id=c_id,
+                            institution_id=c.institution_id,
+                            access_type=EnrollmentAccessType.MEMBERSHIP,
+                        )
 
         return SubscriptionResponse(
             subscription_id=subscription.id,
@@ -489,12 +539,13 @@ class PaymentService:
                     requires_payment=False,
                 )
 
-            # Paid course: create order on provider
+            # Paid course: create order on provider with idempotency
             order_data = await self.provider.create_order(
                 amount=final_price,
                 currency=course.currency,
                 receipt=f"rcpt_{uuid.uuid4().hex[:10]}",
                 notes=metadata_dict,
+                idempotency_key=idempotency_key,
             )
 
             payment_rec = await self.repo.create_payment(
@@ -533,6 +584,7 @@ class PaymentService:
                 currency=course.currency,
                 provider=order_data.get("provider", "MOCK"),
                 key_id=order_data.get("key_id"),
+                client_secret=order_data.get("client_secret"),
                 course_id=course_id,
                 requires_payment=(order_data.get("provider") != "MOCK"),
             )
@@ -571,10 +623,11 @@ class PaymentService:
         if not course:
             raise NotFoundException(message="Associated course not found", error_code="COURSE_NOT_FOUND")
 
-        # Verify signature with provider
+        # Verify signature/status with active payment provider
+        provider_instance = get_payment_provider(payment.provider)
         if payment.provider == "RAZORPAY":
             order_id = payload.provider_order_id or payment.provider_order_id or ""
-            is_valid = self.provider.verify_payment_signature(
+            is_valid = provider_instance.verify_payment_signature(
                 provider_order_id=order_id,
                 provider_payment_id=payload.provider_payment_id,
                 signature=payload.signature or "",
@@ -584,7 +637,7 @@ class PaymentService:
                     message="Invalid payment signature", error_code="INVALID_PAYMENT_SIGNATURE"
                 )
         elif payment.provider == "STRIPE":
-            status_data = await self.provider.retrieve_payment(payload.provider_payment_id)
+            status_data = await provider_instance.retrieve_payment(payload.provider_payment_id)
             if status_data.get("status") not in ("succeeded", "captured"):
                 raise ValidationException(
                     message=f"Stripe payment not completed (status={status_data.get('status')})",
@@ -615,6 +668,9 @@ class PaymentService:
                 institution_id=course.institution_id,
                 access_type=EnrollmentAccessType.PURCHASED,
             )
+        elif enr.status != EnrollmentStatus.ACTIVE:
+            enr.status = EnrollmentStatus.ACTIVE
+            await self.db.flush()
 
         return PaymentVerifyResponse(
             success=True,
@@ -626,13 +682,15 @@ class PaymentService:
     async def process_webhook(self, provider: str, payload_bytes: bytes, signature: str) -> dict:
         """Handle incoming webhooks from Razorpay or Stripe asynchronously."""
         provider_name = provider.lower()
+        provider_instance = get_payment_provider(provider_name)
+
         if provider_name == "razorpay":
             if not settings.RAZORPAY_WEBHOOK_SECRET:
                 raise ValidationException(
                     message="RAZORPAY_WEBHOOK_SECRET not configured",
                     error_code="WEBHOOK_NOT_CONFIGURED",
                 )
-            is_valid = await self.provider.verify_signature(payload_bytes, signature, settings.RAZORPAY_WEBHOOK_SECRET)
+            is_valid = await provider_instance.verify_signature(payload_bytes, signature, settings.RAZORPAY_WEBHOOK_SECRET)
             if not is_valid:
                 raise ForbiddenException(
                     message="Invalid Razorpay webhook signature",
@@ -641,6 +699,7 @@ class PaymentService:
 
             data = json.loads(payload_bytes.decode("utf-8"))
             event = data.get("event")
+
             if event in ("order.paid", "payment.captured"):
                 payment_entity = data.get("payload", {}).get("payment", {}).get("entity", {})
                 order_id = payment_entity.get("order_id")
@@ -652,6 +711,7 @@ class PaymentService:
                         meta = json.loads(payment.metadata_json or "{}")
                         user_id_str = meta.get("user_id")
                         course_id_str = meta.get("course_id")
+                        plan_id_str = meta.get("plan_id")
                         if user_id_str and course_id_str:
                             u_id = UUID(user_id_str)
                             c_id = UUID(course_id_str)
@@ -673,6 +733,56 @@ class PaymentService:
                                         institution_id=c.institution_id,
                                         access_type=EnrollmentAccessType.PURCHASED,
                                     )
+                                elif enr.status != EnrollmentStatus.ACTIVE:
+                                    enr.status = EnrollmentStatus.ACTIVE
+                                    await self.db.flush()
+                        elif user_id_str and plan_id_str:
+                            u_id = UUID(user_id_str)
+                            p_id = UUID(plan_id_str)
+                            course_ids = await self.repo.get_plan_course_ids(p_id)
+                            for c_id in course_ids:
+                                c = await self.course_repo.get_course_by_id(c_id)
+                                if c:
+                                    enr = await self.enrollment_repo.find_enrollment(u_id, c_id)
+                                    if not enr:
+                                        await self.enrollment_repo.create_enrollment(
+                                            user_id=u_id,
+                                            course_id=c_id,
+                                            institution_id=c.institution_id,
+                                            access_type=EnrollmentAccessType.MEMBERSHIP,
+                                        )
+                                    elif enr.status != EnrollmentStatus.ACTIVE:
+                                        enr.status = EnrollmentStatus.ACTIVE
+                                        await self.db.flush()
+            elif event == "payment.failed":
+                payment_entity = data.get("payload", {}).get("payment", {}).get("entity", {})
+                order_id = payment_entity.get("order_id")
+                pay_id = payment_entity.get("id")
+                reason = payment_entity.get("error_description", "Payment failed")
+                if order_id:
+                    payment = await self.repo.get_payment_by_provider_order_id(order_id)
+                    if payment and payment.status == PaymentStatus.PENDING:
+                        await self.repo.fail_payment(payment.id, provider_payment_id=pay_id, failure_reason=reason)
+            elif event == "refund.processed":
+                refund_entity = data.get("payload", {}).get("refund", {}).get("entity", {})
+                payment_id_str = refund_entity.get("payment_id")
+                if payment_id_str:
+                    payment = await self.repo.get_payment_by_provider_payment_id(payment_id_str)
+                    if payment:
+                        await self.repo.refund_payment(payment.id)
+                        meta = json.loads(payment.metadata_json or "{}")
+                        u_id_str = meta.get("user_id")
+                        c_id_str = meta.get("course_id")
+                        p_id_str = meta.get("plan_id")
+                        if u_id_str and c_id_str:
+                            await self.repo.update_purchase_status_by_payment(payment.id, PaymentStatus.REFUNDED)
+                            await self.enrollment_repo.cancel_enrollment(UUID(u_id_str), UUID(c_id_str))
+                        elif u_id_str and p_id_str:
+                            u_id = UUID(u_id_str)
+                            p_id = UUID(p_id_str)
+                            course_ids = await self.repo.get_plan_course_ids(p_id)
+                            for cid in course_ids:
+                                await self.enrollment_repo.cancel_enrollment(u_id, cid)
             return {"status": "ok"}
 
         elif provider_name == "stripe":
@@ -681,7 +791,7 @@ class PaymentService:
                     message="STRIPE_WEBHOOK_SECRET not configured",
                     error_code="WEBHOOK_NOT_CONFIGURED",
                 )
-            is_valid = await self.provider.verify_signature(payload_bytes, signature, settings.STRIPE_WEBHOOK_SECRET)
+            is_valid = await provider_instance.verify_signature(payload_bytes, signature, settings.STRIPE_WEBHOOK_SECRET)
             if not is_valid:
                 raise ForbiddenException(
                     message="Invalid Stripe webhook signature",
@@ -699,6 +809,7 @@ class PaymentService:
                     meta = json.loads(payment.metadata_json or "{}")
                     user_id_str = meta.get("user_id")
                     course_id_str = meta.get("course_id")
+                    plan_id_str = meta.get("plan_id")
                     if user_id_str and course_id_str:
                         u_id = UUID(user_id_str)
                         c_id = UUID(course_id_str)
@@ -720,9 +831,114 @@ class PaymentService:
                                     institution_id=c.institution_id,
                                     access_type=EnrollmentAccessType.PURCHASED,
                                 )
+                            elif enr.status != EnrollmentStatus.ACTIVE:
+                                enr.status = EnrollmentStatus.ACTIVE
+                                await self.db.flush()
+                    elif user_id_str and plan_id_str:
+                        u_id = UUID(user_id_str)
+                        p_id = UUID(plan_id_str)
+                        course_ids = await self.repo.get_plan_course_ids(p_id)
+                        for c_id in course_ids:
+                            c = await self.course_repo.get_course_by_id(c_id)
+                            if c:
+                                enr = await self.enrollment_repo.find_enrollment(u_id, c_id)
+                                if not enr:
+                                    await self.enrollment_repo.create_enrollment(
+                                        user_id=u_id,
+                                        course_id=c_id,
+                                        institution_id=c.institution_id,
+                                        access_type=EnrollmentAccessType.MEMBERSHIP,
+                                    )
+                                elif enr.status != EnrollmentStatus.ACTIVE:
+                                    enr.status = EnrollmentStatus.ACTIVE
+                                    await self.db.flush()
+            elif event_type == "payment_intent.payment_failed":
+                intent = data.get("data", {}).get("object", {})
+                intent_id = intent.get("id")
+                last_err = intent.get("last_payment_error", {}).get("message", "Payment failed")
+                payment = await self.repo.get_payment_by_provider_order_id(intent_id)
+                if payment and payment.status == PaymentStatus.PENDING:
+                    await self.repo.fail_payment(payment.id, provider_payment_id=intent_id, failure_reason=last_err)
+            elif event_type == "charge.refunded":
+                charge = data.get("data", {}).get("object", {})
+                intent_id = charge.get("payment_intent")
+                payment = await self.repo.get_payment_by_provider_order_id(intent_id) if intent_id else None
+                if not payment and charge.get("id"):
+                    payment = await self.repo.get_payment_by_provider_payment_id(charge.get("id"))
+                if payment:
+                    await self.repo.refund_payment(payment.id)
+                    meta = json.loads(payment.metadata_json or "{}")
+                    u_id_str = meta.get("user_id")
+                    c_id_str = meta.get("course_id")
+                    p_id_str = meta.get("plan_id")
+                    if u_id_str and c_id_str:
+                        await self.repo.update_purchase_status_by_payment(payment.id, PaymentStatus.REFUNDED)
+                        await self.enrollment_repo.cancel_enrollment(UUID(u_id_str), UUID(c_id_str))
+                    elif u_id_str and p_id_str:
+                        u_id = UUID(u_id_str)
+                        p_id = UUID(p_id_str)
+                        course_ids = await self.repo.get_plan_course_ids(p_id)
+                        for cid in course_ids:
+                            await self.enrollment_repo.cancel_enrollment(u_id, cid)
             return {"status": "ok"}
 
         return {"status": "ignored"}
+
+    async def refund_course_purchase(
+        self, purchase_id: UUID, user_id: UUID, reason: Optional[str] = None
+    ) -> CoursePurchaseResponse:
+        """Process a refund for a course purchase, revoke enrollment, and update records."""
+        purchase = await self.repo.get_course_purchase_by_id(purchase_id)
+        if not purchase:
+            raise NotFoundException(message="Course purchase not found", error_code="PURCHASE_NOT_FOUND")
+
+        course = await self.course_repo.get_course_by_id(purchase.course_id)
+        if not course:
+            raise NotFoundException(message="Course not found", error_code="COURSE_NOT_FOUND")
+
+        await self._verify_institution_admin(course.institution_id, user_id, "payment.manage")
+
+        if purchase.status != PaymentStatus.SUCCESS:
+            raise ConflictException(
+                message=f"Cannot refund purchase in status {purchase.status.value if hasattr(purchase.status, 'value') else purchase.status}",
+                error_code="INVALID_PURCHASE_STATUS",
+            )
+
+        if not purchase.payment_id:
+            raise ValidationException(
+                message="Cannot refund purchase with no recorded payment",
+                error_code="NO_PAYMENT_RECORD",
+            )
+
+        payment = await self.repo.get_payment_by_id(purchase.payment_id)
+        if not payment:
+            raise NotFoundException(message="Payment record not found", error_code="PAYMENT_NOT_FOUND")
+
+        provider_instance = get_payment_provider(payment.provider)
+        provider_pay_id = payment.provider_payment_id or payment.provider_order_id or ""
+        idempotency_key = f"ref_{purchase.id}_{int(datetime.now(timezone.utc).timestamp())}"
+
+        await provider_instance.create_refund(
+            provider_payment_id=provider_pay_id,
+            amount=payment.amount,
+            reason=reason,
+            idempotency_key=idempotency_key,
+        )
+
+        await self.repo.refund_payment(payment.id)
+        await self.repo.update_purchase_status_by_payment(payment.id, PaymentStatus.REFUNDED)
+        await self.enrollment_repo.cancel_enrollment(purchase.user_id, purchase.course_id)
+
+        return CoursePurchaseResponse(
+            purchase_id=purchase.id,
+            user_id=purchase.user_id,
+            course_id=purchase.course_id,
+            payment_id=purchase.payment_id,
+            amount=purchase.amount,
+            currency=purchase.currency,
+            status=PaymentStatus.REFUNDED.value,
+            created_at=purchase.created_at,
+        )
 
     async def purchase_course(
         self, course_id: UUID, user_id: UUID, payload: PurchaseCourseRequest

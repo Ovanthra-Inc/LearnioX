@@ -2,7 +2,9 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/hooks/useAuth';
 import { apiClient, ApiResponse } from '@/lib/api';
 import {
   Building2,
@@ -166,6 +168,8 @@ const SECTOR_FILTERS = [
 ];
 
 export default function InstitutionDiscoveryPage() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSector, setSelectedSector] = useState('All Sectors');
@@ -179,8 +183,6 @@ export default function InstitutionDiscoveryPage() {
   const [instTagline, setInstTagline] = useState('');
   const [instSector, setInstSector] = useState('Education');
 
-  const hasToken = typeof window !== 'undefined' && Boolean(localStorage.getItem('access_token'));
-
   // 1. Fetch user's own managed institutions from backend
   const { data: userInstitutionsData, isLoading: isUserInstLoading } = useQuery({
     queryKey: ['my-institutions'],
@@ -192,7 +194,7 @@ export default function InstitutionDiscoveryPage() {
         return [];
       }
     },
-    enabled: hasToken,
+    enabled: isAuthenticated,
   });
 
   // 2. Fetch public institutions directory from backend
@@ -338,51 +340,59 @@ export default function InstitutionDiscoveryPage() {
 
           {/* Action Tabs & Create Button Toolbar */}
           <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-1.5 p-1 bg-muted/70 rounded-lg border border-border/80 text-xs">
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('all');
-                  setCurrentPage(1);
-                }}
-                className={cn(
-                  'px-3.5 py-1.5 rounded-md font-semibold transition-all cursor-pointer',
-                  activeTab === 'all'
-                    ? 'bg-background text-foreground shadow-xs'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                All Network ({combinedInstitutions.length})
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('my-orgs');
-                  setCurrentPage(1);
-                }}
-                className={cn(
-                  'px-3.5 py-1.5 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5',
-                  activeTab === 'my-orgs'
-                    ? 'bg-background text-foreground shadow-xs'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                <Shield className="size-3 text-primary" />
-                <span>My Organizations ({userOwnedCount})</span>
-              </button>
-            </div>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-1.5 p-1 bg-muted/70 rounded-lg border border-border/80 text-xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab('all');
+                    setCurrentPage(1);
+                  }}
+                  className={cn(
+                    'px-3.5 py-1.5 rounded-md font-semibold transition-all cursor-pointer',
+                    activeTab === 'all'
+                      ? 'bg-background text-foreground shadow-xs'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  All Network ({combinedInstitutions.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab('my-orgs');
+                    setCurrentPage(1);
+                  }}
+                  className={cn(
+                    'px-3.5 py-1.5 rounded-md font-semibold transition-all cursor-pointer flex items-center gap-1.5',
+                    activeTab === 'my-orgs'
+                      ? 'bg-background text-foreground shadow-xs'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  <Shield className="size-3 text-primary" />
+                  <span>My Organizations ({userOwnedCount})</span>
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-muted/70 rounded-lg border border-border/80 text-xs font-semibold text-foreground">
+                <Building2 className="size-3.5 text-primary" />
+                <span>All Institutions ({combinedInstitutions.length})</span>
+              </div>
+            )}
 
             {/* Create Institution Dialog Modal */}
-            <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-              <DialogTrigger asChild>
-                <Button className="gap-2 text-xs font-semibold shadow-sm cursor-pointer">
-                  <Plus className="size-4" />
-                  <span>Register Institution</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md bg-card border-border">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2 text-foreground">
+            {isAuthenticated ? (
+              <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+                <DialogTrigger asChild>
+                  <Button className="gap-2 text-xs font-semibold shadow-sm cursor-pointer">
+                    <Plus className="size-4" />
+                    <span>Register Institution</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md bg-card border-border">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2 text-foreground">
                     <Building2 className="size-5 text-primary" />
                     Register New Institution
                   </DialogTitle>
@@ -475,7 +485,19 @@ export default function InstitutionDiscoveryPage() {
                 </form>
               </DialogContent>
             </Dialog>
-          </div>
+          ) : (
+            <Button
+              onClick={() => {
+                toast.info("Please sign in to register an institution");
+                router.push("/login?redirect=/institution");
+              }}
+              className="gap-2 text-xs font-semibold shadow-xs cursor-pointer"
+            >
+              <Plus className="size-4" />
+              <span>Register Institution</span>
+            </Button>
+          )}
+        </div>
 
           {/* Search Input Bar */}
           <div className="w-full mb-4">

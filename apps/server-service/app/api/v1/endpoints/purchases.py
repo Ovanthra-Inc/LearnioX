@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Header, status
 
 from app.api.deps import get_current_active_user, get_payment_service
+from app.core.exceptions import NotFoundException
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.payment import (
@@ -11,6 +12,7 @@ from app.schemas.payment import (
     PaymentVerifyRequest,
     PaymentVerifyResponse,
     PurchaseCourseRequest,
+    RefundPurchaseRequest,
 )
 from app.services.payment_service import PaymentService
 
@@ -100,7 +102,7 @@ async def get_purchase_by_id(
 ):
     purchase = await service.repo.get_course_purchase_by_id(purchase_id)
     if not purchase:
-        return APIResponse.fail(message="Purchase not found", code="NOT_FOUND")
+        raise NotFoundException(message="Purchase not found", error_code="PURCHASE_NOT_FOUND")
 
     resp = CoursePurchaseResponse(
         purchase_id=purchase.id,
@@ -113,3 +115,22 @@ async def get_purchase_by_id(
         created_at=purchase.created_at,
     )
     return APIResponse.ok(data=resp, message="Purchase details retrieved")
+
+
+@router.post(
+    "/purchases/{purchase_id}/refund",
+    summary="Refund Course Purchase & Revoke Enrollment (Admin Only)",
+    response_model=APIResponse[CoursePurchaseResponse],
+)
+async def refund_purchase(
+    purchase_id: UUID,
+    body: RefundPurchaseRequest = RefundPurchaseRequest(),
+    current_user: User = Depends(get_current_active_user),
+    service: PaymentService = Depends(get_payment_service),
+):
+    result = await service.refund_course_purchase(
+        purchase_id=purchase_id,
+        user_id=current_user.id,
+        reason=body.reason,
+    )
+    return APIResponse.ok(data=result, message="Purchase successfully refunded and enrollment revoked")

@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useState, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
+import React, { useState, useEffect, Suspense } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
 import { AppSidebar } from "@/components/app-sidebar"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -16,8 +17,16 @@ import { CreateChannelModal } from "@/components/community/create-channel-modal"
 import { ChevronLeft, Loader2 } from "lucide-react"
 
 function CommunityContent() {
+  const router = useRouter()
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
   const searchParams = useSearchParams()
   const initialChannelParam = searchParams.get("channel") || undefined
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace("/login?redirect=/community")
+    }
+  }, [isAuthLoading, isAuthenticated, router])
 
   const {
     channels,
@@ -51,6 +60,14 @@ function CommunityContent() {
   const handleSelectChannel = (id: string) => {
     setActiveChannelId(id)
     setMobileShowChat(true)
+  }
+
+  if (isAuthLoading || !isAuthenticated) {
+    return (
+      <div className="flex min-h-svh items-center justify-center bg-background">
+        <Loader2 className="size-6 animate-spin text-primary" />
+      </div>
+    )
   }
 
   return (

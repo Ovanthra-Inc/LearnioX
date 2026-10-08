@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import List, Optional, Tuple
 from uuid import UUID
 from fastapi import UploadFile
-from fastapi.responses import FileResponse as FastAPIFileResponse, StreamingResponse
+from fastapi.responses import FileResponse as FastAPIFileResponse, RedirectResponse, StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
@@ -324,6 +324,11 @@ class StorageService:
             else:
                 raise ForbiddenException(message="Access denied to file", error_code="FILE_ACCESS_DENIED")
 
+        if settings.STORAGE_PROVIDER.lower() in ("r2", "s3"):
+            remote_url = await self.provider.get_download_url(record.path, filename=record.original_name)
+            if remote_url:
+                return RedirectResponse(url=remote_url, status_code=307)
+
         full_path = self.base_upload_dir / record.path
         if not full_path.exists():
             raise NotFoundException(
@@ -368,6 +373,11 @@ class StorageService:
                     raise ForbiddenException(message=f"Access denied: {access.reason}", error_code="FILE_ACCESS_DENIED")
             else:
                 raise ForbiddenException(message="Access denied to file", error_code="FILE_ACCESS_DENIED")
+
+        if settings.STORAGE_PROVIDER.lower() in ("r2", "s3"):
+            remote_url = await self.provider.get_download_url(record.path, filename=record.original_name)
+            if remote_url:
+                return RedirectResponse(url=remote_url, status_code=307)
 
         full_path = self.base_upload_dir / record.path
         if not full_path.exists():

@@ -1,7 +1,9 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
 import { AppSidebar } from "@/components/app-sidebar"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -28,6 +30,7 @@ import {
   SlidersHorizontal,
   ChevronRight,
   Flame,
+  Loader2,
 } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
@@ -160,10 +163,18 @@ const REGISTERED_COURSES: EnrolledCourse[] = [
 ]
 
 export default function RegisteredPage() {
-  const { data: enrollments, isLoading } = useMyEnrollments()
+  const router = useRouter()
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
+  const { data: enrollments, isLoading: isEnrollmentsLoading } = useMyEnrollments()
   const [activeTab, setActiveTab] = useState<"ALL" | "IN_PROGRESS" | "COMPLETED" | "CERTIFICATES">("ALL")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCertificate, setSelectedCertificate] = useState<EnrolledCourse | null>(null)
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace("/login?redirect=/registered")
+    }
+  }, [isAuthLoading, isAuthenticated, router])
 
   const registeredCoursesList: EnrolledCourse[] = useMemo(() => {
     if (enrollments && enrollments.length > 0) {
@@ -214,15 +225,23 @@ export default function RegisteredPage() {
         }
       })
     }
-    return REGISTERED_COURSES
+    return []
   }, [enrollments])
 
   // Metrics calculation
   const totalCourses = registeredCoursesList.length
   const inProgressCount = registeredCoursesList.filter((c) => c.status === "IN_PROGRESS").length
   const completedCount = registeredCoursesList.filter((c) => c.status === "COMPLETED").length
-  const totalHoursLearned = 38.5
-  const streakDays = 7
+  const totalHoursLearned = totalCourses > 0 ? totalCourses * 12.5 : 0
+  const streakDays = totalCourses > 0 ? 3 : 0
+
+  if (isAuthLoading || !isAuthenticated) {
+    return (
+      <div className="flex min-h-svh items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
 
   // Filter courses
   const filteredCourses = useMemo(() => {

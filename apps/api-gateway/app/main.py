@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
 from app.core.config import settings
@@ -14,8 +15,28 @@ from app.router.proxy import router as proxy_router
 
 logger = logging.getLogger("gateway")
 
-# Rate limiter
-limiter = Limiter(key_func=get_remote_address, default_limits=["300/minute"])
+
+def rate_limit_key(request: Request) -> str:
+    """Rate limit key prioritizing user ID, institution ID, or client IP address."""
+    user_id = request.headers.get("X-User-ID")
+    if user_id:
+        return f"user:{user_id}"
+    inst_id = request.headers.get("X-Institution-ID")
+    if inst_id:
+        return f"inst:{inst_id}"
+    return f"ip:{get_remote_address(request)}"
+
+
+# Rate limiter backed by Redis with in-memory fallback
+try:
+    limiter = Limiter(
+        key_func=rate_limit_key,
+        default_limits=["300/minute"],
+        storage_uri=settings.REDIS_URL,
+    )
+except Exception as e:
+    logger.warning(f"Could not connect slowapi to Redis ({e}); falling back to memory.")
+    limiter = Limiter(key_func=rate_limit_key, default_limits=["300/minute"])
 
 
 @asynccontextmanager
@@ -38,9 +59,10 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Middleware Pipeline
-app.add_middleware(GatewayRequestIDMiddleware)
+# Middleware Pipeline (LIFO execution order)
+app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(GatewayAuthClaimsMiddleware)
+app.add_middleware(GatewayRequestIDMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -51,6 +73,7 @@ app.add_middleware(
 
 # Gateway Operational Endpoints
 @app.get("/health", tags=["Health"])
+@app.get("/ready", tags=["Health"])
 async def gateway_health():
     return {
         "success": True,

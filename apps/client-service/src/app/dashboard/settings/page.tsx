@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   SlidersHorizontal,
   Palette,
@@ -27,6 +28,7 @@ import {
   TerminalSquare,
   Cpu,
   RefreshCw,
+  Loader2,
 } from "lucide-react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { NavUser } from "@/components/nav-user"
@@ -543,7 +545,15 @@ const THEME_OPTIONS = [
 ]
 
 export default function SettingsPage() {
-  const { user } = useAuth()
+  const router = useRouter()
+  const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth()
+
+  React.useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace("/login?redirect=/dashboard/settings")
+    }
+  }, [isAuthLoading, isAuthenticated, router])
+
   const [activeScope, setActiveScope] = React.useState<"all" | SettingScope>("all")
   const [activeCategory, setActiveCategory] = React.useState<string>("commonly-used")
   const [searchQuery, setSearchQuery] = React.useState<string>("")
@@ -631,6 +641,14 @@ export default function SettingsPage() {
       if (activeScope !== "all" && s.scope !== activeScope) return false
       return s.category === categoryId
     }).length
+  }
+
+  if (isAuthLoading || !isAuthenticated) {
+    return (
+      <div className="flex min-h-svh items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   return (

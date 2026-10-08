@@ -19,8 +19,11 @@ from app.models.curriculum import (
     LessonType,
     LessonVisibility,
 )
+from app.models.member import MemberStatus
 from app.repositories.course_repository import CourseRepository
 from app.repositories.curriculum_repository import CurriculumRepository
+from app.repositories.institution_repository import InstitutionRepository
+from app.repositories.member_repository import MemberRepository
 from app.schemas.curriculum import (
     AttachContentRequest,
     ContentStatisticsResponse,
@@ -46,6 +49,35 @@ class CurriculumService:
         self.db = db
         self.repo = CurriculumRepository(db)
         self.course_repo = CourseRepository(db)
+        self.inst_repo = InstitutionRepository(db)
+        self.member_repo = MemberRepository(db)
+
+    async def _verify_course_ownership(self, course_id: UUID, user_id: UUID) -> None:
+        course = await self.course_repo.get_course_by_id(course_id)
+        if not course:
+            raise NotFoundException(message="Course not found", error_code="COURSE_NOT_FOUND")
+        inst = await self.inst_repo.get_by_id(course.institution_id)
+        if not inst:
+            raise NotFoundException(message="Institution not found", error_code="INSTITUTION_NOT_FOUND")
+        if inst.owner_id == user_id:
+            return
+        member = await self.member_repo.get_member_by_user_and_inst(user_id, course.institution_id)
+        if not member or member.status != MemberStatus.ACTIVE:
+            raise ForbiddenException(message="Access denied to course resources", error_code="FORBIDDEN")
+
+    async def _verify_module_ownership(self, module_id: UUID, user_id: UUID) -> CourseModule:
+        module = await self.repo.get_module_by_id(module_id)
+        if not module:
+            raise NotFoundException(message="Module not found", error_code="MODULE_NOT_FOUND")
+        await self._verify_course_ownership(module.course_id, user_id)
+        return module
+
+    async def _verify_lesson_ownership(self, lesson_id: UUID, user_id: UUID) -> Lesson:
+        lesson = await self.repo.get_lesson_by_id(lesson_id)
+        if not lesson:
+            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        await self._verify_module_ownership(lesson.module_id, user_id)
+        return lesson
 
     def _resolve_file_url(self, file_id: Optional[UUID]) -> Optional[str]:
         if not file_id:
@@ -118,9 +150,7 @@ class CurriculumService:
     async def create_module(
         self, course_id: UUID, user_id: UUID, payload: CreateModuleRequest
     ) -> ModuleResponse:
-        course = await self.course_repo.get_course_by_id(course_id)
-        if not course:
-            raise NotFoundException(message="Course not found", error_code="COURSE_NOT_FOUND")
+        await self._verify_course_ownership(course_id, user_id)
 
         module = await self.repo.create_module(
             course_id=course_id,
@@ -144,15 +174,14 @@ class CurriculumService:
     async def update_module(
         self, module_id: UUID, user_id: UUID, payload: UpdateModuleRequest
     ) -> ModuleResponse:
-        module = await self.repo.get_module_by_id(module_id)
-        if not module:
-            raise NotFoundException(message="Module not found", error_code="MODULE_NOT_FOUND")
+        module = await self._verify_module_ownership(module_id, user_id)
 
         update_dict = payload.model_dump(exclude_unset=True)
         updated = await self.repo.update_module(module, update_dict)
         return await self._to_module_response(updated)
 
     async def delete_module(self, module_id: UUID, user_id: UUID) -> None:
+        await self._verify_module_ownership(module_id, user_id)
         success = await self.repo.delete_module(module_id)
         if not success:
             raise NotFoundException(message="Module not found", error_code="MODULE_NOT_FOUND")
@@ -160,15 +189,14 @@ class CurriculumService:
     async def reorder_modules(
         self, course_id: UUID, user_id: UUID, payload: ReorderModulesRequest
     ) -> None:
+        await self._verify_course_ownership(course_id, user_id)
         await self.repo.reorder_modules(course_id, payload.module_ids)
 
     # Lesson Services
     async def create_lesson(
         self, module_id: UUID, user_id: UUID, payload: CreateLessonRequest
     ) -> LessonResponse:
-        module = await self.repo.get_module_by_id(module_id)
-        if not module:
-            raise NotFoundException(message="Module not found", error_code="MODULE_NOT_FOUND")
+        await self._verify_module_ownership(module_id, user_id)
 
         lesson = await self.repo.create_lesson(
             module_id=module_id,
@@ -211,9 +239,7 @@ class CurriculumService:
     async def update_lesson(
         self, lesson_id: UUID, user_id: UUID, payload: UpdateLessonRequest
     ) -> LessonResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         update_dict = payload.model_dump(exclude_unset=True)
         if "visibility" in update_dict and update_dict["visibility"]:
@@ -223,6 +249,7 @@ class CurriculumService:
         return await self._to_lesson_response(updated)
 
     async def delete_lesson(self, lesson_id: UUID, user_id: UUID) -> None:
+        await self._verify_lesson_ownership(lesson_id, user_id)
         success = await self.repo.delete_lesson(lesson_id)
         if not success:
             raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
@@ -230,12 +257,11 @@ class CurriculumService:
     async def reorder_lessons(
         self, module_id: UUID, user_id: UUID, payload: ReorderLessonsRequest
     ) -> None:
+        await self._verify_module_ownership(module_id, user_id)
         await self.repo.reorder_lessons(module_id, payload.lesson_ids)
 
     async def publish_lesson(self, lesson_id: UUID, user_id: UUID) -> LessonResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         content = await self.repo.get_lesson_content(lesson_id)
         if not content:
@@ -248,9 +274,7 @@ class CurriculumService:
         return await self._to_lesson_response(updated)
 
     async def draft_lesson(self, lesson_id: UUID, user_id: UUID) -> LessonResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         updated = await self.repo.update_lesson(lesson, {"status": LessonStatus.DRAFT})
         return await self._to_lesson_response(updated)
@@ -258,9 +282,7 @@ class CurriculumService:
     async def schedule_lesson(
         self, lesson_id: UUID, user_id: UUID, payload: ScheduleLessonRequest
     ) -> LessonResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         updated = await self.repo.update_lesson(
             lesson,
@@ -271,9 +293,7 @@ class CurriculumService:
     async def update_visibility(
         self, lesson_id: UUID, user_id: UUID, visibility: str
     ) -> LessonResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         updated = await self.repo.update_lesson(
             lesson, {"visibility": LessonVisibility(visibility)}
@@ -283,9 +303,7 @@ class CurriculumService:
     async def update_preview(
         self, lesson_id: UUID, user_id: UUID, is_preview: bool
     ) -> LessonResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         updated = await self.repo.update_lesson(lesson, {"is_preview": is_preview})
         return await self._to_lesson_response(updated)
@@ -293,9 +311,7 @@ class CurriculumService:
     async def update_duration(
         self, lesson_id: UUID, user_id: UUID, duration: int
     ) -> LessonResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         updated = await self.repo.update_lesson(lesson, {"duration": duration})
         return await self._to_lesson_response(updated)
@@ -304,9 +320,7 @@ class CurriculumService:
     async def attach_content(
         self, lesson_id: UUID, user_id: UUID, payload: AttachContentRequest
     ) -> LessonContentResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         ctype = ContentType(payload.content_type)
         if ctype in [ContentType.VIDEO, ContentType.PDF, ContentType.FILE] and not payload.file_id:
@@ -339,6 +353,7 @@ class CurriculumService:
         return await self._to_lesson_content_response(content)
 
     async def remove_content(self, lesson_id: UUID, user_id: UUID) -> None:
+        await self._verify_lesson_ownership(lesson_id, user_id)
         success = await self.repo.delete_lesson_content(lesson_id)
         if not success:
             raise NotFoundException(message="Content not found", error_code="CONTENT_NOT_FOUND")
@@ -346,9 +361,7 @@ class CurriculumService:
     async def add_resource(
         self, lesson_id: UUID, user_id: UUID, payload: ResourceRequest
     ) -> ResourceResponse:
-        lesson = await self.repo.get_lesson_by_id(lesson_id)
-        if not lesson:
-            raise NotFoundException(message="Lesson not found", error_code="LESSON_NOT_FOUND")
+        lesson = await self._verify_lesson_ownership(lesson_id, user_id)
 
         resource = await self.repo.add_resource(
             lesson_id=lesson_id, file_id=payload.file_id, title=payload.title
@@ -360,6 +373,7 @@ class CurriculumService:
         return [await self._to_resource_response(r) for r in resources]
 
     async def remove_resource(self, resource_id: UUID, lesson_id: UUID, user_id: UUID) -> None:
+        await self._verify_lesson_ownership(lesson_id, user_id)
         success = await self.repo.delete_resource(resource_id=resource_id, lesson_id=lesson_id)
         if not success:
             raise NotFoundException(message="Resource not found", error_code="RESOURCE_NOT_FOUND")

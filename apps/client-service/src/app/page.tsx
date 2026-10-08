@@ -207,12 +207,19 @@ export default function HomePage() {
               <Link href="/courses" className="hover:text-foreground transition-colors">
                 Explore Tracks
               </Link>
-              <Link href="/registered" className="hover:text-foreground transition-colors">
-                My Classroom
+              <Link href="/institution" className="hover:text-foreground transition-colors">
+                Institutions
               </Link>
-              <Link href="/community" className="hover:text-foreground transition-colors">
-                Community
-              </Link>
+              {isAuthenticated && (
+                <>
+                  <Link href="/registered" className="hover:text-foreground transition-colors">
+                    My Classroom
+                  </Link>
+                  <Link href="/community" className="hover:text-foreground transition-colors">
+                    Community
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
 
@@ -654,12 +661,19 @@ export default function HomePage() {
             <Link href="/courses" className="hover:text-foreground transition-colors">
               Courses
             </Link>
-            <Link href="/community" className="hover:text-foreground transition-colors">
-              Community
+            <Link href="/institution" className="hover:text-foreground transition-colors">
+              Institutions
             </Link>
-            <Link href="/registered" className="hover:text-foreground transition-colors">
-              Classroom
-            </Link>
+            {isAuthenticated && (
+              <>
+                <Link href="/registered" className="hover:text-foreground transition-colors">
+                  Classroom
+                </Link>
+                <Link href="/community" className="hover:text-foreground transition-colors">
+                  Community
+                </Link>
+              </>
+            )}
             <a href="mailto:support@learniox.com" className="hover:text-foreground transition-colors">
               Support
             </a>

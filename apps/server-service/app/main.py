@@ -221,8 +221,9 @@ app.include_router(api_v1_router, prefix=settings.API_V1_STR)
 
 
 @app.get("/health", tags=["Health"])
+@app.get("/ready", tags=["Health"])
 async def health_check():
-    """Lightweight health check for Docker/Kubernetes liveness probes."""
+    """Lightweight health check for Docker/Kubernetes liveness and readiness probes."""
     return APIResponse.ok(
         data={"status": "healthy", "service": settings.PROJECT_NAME},
         message="Server Service is healthy and operational",

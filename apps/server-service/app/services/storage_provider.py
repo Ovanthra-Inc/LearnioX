@@ -49,6 +49,12 @@ class StorageProvider(ABC):
     def get_local_path(self, relative_path: str) -> Optional[Path]:
         """Returns the local filesystem Path if stored locally, or None if remote object."""
 
+    @abstractmethod
+    async def get_download_url(
+        self, relative_path: str, filename: Optional[str] = None, expires_in: int = 3600
+    ) -> Optional[str]:
+        """Returns a temporary presigned download URL for remote storage, or None for local disk."""
+
 
 class LocalStorageProvider(StorageProvider):
     """Local disk storage provider."""
@@ -103,6 +109,11 @@ class LocalStorageProvider(StorageProvider):
         if not str(p).startswith(str(self.base_dir)):
             return None
         return p
+
+    async def get_download_url(
+        self, relative_path: str, filename: Optional[str] = None, expires_in: int = 3600
+    ) -> Optional[str]:
+        return None
 
 
 class R2StorageProvider(StorageProvider):
@@ -200,6 +211,35 @@ class R2StorageProvider(StorageProvider):
 
     def get_local_path(self, relative_path: str) -> Optional[Path]:
         return None
+
+    async def get_download_url(
+        self, relative_path: str, filename: Optional[str] = None, expires_in: int = 3600
+    ) -> Optional[str]:
+        try:
+            import aioboto3
+            session = aioboto3.Session()
+            clean_key = relative_path.lstrip("/")
+            params: Dict[str, Any] = {"Bucket": self.bucket_name, "Key": clean_key}
+            if filename:
+                params["ResponseContentDisposition"] = f'inline; filename="{filename}"'
+
+            async with session.client(
+                "s3",
+                endpoint_url=self.endpoint_url,
+                aws_access_key_id=self.access_key_id,
+                aws_secret_access_key=self.secret_access_key,
+            ) as s3:
+                url = await s3.generate_presigned_url(
+                    "get_object",
+                    Params=params,
+                    ExpiresIn=expires_in,
+                )
+                return url
+        except Exception as e:
+            logger.warning(f"Failed to generate presigned URL for {relative_path}: {e}")
+            if self.public_url:
+                return f"{self.public_url}/{relative_path.lstrip('/')}"
+            return None
 
 
 def get_storage_provider() -> StorageProvider:

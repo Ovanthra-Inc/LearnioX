@@ -9,6 +9,7 @@ import {
   GraduationCap,
   Headphones,
   Home,
+  LogIn,
   LogOut,
   MessagesSquare,
   PanelLeft,
@@ -16,6 +17,7 @@ import {
   Settings,
   Sparkles,
 } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
@@ -83,6 +85,7 @@ const sidebarData = {
 
 function AppSidebarHeader() {
   const { state, toggleSidebar } = useSidebar()
+  const { isAuthenticated } = useAuth()
   const [searchOpen, setSearchOpen] = React.useState(false)
 
   return (
@@ -91,7 +94,7 @@ function AppSidebarHeader() {
         {/* Brand / Logo - hidden when collapsed */}
         <div className="flex items-center gap-2 overflow-hidden group-data-[collapsible=icon]:hidden">
           <Link
-            href="/dashboard"
+            href={isAuthenticated ? "/dashboard" : "/"}
             className="flex items-center gap-2 px-1 py-1 rounded-md text-sidebar-foreground hover:opacity-90 transition-opacity"
           >
             <div className="flex aspect-square size-6 items-center justify-center rounded-md bg-primary text-primary-foreground font-bold shadow-xs">
@@ -155,14 +158,102 @@ function AppSidebarHeader() {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { isAuthenticated } = useAuth()
+
+  const navMain = React.useMemo(() => {
+    if (!isAuthenticated) {
+      return [
+        {
+          title: "Home",
+          url: "/",
+          icon: Home,
+        },
+        {
+          title: "Discover",
+          url: "/courses",
+          icon: Compass,
+        },
+        {
+          title: "Institutions",
+          url: "/institution",
+          icon: Building2,
+        },
+      ]
+    }
+
+    return [
+      {
+        title: "Home",
+        url: "/dashboard",
+        icon: Home,
+      },
+      {
+        title: "Discover",
+        url: "/courses",
+        icon: Compass,
+      },
+      {
+        title: "Registered",
+        url: "/registered",
+        icon: GraduationCap,
+      },
+      {
+        title: "Community",
+        url: "/community",
+        icon: MessagesSquare,
+      },
+      {
+        title: "Institutions",
+        url: "/institution",
+        icon: Building2,
+      },
+    ]
+  }, [isAuthenticated])
+
+  const navSecondary = React.useMemo(() => {
+    if (!isAuthenticated) {
+      return [
+        {
+          title: "Support",
+          url: "mailto:support@learniox.com",
+          icon: Headphones,
+        },
+        {
+          title: "Sign In",
+          url: "/login",
+          icon: LogIn,
+        },
+      ]
+    }
+
+    return [
+      {
+        title: "Support",
+        url: "mailto:support@learniox.com",
+        icon: Headphones,
+      },
+      {
+        title: "Settings",
+        url: "/dashboard/settings",
+        icon: Settings,
+      },
+      {
+        title: "Logout",
+        url: "#",
+        icon: LogOut,
+        isDestructive: true,
+      },
+    ]
+  }, [isAuthenticated])
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="border-b border-sidebar-border/40 pb-2">
         <AppSidebarHeader />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={sidebarData.navMain} />
-        <NavSecondary items={sidebarData.navSecondary} className="mt-auto" />
+        <NavMain items={navMain} />
+        <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -25,6 +25,8 @@ export function LoginForm({
 }: React.ComponentProps<"form"> & { initialMode?: AuthMode }) {
   const [mode, setMode] = useState<AuthMode>(initialMode)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTarget = searchParams?.get("redirect") || "/dashboard"
   const {
     loginWithEmail,
     isAuthenticating,
@@ -59,7 +61,7 @@ export function LoginForm({
     try {
       await loginWithEmail({ email: email.trim(), password })
       toast.success("Welcome back!", { id: toastId })
-      router.push("/dashboard")
+      router.push(redirectTarget)
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || "Invalid email or password"
       toast.error(msg, { id: toastId })

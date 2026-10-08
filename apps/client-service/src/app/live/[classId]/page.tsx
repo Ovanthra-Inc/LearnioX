@@ -15,7 +15,9 @@ import {
   Sparkles,
   LayoutGrid,
   PenTool,
+  Loader2,
 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 import { useClassroom, useSessionParticipants, useSessionChat, useSessionPolls, useSessionQnA, useLiveClassroomMutations } from '@/hooks/useLiveClassroom';
 import { useClassroomMedia } from '@/hooks/useClassroomMedia';
 import { useClassroomSocket } from '@/hooks/useClassroomSocket';
@@ -35,6 +37,13 @@ export default function LiveClassroomPage() {
   const params = useParams();
   const router = useRouter();
   const classId = params.classId as string;
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace(`/login?redirect=${encodeURIComponent(`/live/${classId}`)}`);
+    }
+  }, [isAuthLoading, isAuthenticated, router, classId]);
 
   const [joinState, setJoinState] = useState<'lobby' | 'waiting' | 'in-class'>('lobby');
   const [activePanel, setActivePanel] = useState<'chat' | 'qna' | 'polls' | 'people' | 'whiteboard' | null>(null);
@@ -178,6 +187,15 @@ export default function LiveClassroomPage() {
     }
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+
+  // Authentication check
+  if (isAuthLoading || !isAuthenticated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   // 1. Loading State
   if (isLoading || !classroom) {

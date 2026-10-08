@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.exceptions import (
+    AppException,
     ConflictException,
     ForbiddenException,
     NotFoundException,
@@ -656,30 +657,18 @@ class AssessmentService:
                     )
                     return AIGradeSubmissionResponse.model_validate(grade_data)
                 else:
-                    logger.warning(f"AI Service returned HTTP {res.status_code}: {res.text}")
+                    logger.error(f"AI Service returned HTTP {res.status_code}: {res.text}")
+                    raise AppException(
+                        message=f"AI Evaluation Service returned error status {res.status_code}",
+                        status_code=502,
+                        error_code="AI_EVALUATION_FAILED",
+                    )
+        except AppException:
+            raise
         except Exception as exc:
             logger.error(f"Failed to communicate with AI Service: {exc}", exc_info=True)
-
-        # Fallback simulation if ai-service network call fails
-        score = int(assignment.total_marks * 0.8)
-        fallback_data = {
-            "assessment_type": type_str,
-            "score": score,
-            "total_marks": assignment.total_marks,
-            "percentage": round((score / assignment.total_marks) * 100.0, 2),
-            "passed": True,
-            "summary_feedback": "Auto-evaluated: Submission addresses core assignment requirements.",
-            "rubric_breakdown": [
-                {
-                    "criterion_name": "Core Requirements",
-                    "max_points": assignment.total_marks,
-                    "awarded_points": score,
-                    "criterion_feedback": "Successfully satisfied assignment requirements.",
-                }
-            ],
-            "strengths": ["Clear structure", "Functional approach"],
-            "areas_for_improvement": ["Consider adding more edge cases"],
-            "suggested_correction": None,
-        }
-        await self.repo.grade_submission(submission, marks=score, feedback=json.dumps(fallback_data))
-        return AIGradeSubmissionResponse.model_validate(fallback_data)
+            raise AppException(
+                message="AI Evaluation Service is currently unreachable. Please try again shortly.",
+                status_code=503,
+                error_code="AI_SERVICE_UNAVAILABLE",
+            )

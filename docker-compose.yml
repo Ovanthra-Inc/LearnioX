@@ -95,6 +95,7 @@ services:
       - redis
     volumes:
       - ./apps/ai-service:/app
+      - ai_storage_data:/app/storage
     networks:
       - learniox-network
 
@@ -180,3 +181,4 @@ volumes:
   postgres_data:
   redis_data:
   uploads_data:
+  ai_storage_data:

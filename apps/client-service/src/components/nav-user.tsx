@@ -5,9 +5,11 @@ import {
   BadgeCheck,
   Bell,
   CreditCard,
+  LogIn,
   LogOut,
   Sparkles,
 } from "lucide-react"
+import Link from "next/link"
 
 import {
   Avatar,
@@ -35,7 +37,19 @@ export function NavUser({
     avatar: string
   }
 }) {
-  const { user: authUser, logout } = useAuth()
+  const { user: authUser, isAuthenticated, logout } = useAuth()
+
+  if (!isAuthenticated && !user) {
+    return (
+      <Link
+        href="/login"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-secondary transition-colors cursor-pointer shadow-xs"
+      >
+        <LogIn className="size-3.5" />
+        <span>Sign In</span>
+      </Link>
+    )
+  }
 
   const activeUser = {
     name: user?.name || authUser?.name || "User",

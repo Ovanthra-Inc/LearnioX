@@ -11,6 +11,7 @@ from app.modules.transcription.schemas import (
     TranscriptionResultResponse,
     TranscriptionStatusResponse,
 )
+from app.core.redis_client import get_redis_client
 from app.modules.transcription.audio_utils import audio_utils
 from app.providers import get_transcription_provider
 from app.providers.base import BaseTranscriptionProvider
@@ -32,19 +33,43 @@ class TranscriptionModuleService:
         self.results_dir = audio_utils.results_dir
         self.upload_dir = audio_utils.upload_dir
 
+    def _update_job_status(self, job_id: str, status_obj: TranscriptionStatusResponse):
+        _ACTIVE_JOBS[job_id] = status_obj
+        r = get_redis_client()
+        if r:
+            try:
+                r.setex(f"transcription:job:{job_id}", 86400, status_obj.model_dump_json())
+            except Exception as e:
+                logger.warning(f"Failed to persist job status to Redis: {e}")
+
     def register_job(self, job_id: str):
         """Initializes a new job entry in the registry."""
-        _ACTIVE_JOBS[job_id] = TranscriptionStatusResponse(
-            job_id=job_id,
-            status=TranscriptionJobStatus.QUEUED,
-            progress=5,
-            stage="Job queued for processing",
+        self._update_job_status(
+            job_id,
+            TranscriptionStatusResponse(
+                job_id=job_id,
+                status=TranscriptionJobStatus.QUEUED,
+                progress=5,
+                stage="Job queued for processing",
+            ),
         )
 
     def get_job_status(self, job_id: str) -> Optional[TranscriptionStatusResponse]:
         """Returns the current processing status and progress."""
         if job_id in _ACTIVE_JOBS:
             return _ACTIVE_JOBS[job_id]
+
+        r = get_redis_client()
+        if r:
+            try:
+                raw = r.get(f"transcription:job:{job_id}")
+                if raw:
+                    parsed = json.loads(raw)
+                    res = TranscriptionStatusResponse.model_validate(parsed)
+                    _ACTIVE_JOBS[job_id] = res
+                    return res
+            except Exception as e:
+                logger.warning(f"Failed to fetch job status from Redis: {e}")
 
         # Check if result JSON file exists on disk
         for directory in [self.results_dir, audio_utils.legacy_results_dir]:
@@ -79,22 +104,28 @@ class TranscriptionModuleService:
         """
         try:
             logger.info(f"[TRANSCRIPTION] job={job_id} started processing for '{original_filename}'")
-            _ACTIVE_JOBS[job_id] = TranscriptionStatusResponse(
-                job_id=job_id,
-                status=TranscriptionJobStatus.EXTRACTING_AUDIO,
-                progress=20,
-                stage="Extracting audio track from media",
+            self._update_job_status(
+                job_id,
+                TranscriptionStatusResponse(
+                    job_id=job_id,
+                    status=TranscriptionJobStatus.EXTRACTING_AUDIO,
+                    progress=20,
+                    stage="Extracting audio track from media",
+                ),
             )
 
             # Step 1: Probe duration and extract audio via FFmpeg
             duration = audio_utils.probe_media_duration(media_path)
             audio_path = audio_utils.extract_audio_if_needed(media_path, job_id)
 
-            _ACTIVE_JOBS[job_id] = TranscriptionStatusResponse(
-                job_id=job_id,
-                status=TranscriptionJobStatus.TRANSCRIBING,
-                progress=45,
-                stage=f"Transcribing audio with {self._provider.provider_name}",
+            self._update_job_status(
+                job_id,
+                TranscriptionStatusResponse(
+                    job_id=job_id,
+                    status=TranscriptionJobStatus.TRANSCRIBING,
+                    progress=45,
+                    stage=f"Transcribing audio with {self._provider.provider_name}",
+                ),
             )
             logger.info(f"[TRANSCRIPTION] job={job_id} audio ready, running Speech-to-Text via {self._provider.provider_name}...")
 
@@ -137,22 +168,28 @@ class TranscriptionModuleService:
             with open(result_file, "w", encoding="utf-8") as f:
                 json.dump(result.model_dump(), f, indent=2)
 
-            _ACTIVE_JOBS[job_id] = TranscriptionStatusResponse(
-                job_id=job_id,
-                status=TranscriptionJobStatus.COMPLETED,
-                progress=100,
-                stage="Transcription completed successfully",
+            self._update_job_status(
+                job_id,
+                TranscriptionStatusResponse(
+                    job_id=job_id,
+                    status=TranscriptionJobStatus.COMPLETED,
+                    progress=100,
+                    stage="Transcription completed successfully",
+                ),
             )
             logger.info(f"[TRANSCRIPTION] job={job_id} completed successfully.")
 
         except Exception as exc:
             logger.error(f"[TRANSCRIPTION] job={job_id} failed: {exc}", exc_info=True)
-            _ACTIVE_JOBS[job_id] = TranscriptionStatusResponse(
-                job_id=job_id,
-                status=TranscriptionJobStatus.FAILED,
-                progress=0,
-                stage="Transcription failed",
-                error=str(exc),
+            self._update_job_status(
+                job_id,
+                TranscriptionStatusResponse(
+                    job_id=job_id,
+                    status=TranscriptionJobStatus.FAILED,
+                    progress=0,
+                    stage="Transcription failed",
+                    error=str(exc),
+                ),
             )
 
 

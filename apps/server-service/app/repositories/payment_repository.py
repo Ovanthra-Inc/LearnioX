@@ -199,6 +199,22 @@ class PaymentRepository:
         await self.db.flush()
         return await self.get_payment_by_id(payment_id)
 
+    async def fail_payment(self, payment_id: UUID) -> Optional["Payment"]:
+        """Mark a payment as FAILED."""
+        await self.db.execute(
+            update(Payment).where(Payment.id == payment_id).values(status=PaymentStatus.FAILED)
+        )
+        await self.db.flush()
+        return await self.get_payment_by_id(payment_id)
+
+    async def refund_payment(self, payment_id: UUID) -> Optional["Payment"]:
+        """Mark a payment as REFUNDED."""
+        await self.db.execute(
+            update(Payment).where(Payment.id == payment_id).values(status=PaymentStatus.REFUNDED)
+        )
+        await self.db.flush()
+        return await self.get_payment_by_id(payment_id)
+
     async def get_payment_by_id(self, payment_id: UUID) -> Optional[Payment]:
         res = await self.db.execute(select(Payment).where(Payment.id == payment_id))
         return res.scalars().first()
@@ -207,9 +223,19 @@ class PaymentRepository:
         res = await self.db.execute(select(Payment).where(Payment.provider_order_id == provider_order_id))
         return res.scalars().first()
 
+    async def get_payment_by_provider_payment_id(self, provider_payment_id: str) -> Optional[Payment]:
+        res = await self.db.execute(select(Payment).where(Payment.provider_payment_id == provider_payment_id))
+        return res.scalars().first()
+
     async def get_payment_by_idempotency_key(self, idempotency_key: str) -> Optional[Payment]:
         res = await self.db.execute(select(Payment).where(Payment.idempotency_key == idempotency_key))
         return res.scalars().first()
+
+    async def update_purchase_status_by_payment(self, payment_id: UUID, status: PaymentStatus) -> None:
+        await self.db.execute(
+            update(CoursePurchase).where(CoursePurchase.payment_id == payment_id).values(status=status)
+        )
+        await self.db.flush()
 
     async def create_course_purchase(
         self,

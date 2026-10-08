@@ -49,6 +49,7 @@ import { InstitutionSidebar } from '@/components/institution/institution-sidebar
 import { InstitutionNavbar } from '@/components/institution/institution-navbar';
 import { DiscordCommunityView } from '@/components/institution/discord-community-view';
 import { YouTubeStudioView } from '@/components/institution/studio/youtube-studio-view';
+import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 
 export default function InstitutionAdminPage() {
@@ -56,12 +57,19 @@ export default function InstitutionAdminPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const institutionId = (params?.id as string) || '650df5bf-a541-40e6-91bc-a5b09a1daadc';
 
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'courses' | 'community' | 'settings'>('overview');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('STUDENT');
   const [isInviteOpen, setIsInviteOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace(`/login?redirect=${encodeURIComponent(`/institution/${institutionId}`)}`);
+    }
+  }, [isAuthLoading, isAuthenticated, router, institutionId]);
 
   // 1. Fetch Institution Details
   const { data: instData, isLoading: isInstLoading } = useQuery({
@@ -215,6 +223,14 @@ export default function InstitutionAdminPage() {
         return 'Studio';
     }
   };
+
+  if (isAuthLoading || !isAuthenticated) {
+    return (
+      <div className="flex min-h-svh items-center justify-center bg-background">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>

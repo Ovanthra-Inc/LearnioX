@@ -21,6 +21,8 @@ async def lifespan(app: FastAPI):
     if settings.GEMINI_API_KEY:
         logger.info("Google Gemini AI API Key is configured and ready.")
     else:
+        if settings.ENVIRONMENT.lower() == "production":
+            raise RuntimeError("CRITICAL CONFIGURATION ERROR: GEMINI_API_KEY must be set in production mode!")
         logger.warning("GEMINI_API_KEY not set — running with local deterministic simulation mode.")
     yield
     logger.info("Shutting down LearnioX AI Microservice...")
@@ -89,6 +91,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 # Health check on root
 @app.get("/health", tags=["Health"])
+@app.get("/ready", tags=["Health"])
 async def root_health():
     return APIResponse.ok(
         data={"service": "ai-service", "status": "healthy"},

@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     MAX_TRANSCRIPTION_FILE_SIZE_MB: int = 100
     TRANSCRIPTION_STORAGE_DIR: str = "/app/storage/lecture_transcription_test"
 
+    # Redis Cache & Background Tasks
+    REDIS_URL: str = "redis://redis:6379/1"
+
     # Cross-Origin Resource Sharing (CORS)
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",

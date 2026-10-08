@@ -9,6 +9,7 @@ import {
   Settings,
   Headphones,
   Home,
+  LogIn,
   Sun,
   Moon,
   Sparkles,
@@ -45,7 +46,7 @@ interface SearchModalProps {
 export function SearchModal({ open, onOpenChange }: SearchModalProps) {
   const router = useRouter()
   const { theme, setTheme } = useTheme()
-  const { logout } = useAuth()
+  const { logout, isAuthenticated } = useAuth()
   const [query, setQuery] = React.useState("")
   const [debouncedQuery, setDebouncedQuery] = React.useState("")
   const [selectedIndex, setSelectedIndex] = React.useState(0)
@@ -155,10 +156,10 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
       {
         id: "nav-home",
         title: "Home",
-        subtitle: "Platform dashboard, workspace & activity",
+        subtitle: isAuthenticated ? "Platform dashboard, workspace & activity" : "Explore LearnioX learning platform",
         category: "Navigation",
         icon: Home,
-        url: "/dashboard",
+        url: isAuthenticated ? "/dashboard" : "/",
         keywords: ["dashboard", "home", "main", "playground", "workspace"],
       },
       {
@@ -179,15 +180,29 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
         url: "/institution",
         keywords: ["institutions", "teams", "organizations", "enterprise", "tenants"],
       },
-      {
-        id: "nav-settings",
-        title: "Settings",
-        subtitle: "Preferences, appearance, AI models & security",
-        category: "Navigation",
-        icon: Settings,
-        url: "/dashboard/settings",
-        keywords: ["settings", "preferences", "config", "editor", "theme"],
-      },
+      ...(isAuthenticated
+        ? [
+            {
+              id: "nav-settings",
+              title: "Settings",
+              subtitle: "Preferences, appearance, AI models & security",
+              category: "Navigation" as const,
+              icon: Settings,
+              url: "/dashboard/settings",
+              keywords: ["settings", "preferences", "config", "editor", "theme"],
+            },
+          ]
+        : [
+            {
+              id: "nav-login",
+              title: "Sign In",
+              subtitle: "Access your account, learning workspace & certificates",
+              category: "Navigation" as const,
+              icon: LogIn,
+              url: "/login",
+              keywords: ["login", "signin", "auth", "account"],
+            },
+          ]),
       {
         id: "nav-support",
         title: "Support & Docs",

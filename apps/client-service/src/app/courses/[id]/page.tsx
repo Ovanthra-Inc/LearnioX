@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { useCourseDetail, useCourses } from "@/hooks/useCourses"
+import { useAuth } from "@/hooks/useAuth"
 import { AppSidebar } from "@/components/app-sidebar"
 import { NavUser } from "@/components/nav-user"
 import { NotificationBell } from "@/components/layout/notification-bell"
@@ -237,7 +238,8 @@ export default function CourseDetailPage() {
   const router = useRouter()
 
   const { data: apiCourse } = useCourseDetail(courseId)
-  const { enrollInCourse, isEnrolling, checkoutCourse, isCheckingOut } = useCourses()
+  const { enrollInCourse, isEnrolling, checkoutCourse, isCheckingOut, verifyPayment } = useCourses()
+  const { user, isAuthenticated } = useAuth()
 
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({
     m1: true,
@@ -272,27 +274,112 @@ export default function CourseDetailPage() {
     }))
   }
 
+  const loadRazorpayScript = (): Promise<boolean> => {
+    return new Promise((resolve) => {
+      if (typeof window !== "undefined" && (window as any).Razorpay) {
+        return resolve(true)
+      }
+      const script = document.createElement("script")
+      script.src = "https://checkout.razorpay.com/v1/checkout.js"
+      script.onload = () => resolve(true)
+      script.onerror = () => resolve(false)
+      document.body.appendChild(script)
+    })
+  }
+
   const handleRegisterEnroll = async () => {
-    const toastId = toast.loading("Processing registration & course checkout...")
+    if (!isAuthenticated) {
+      toast.error("Please sign in or create an account to enroll.")
+      router.push(`/auth/login?redirect=/courses/${courseId}`)
+      return
+    }
+
+    const toastId = toast.loading("Initiating course registration...")
     try {
       if (courseId && courseId !== "default" && courseId !== "c1") {
         const order = await checkoutCourse({ courseId })
-        if (order?.requires_payment && order?.order_id) {
-          toast.success(`Order created: ${order.order_id}. Completing enrollment...`, { id: toastId })
-        } else {
-          toast.success("Successfully registered! You are now enrolled in the course.", { id: toastId })
+
+        if (!order?.requires_payment) {
+          toast.success("Successfully registered and enrolled in course!", { id: toastId })
+          setTimeout(() => {
+            router.push(`/courses/${courseId}/learn`)
+          }, 600)
+          return
         }
+
+        // Paid course: Razorpay flow
+        if (order.provider === "RAZORPAY") {
+          toast.loading("Opening secure payment gateway...", { id: toastId })
+          const loaded = await loadRazorpayScript()
+          if (!loaded) {
+            toast.error("Failed to load payment gateway. Please verify your connection.", { id: toastId })
+            return
+          }
+
+          toast.dismiss(toastId)
+          const options = {
+            key: order.key_id,
+            amount: Math.round(Number(order.amount) * 100),
+            currency: order.currency || "INR",
+            name: "LearnioX Academy",
+            description: courseData.title,
+            order_id: order.order_id,
+            handler: async (response: any) => {
+              const verifyToast = toast.loading("Verifying payment...")
+              try {
+                await verifyPayment({
+                  payment_id: order.payment_id,
+                  provider_payment_id: response.razorpay_payment_id,
+                  provider_order_id: response.razorpay_order_id,
+                  signature: response.razorpay_signature,
+                })
+                toast.success("Payment verified! Welcome to the course.", { id: verifyToast })
+                router.push(`/courses/${courseId}/learn`)
+              } catch (verifyErr: any) {
+                const msg = verifyErr?.response?.data?.message || "Payment verification failed. Please contact support."
+                toast.error(msg, { id: verifyToast })
+              }
+            },
+            prefill: {
+              name: user?.name,
+              email: user?.email,
+            },
+            theme: {
+              color: "#000000",
+            },
+          }
+          const rzp = new (window as any).Razorpay(options)
+          rzp.open()
+          return
+        }
+
+        // Mock mode (development)
+        if (order.provider === "MOCK") {
+          toast.success("Enrollment confirmed (development test mode)!", { id: toastId })
+          setTimeout(() => {
+            router.push(`/courses/${courseId}/learn`)
+          }, 600)
+          return
+        }
+
+        toast.info("Payment order created. Please complete checkout.", { id: toastId })
       } else {
-        toast.success("Registration confirmed! Interactive classroom activated.", { id: toastId })
+        toast.success("Preview enrollment confirmed!", { id: toastId })
+        setTimeout(() => {
+          router.push(`/courses/${courseId}/learn`)
+        }, 600)
       }
-      setTimeout(() => {
-        router.push(`/courses/${courseId}/learn`)
-      }, 800)
-    } catch {
-      toast.success("Registration confirmed! Redirecting to classroom...", { id: toastId })
-      setTimeout(() => {
-        router.push(`/courses/${courseId}/learn`)
-      }, 800)
+    } catch (err: any) {
+      console.error("Enrollment checkout error:", err)
+      const msg = err?.response?.data?.message || err?.message || "Failed to process enrollment"
+      if (err?.response?.status === 409) {
+        toast.info(msg, { id: toastId })
+        setTimeout(() => {
+          router.push(`/courses/${courseId}/learn`)
+        }, 600)
+      } else {
+        toast.error(msg, { id: toastId })
+      }
     }
   }
 
