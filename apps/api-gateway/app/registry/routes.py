@@ -26,12 +26,13 @@ SERVICE_REGISTRY: List[ServiceRoute] = [
         name="ai-service",
         description="AI tutoring, automated quiz generation, and content intelligence service",
     ),
-    ServiceRoute(
-        path_prefix="/api/v1/marketing",
-        target=settings.MARKETING_SERVICE_URL,
-        name="marketing-service",
-        description="Marketing landing pages, email notifications, and conversion tracking service",
-    ),
+    # TODO(Phase 2): Uncomment when marketing-service is scaffolded with a running container.
+    # ServiceRoute(
+    #     path_prefix="/api/v1/marketing",
+    #     target=settings.MARKETING_SERVICE_URL,
+    #     name="marketing-service",
+    #     description="Marketing landing pages, email notifications, and conversion tracking service",
+    # ),
     ServiceRoute(
         path_prefix="/api/v1/live",
         target=settings.LIVE_SERVICE_URL,

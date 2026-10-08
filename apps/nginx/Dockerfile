@@ -17,6 +17,6 @@ RUN mkdir -p /app/uploads
 EXPOSE 80 443
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost/api/v1/live/health || exit 1
+    CMD curl -f http://localhost/health || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]

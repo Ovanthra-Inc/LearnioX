@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient, ApiResponse } from '@/lib/api';
-import { useCourseDetail } from '@/hooks/useCourses';
+import { useCourseDetail, useCourseStructure, useCurriculumMutations, StructureLesson } from '@/hooks/useCourses';
 import {
   Building2,
   ArrowLeft,
@@ -18,24 +18,19 @@ import {
   Clock,
   MessageSquare,
   FileText,
-  HelpCircle,
   Sparkles,
   ChevronLeft,
   ChevronRight,
   Send,
   ThumbsUp,
-  Code,
   Radio,
   Bookmark,
-  ChevronDown,
   Download,
   Terminal,
-  Layers,
-  BookOpen,
-  Share2,
-  Check,
   RotateCcw,
   Loader2,
+  Lock,
+  GraduationCap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -164,11 +159,14 @@ export default function InstitutionCoursePlayPage() {
   const courseId = (params?.courseId as string) || 'default';
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
-  React.useEffect(() => {
-    if (!isAuthLoading && !isAuthenticated) {
-      router.replace(`/login?redirect=${encodeURIComponent(`/institution/slug/${slug}/courses/${courseId}/learn`)}`);
-    }
-  }, [isAuthLoading, isAuthenticated, router, slug, courseId]);
+  // Ref to the native <video> element for direct DOM control
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // Tracks accumulated watch time in seconds for the current lesson session
+  const progressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastReportedPositionRef = useRef<number>(0);
+
+  // NO unconditional redirect — guests may access preview lessons.
+  // The enrollment gate is rendered inline only for non-preview content.
 
   // 1. Fetch institution data
   const { data: instData } = useQuery({
@@ -189,14 +187,36 @@ export default function InstitutionCoursePlayPage() {
   // 2. Fetch course details
   const { data: apiCourse } = useCourseDetail(courseId);
 
-  // Active Lesson State
-  const [activeLessonId, setActiveLessonId] = useState<string>('l-1');
+  // 3. Fetch real course structure (modules + lessons) from API
+  const { data: courseStructure } = useCourseStructure(courseId);
+
+  // Progress mutations (progress heartbeat, lesson completion)
+  const { updateProgress, completeLesson } = useCurriculumMutations();
+
+  // Active Lesson State — seed from API structure when available
+  const apiModules = courseStructure?.modules ?? [];
+  const allApiLessons: StructureLesson[] = useMemo(
+    () => apiModules.flatMap((m) => m.lessons),
+    [apiModules]
+  );
+
+  const firstLessonId = allApiLessons[0]?.id || 'l-1';
+  const [activeLessonId, setActiveLessonId] = useState<string>(firstLessonId);
   const [activeTab, setActiveTab] = useState<'overview' | 'sandbox' | 'qa' | 'notes' | 'resources'>('overview');
+
+  // Sync activeLessonId to first lesson when API structure loads
+  useEffect(() => {
+    if (allApiLessons.length > 0 && activeLessonId === 'l-1') {
+      setActiveLessonId(allApiLessons[0].id);
+    }
+  }, [allApiLessons]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Player controls
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState('1x');
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [sandboxCode, setSandboxCode] = useState(`import qiskit
 from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
@@ -256,32 +276,150 @@ print("Measurement Counts:", counts)`);
   ]);
   const [newQuestion, setNewQuestion] = useState('');
 
-  // All lessons flat list
+  // ─── Lesson list: prefer live API structure, fall back to mock playlist ───────
   const playlist = DEFAULT_PLAYLIST;
   const allLessons = useMemo(() => {
+    if (allApiLessons.length > 0) return allApiLessons;
     return playlist.modules.flatMap((mod) => mod.lessons);
-  }, [playlist]);
+  }, [allApiLessons, playlist]);
 
   const currentLessonIndex = allLessons.findIndex((l) => l.id === activeLessonId);
   const currentLesson = allLessons[currentLessonIndex] || allLessons[0];
 
-  const completedCount = allLessons.filter((l) => l.completed).length;
+  // For API lessons, look up the StructureLesson to get file_id / is_preview
+  const currentApiLesson = allApiLessons.find((l) => l.id === activeLessonId);
+  const currentFileId: string | undefined =
+    (currentApiLesson as StructureLesson | undefined)?.content?.file_id ?? undefined;
+  const currentIsPreview: boolean =
+    (currentApiLesson as StructureLesson | undefined)?.is_preview ?? true; // fallback: treat mock lessons as preview
+
+  // Guest access gate: guests can only watch preview lessons
+  const isGuestBlockedFromLesson = !isAuthLoading && !isAuthenticated && !currentIsPreview;
+
+  // ─── Video player helpers ─────────────────────────────────────────────────────
+  const videoSrc = currentFileId
+    ? `/api/v1/storage/files/${currentFileId}/preview`
+    : null;
+
+  // Debounced progress heartbeat — fires every 10 seconds of playback
+  const sendProgressHeartbeat = useCallback(
+    async (lessonId: string, position: number) => {
+      if (!isAuthenticated || !lessonId || lessonId.startsWith('l-')) return; // skip mock lesson IDs
+      const delta = Math.max(0, position - lastReportedPositionRef.current);
+      if (delta < 5) return; // avoid noise for tiny scrub movements
+      try {
+        await updateProgress({ lessonId, watchTime: delta, lastPosition: Math.floor(position) });
+        lastReportedPositionRef.current = position;
+      } catch {
+        // Non-critical — swallow silently so playback is never interrupted
+      }
+    },
+    [isAuthenticated, updateProgress]
+  );
+
+  // Video event handlers
+  const handleTimeUpdate = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    setCurrentTime(video.currentTime);
+    // Fire heartbeat every ~10s of real watch time
+    if (Math.floor(video.currentTime) % 10 === 0 && Math.floor(video.currentTime) !== 0) {
+      sendProgressHeartbeat(activeLessonId, video.currentTime);
+    }
+  }, [activeLessonId, sendProgressHeartbeat]);
+
+  const handleVideoLoadedMetadata = useCallback(() => {
+    if (videoRef.current) setDuration(videoRef.current.duration);
+  }, []);
+
+  const handleVideoPlay = useCallback(() => setIsPlaying(true), []);
+  const handleVideoPause = useCallback(() => {
+    setIsPlaying(false);
+    if (videoRef.current) sendProgressHeartbeat(activeLessonId, videoRef.current.currentTime);
+  }, [activeLessonId, sendProgressHeartbeat]);
+
+  const handleVideoEnded = useCallback(async () => {
+    setIsPlaying(false);
+    if (isAuthenticated && !activeLessonId.startsWith('l-')) {
+      try { await completeLesson(activeLessonId); } catch { /* non-critical */ }
+    }
+    // Auto-advance
+    if (currentLessonIndex < allLessons.length - 1) {
+      const next = allLessons[currentLessonIndex + 1];
+      setActiveLessonId(next.id);
+      lastReportedPositionRef.current = 0;
+      toast.success(`Lesson complete! Now playing: ${next.title}`);
+    }
+  }, [isAuthenticated, activeLessonId, currentLessonIndex, allLessons, completeLesson]);
+
+  // Reset video and progress tracking when active lesson changes
+  useEffect(() => {
+    lastReportedPositionRef.current = 0;
+    setCurrentTime(0);
+    setDuration(0);
+    setIsPlaying(false);
+    if (videoRef.current) {
+      videoRef.current.load();
+    }
+  }, [activeLessonId]);
+
+  // Sync muted state with video element
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.muted = isMuted;
+  }, [isMuted]);
+
+  // Sync playback speed with video element
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.playbackRate = parseFloat(playbackSpeed);
+  }, [playbackSpeed]);
+
+  const togglePlayPause = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) { setIsPlaying((p) => !p); return; }
+    if (video.paused) { video.play(); } else { video.pause(); }
+  }, []);
+
+  const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const video = videoRef.current;
+    if (!video || !duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    video.currentTime = ratio * duration;
+  }, [duration]);
+
+  const handleFullscreen = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (document.fullscreenElement) document.exitFullscreen();
+    else video.requestFullscreen();
+  }, []);
+
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  };
+
+  // ─── Mock playlist fallback helpers ──────────────────────────────────────────
+  const completedCount = allLessons.filter((l: any) => l.completed).length;
   const totalCount = allLessons.length;
-  const progressPercent = Math.round((completedCount / totalCount) * 100);
+  const progressPercent = duration > 0 && currentTime > 0
+    ? Math.round((currentTime / duration) * 100)
+    : Math.round((completedCount / Math.max(totalCount, 1)) * 100);
 
   const handleNextLesson = () => {
     if (currentLessonIndex < allLessons.length - 1) {
       setActiveLessonId(allLessons[currentLessonIndex + 1].id);
-      setIsPlaying(true);
-      toast.info(`Playing: ${allLessons[currentLessonIndex + 1].title}`);
+      lastReportedPositionRef.current = 0;
+      toast.info(`Playing: ${(allLessons[currentLessonIndex + 1] as any).title}`);
     }
   };
 
   const handlePrevLesson = () => {
     if (currentLessonIndex > 0) {
       setActiveLessonId(allLessons[currentLessonIndex - 1].id);
-      setIsPlaying(true);
-      toast.info(`Playing: ${allLessons[currentLessonIndex - 1].title}`);
+      lastReportedPositionRef.current = 0;
+      toast.info(`Playing: ${(allLessons[currentLessonIndex - 1] as any).title}`);
     }
   };
 
@@ -336,7 +474,8 @@ Execution time: 42ms`);
     }, 1200);
   };
 
-  if (isAuthLoading || !isAuthenticated) {
+  // Show a spinner only while auth is still resolving
+  if (isAuthLoading) {
     return (
       <div className="flex min-h-svh items-center justify-center bg-background">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -397,18 +536,74 @@ Execution time: 42ms`);
         {/* LEFT/CENTER: Video Player & Interactive Work Tabs */}
         <div className="w-full lg:w-2/3 flex flex-col gap-6">
           
-          {/* 1. CINEMATIC VIDEO PLAYER */}
+          {/* 1. VIDEO PLAYER — real HTML5 stream or guest-gate overlay */}
           <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border/80 bg-neutral-950 shadow-2xl flex flex-col justify-between group">
-            
-            {/* Ambient Background & Glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40 pointer-events-none" />
+
+            {/* ── Guest Enrollment Gate ── visible only when guest tries non-preview lesson */}
+            {isGuestBlockedFromLesson && (
+              <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-5 bg-black/80 backdrop-blur-sm px-6 text-center">
+                <div className="size-16 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
+                  <Lock className="size-8 text-primary" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-bold text-white">This lesson is for enrolled students</h3>
+                  <p className="text-sm text-white/60 max-w-sm">
+                    Create a free account or log in to access the full course. Preview lessons are always free.
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    size="sm"
+                    onClick={() => router.push(`/login?redirect=${encodeURIComponent(`/institution/slug/${slug}/courses/${courseId}/learn`)}`)}
+                    className="font-bold gap-2"
+                  >
+                    <GraduationCap className="size-4" />
+                    Enroll / Log In
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => router.push(`/institution/slug/${slug}/courses/${courseId}`)}
+                    className="font-semibold"
+                  >
+                    View Course Details
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* ── Real HTML5 Video Stream ─────────────────────────────────────── */}
+            {videoSrc ? (
+              <video
+                ref={videoRef}
+                key={activeLessonId}
+                className="absolute inset-0 w-full h-full object-contain"
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleVideoLoadedMetadata}
+                onPlay={handleVideoPlay}
+                onPause={handleVideoPause}
+                onEnded={handleVideoEnded}
+                playsInline
+                preload="metadata"
+              >
+                <source src={videoSrc} />
+              </video>
+            ) : (
+              /* Ambient fallback background when no file_id is available (mock data) */
+              <>
+                <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40 pointer-events-none" />
+              </>
+            )}
+
+            {/* Gradient overlay for controls readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none z-10" />
 
             {/* Top Bar inside Video Player */}
-            <div className="relative z-10 p-4 flex items-center justify-between">
+            <div className="relative z-20 p-4 flex items-center justify-between">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-background/80 backdrop-blur-md text-[11px] font-bold text-primary border border-border/60">
                 <Radio className="size-3 text-emerald-400 animate-pulse" />
-                <span>INSTITUTIONAL SANDBOX ACTIVE</span>
+                <span>{currentIsPreview ? 'FREE PREVIEW' : 'INSTITUTIONAL LECTURE'}</span>
               </span>
 
               <div className="flex items-center gap-2">
@@ -422,38 +617,51 @@ Execution time: 42ms`);
               </div>
             </div>
 
-            {/* Center Play Button Overlay */}
-            <div className="relative z-10 flex flex-col items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="size-16 sm:size-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-2xl shadow-primary/30 transition-transform duration-200 hover:scale-110 cursor-pointer"
-              >
-                {isPlaying ? <Pause className="size-8 fill-current" /> : <Play className="size-8 fill-current ml-1" />}
-              </button>
-              <span className="text-xs sm:text-sm font-semibold text-white/90 drop-shadow-md">
-                {isPlaying ? 'Playing Lesson Video Stream' : 'Click to Resume Lecture'}
-              </span>
-            </div>
+            {/* Center Play/Pause Button Overlay (shown when video is not src-streaming or paused) */}
+            {(!isPlaying || !videoSrc) && !isGuestBlockedFromLesson && (
+              <div className="relative z-20 flex flex-col items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={togglePlayPause}
+                  className="size-16 sm:size-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-2xl shadow-primary/30 transition-transform duration-200 hover:scale-110 cursor-pointer"
+                >
+                  <Play className="size-8 fill-current ml-1" />
+                </button>
+                <span className="text-xs sm:text-sm font-semibold text-white/90 drop-shadow-md">
+                  {videoSrc ? 'Click to Start Lecture' : 'Preview — No video attached yet'}
+                </span>
+              </div>
+            )}
 
             {/* Bottom Scrubber & Controls Bar */}
-            <div className="relative z-10 p-4 sm:p-5 space-y-2 bg-gradient-to-t from-black/95 to-transparent">
+            <div className="relative z-20 p-4 sm:p-5 space-y-2 bg-gradient-to-t from-black/95 to-transparent">
               {/* Progress Timeline Scrubber */}
-              <div className="w-full bg-white/20 h-1.5 rounded-full overflow-hidden cursor-pointer">
-                <div className="bg-primary h-full rounded-full w-2/5 transition-all duration-300" />
+              <div
+                className="w-full bg-white/20 h-1.5 rounded-full overflow-hidden cursor-pointer"
+                onClick={handleSeek}
+                role="slider"
+                aria-label="Video seek bar"
+                aria-valuenow={currentTime}
+                aria-valuemin={0}
+                aria-valuemax={duration}
+              >
+                <div
+                  className="bg-primary h-full rounded-full transition-all duration-150"
+                  style={{ width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%' }}
+                />
               </div>
 
               <div className="flex items-center justify-between text-xs text-white/80 pt-1">
                 <div className="flex items-center gap-3">
-                  <span>07:24 / {currentLesson.duration}</span>
+                  <span>{formatTime(currentTime)} / {duration > 0 ? formatTime(duration) : ((currentLesson as any).duration || '--:--')}</span>
                   <span className="text-white/40">•</span>
-                  <span className="font-semibold text-white">{currentLesson.title}</span>
+                  <span className="font-semibold text-white">{(currentLesson as any).title}</span>
                 </div>
 
                 <div className="flex items-center gap-3">
                   {/* Speed Selector */}
                   <div className="flex items-center gap-1 bg-white/10 px-2 py-0.5 rounded text-[11px]">
-                    {['1x', '1.25x', '1.5x'].map((spd) => (
+                    {['1', '1.25', '1.5', '2'].map((spd) => (
                       <button
                         key={spd}
                         type="button"
@@ -463,15 +671,16 @@ Execution time: 42ms`);
                           playbackSpeed === spd ? 'font-bold text-primary bg-white/20' : 'text-white/60 hover:text-white'
                         )}
                       >
-                        {spd}
+                        {spd}x
                       </button>
                     ))}
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => toast.info('Fullscreen toggled')}
+                    onClick={handleFullscreen}
                     className="hover:text-white cursor-pointer"
+                    aria-label="Toggle fullscreen"
                   >
                     <Maximize2 className="size-4" />
                   </button>
@@ -745,33 +954,42 @@ Execution time: 42ms`);
 
             {/* Modules & Lessons List */}
             <div className="divide-y divide-border/60 max-h-[580px] overflow-y-auto">
-              {playlist.modules.map((mod) => (
+              {(apiModules.length > 0 ? apiModules : playlist.modules).map((mod: any) => (
                 <div key={mod.id} className="p-3 space-y-2">
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground px-2 block">
                     {mod.title}
                   </span>
 
                   <div className="space-y-1">
-                    {mod.lessons.map((lesson) => {
+                    {mod.lessons.map((lesson: any) => {
                       const isActive = lesson.id === activeLessonId;
+                      const isPreview = lesson.is_preview ?? true;
+                      const isLocked = !isAuthenticated && !isPreview;
                       return (
                         <button
                           key={lesson.id}
                           type="button"
                           onClick={() => {
+                            if (isLocked) {
+                              toast.info('Log in or enroll to access this lesson');
+                              return;
+                            }
                             setActiveLessonId(lesson.id);
-                            setIsPlaying(true);
                           }}
                           className={cn(
                             'w-full flex items-center justify-between p-2.5 rounded-xl text-left transition-all cursor-pointer text-xs',
                             isActive
                               ? 'bg-primary text-primary-foreground font-bold shadow-xs'
+                              : isLocked
+                              ? 'opacity-50 cursor-not-allowed text-muted-foreground'
                               : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                           )}
                         >
                           <div className="flex items-center gap-2.5 pr-2">
                             {isActive ? (
                               <Play className="size-3.5 fill-current shrink-0" />
+                            ) : isLocked ? (
+                              <Lock className="size-3.5 shrink-0" />
                             ) : lesson.completed ? (
                               <CheckCircle2 className="size-3.5 text-emerald-400 shrink-0" />
                             ) : (
@@ -779,9 +997,18 @@ Execution time: 42ms`);
                             )}
                             <span className="line-clamp-1">{lesson.title}</span>
                           </div>
-                          <span className={cn('text-[10px] shrink-0 font-mono', isActive ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
-                            {lesson.duration}
-                          </span>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {isPreview && !isActive && (
+                              <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wide">Free</span>
+                            )}
+                            <span className={cn('text-[10px] font-mono', isActive ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
+                              {lesson.duration
+                                ? typeof lesson.duration === 'number'
+                                  ? formatTime(lesson.duration)
+                                  : lesson.duration
+                                : ''}
+                            </span>
+                          </div>
                         </button>
                       );
                     })}
