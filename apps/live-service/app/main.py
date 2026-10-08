@@ -7,19 +7,18 @@ from redis.asyncio import ConnectionPool
 
 from app.api.v1.router import api_v1_router
 from app.core.config import settings
+from app.core.logging_config import setup_logging
+from app.core.telemetry import setup_telemetry
 from app.database.base import Base
 from app.database.session import engine
 from app.ws.connection_manager import ws_manager
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-)
-logger = logging.getLogger("learniox.live-service")
+logger = setup_logging("live-service", log_level="DEBUG" if settings.DEBUG else "INFO")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    setup_telemetry(app, "live-service", engine=engine)
     logger.info("Initializing LearnioX Live Classroom Service...")
     logger.info(f"Environment: {settings.ENVIRONMENT} | Port: {settings.PORT} | Media Provider: {settings.MEDIA_PROVIDER}")
 

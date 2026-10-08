@@ -1119,43 +1119,51 @@ class PaymentService:
         # 4. Atomic Database Reconciliation for Purchases
         course = await self.course_repo.get_course_by_id(course_id) if course_id else None
 
-        async with _atomic_transaction(self.db):
-            # 1. Update Payment status to SUCCESS
-            await self.repo.confirm_payment(payment.id, provider_payment_id=provider_payment_id)
+        lock_key = f"purchase:{user_id}:{course_id}" if user_id and course_id else None
+        if lock_key and self.redis:
+            await acquire_lock(self.redis, lock_key, ttl=15)
 
-            # 2. Upsert CoursePurchase record
-            if course_id:
-                existing_purchase = None
-                if hasattr(self.repo, "find_course_purchase"):
-                    find_res = self.repo.find_course_purchase(user_id, course_id)
-                    if hasattr(find_res, "__await__"):
-                        existing_purchase = await find_res
-                    elif type(find_res).__name__ not in ("MagicMock", "AsyncMock", "NonCallableMagicMock"):
-                        existing_purchase = find_res
+        try:
+            async with _atomic_transaction(self.db):
+                # 1. Update Payment status to SUCCESS
+                await self.repo.confirm_payment(payment.id, provider_payment_id=provider_payment_id)
 
-                if not existing_purchase:
-                    await self.repo.create_course_purchase(
-                        user_id=user_id,
-                        course_id=course_id,
-                        payment_id=payment.id,
-                        amount=payment.amount,
-                        currency=payment.currency,
-                        status=PaymentStatus.SUCCESS,
-                    )
+                # 2. Upsert CoursePurchase record
+                if course_id:
+                    existing_purchase = None
+                    if hasattr(self.repo, "find_course_purchase"):
+                        find_res = self.repo.find_course_purchase(user_id, course_id)
+                        if hasattr(find_res, "__await__"):
+                            existing_purchase = await find_res
+                        elif type(find_res).__name__ not in ("MagicMock", "AsyncMock", "NonCallableMagicMock"):
+                            existing_purchase = find_res
 
-                # 3. Create or activate Course Enrollment
-                if course:
-                    enr = await self.enrollment_repo.find_enrollment(user_id, course_id)
-                    if not enr:
-                        await self.enrollment_repo.create_enrollment(
+                    if not existing_purchase:
+                        await self.repo.create_course_purchase(
                             user_id=user_id,
                             course_id=course_id,
-                            institution_id=course.institution_id,
-                            access_type=EnrollmentAccessType.PURCHASED,
+                            payment_id=payment.id,
+                            amount=payment.amount,
+                            currency=payment.currency,
+                            status=PaymentStatus.SUCCESS,
                         )
-                    elif enr.status != EnrollmentStatus.ACTIVE:
-                        enr.status = EnrollmentStatus.ACTIVE
-                        await self.db.flush()
+
+                    # 3. Create or activate Course Enrollment
+                    if course:
+                        enr = await self.enrollment_repo.find_enrollment(user_id, course_id)
+                        if not enr:
+                            await self.enrollment_repo.create_enrollment(
+                                user_id=user_id,
+                                course_id=course_id,
+                                institution_id=course.institution_id,
+                                access_type=EnrollmentAccessType.PURCHASED,
+                            )
+                        elif enr.status != EnrollmentStatus.ACTIVE:
+                            enr.status = EnrollmentStatus.ACTIVE
+                            await self.db.flush()
+        finally:
+            if lock_key and self.redis:
+                await release_lock(self.redis, lock_key)
 
         logger.info(
             f"Successfully reconciled payment {payment.id} for user {user_id} on course {course_id}"

@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Locate central .env file
@@ -21,6 +21,13 @@ class LiveSettings(BaseSettings):
     DEBUG: bool = True
     PORT: int = 8003
     API_V1_STR: str = "/api/v1/live"
+
+    # Logging & Observability
+    LOG_LEVEL: str = "INFO"
+    LEARNIOX_LOG_DIR: str = "/var/log/learniox"
+    LOG_FILE_MAX_BYTES: int = 26214400
+    LOG_FILE_BACKUP_COUNT: int = 10
+    APPLICATIONINSIGHTS_CONNECTION_STRING: Optional[str] = None
 
     # Security & JWT
     SECRET_KEY: str = "learniox_super_secret_jwt_key_2026_change_in_production"

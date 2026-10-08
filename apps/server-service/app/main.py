@@ -19,6 +19,8 @@ from app.core.middleware import (
     SecurityHeadersMiddleware,
     configure_json_logging,
 )
+from app.core.logging_config import setup_logging
+from app.core.telemetry import setup_telemetry
 from app.core.response import APIResponse
 from app.database.base import Base
 from app.database.session import engine
@@ -30,9 +32,8 @@ from app.cache.redis_client import (
 )
 import app.models  # Registers all declarative models with Base.metadata for automatic table creation
 
-# Configure structured JSON logging before any other logging
-configure_json_logging(log_level="DEBUG" if settings.DEBUG else "INFO")
-logger = logging.getLogger("server-service")
+# Configure centralized structured JSON logging with local file rotation & stdout streaming
+logger = setup_logging("server-service", log_level="DEBUG" if settings.DEBUG else "INFO")
 
 # Rate limiter — keyed by client IP address
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
@@ -64,6 +65,9 @@ class RequestBodySizeLimitMiddleware(BaseHTTPMiddleware):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # ── 0. Initialize Azure Application Insights Telemetry ──────────────────
+    setup_telemetry(app, "server-service", engine=engine)
+
     # ── 1. Initialize Redis Connection Pool ───────────────────────────────────
     logger.info("Initializing Redis connection pool...")
     try:

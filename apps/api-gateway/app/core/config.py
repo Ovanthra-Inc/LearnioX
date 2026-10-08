@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Safely locate central .env file for local development without crashing inside Docker containers
@@ -31,10 +31,20 @@ class GatewaySettings(BaseSettings):
     MARKETING_SERVICE_URL: str = "http://marketing-service:8002"
     LIVE_SERVICE_URL: str = "http://live-service:8003"
 
+    # Logging & Observability
+    LOG_LEVEL: str = "INFO"
+    LEARNIOX_LOG_DIR: str = "/var/log/learniox"
+    LOG_FILE_MAX_BYTES: int = 26214400
+    LOG_FILE_BACKUP_COUNT: int = 10
+    APPLICATIONINSIGHTS_CONNECTION_STRING: Optional[str] = None
+
     # Redis Rate Limiting
     REDIS_HOST: str = "redis"
     REDIS_PORT: int = 6379
     REDIS_URL: str = "redis://redis:6379"
+    GATEWAY_RATE_LIMIT_WINDOW_MS: int = 60000
+    GATEWAY_RATE_LIMIT_MAX: int = 300
+    GATEWAY_RATE_LIMIT_DEFAULT: str = "300/minute"
 
     # CORS
     CORS_ORIGINS: List[str] = [

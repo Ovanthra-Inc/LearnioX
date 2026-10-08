@@ -1,5 +1,9 @@
+from pathlib import Path
 from typing import List, Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+parents = Path(__file__).resolve().parents
+central_env = str(parents[3] / ".env") if len(parents) > 3 and (parents[3] / ".env").exists() else ".env"
 
 
 class Settings(BaseSettings):
@@ -9,6 +13,16 @@ class Settings(BaseSettings):
     # Server & Port
     AI_SERVICE_HOST: str = "0.0.0.0"
     AI_SERVICE_PORT: int = 8001
+
+    # Logging & Observability
+    LOG_LEVEL: str = "INFO"
+    LEARNIOX_LOG_DIR: str = "/var/log/learniox"
+    LOG_FILE_MAX_BYTES: int = 26214400
+    LOG_FILE_BACKUP_COUNT: int = 10
+    APPLICATIONINSIGHTS_CONNECTION_STRING: Optional[str] = None
+
+    # Rate Limiting
+    AI_RATE_LIMIT_PER_MINUTE: int = 30
 
     # Google Gemini AI Settings
     GEMINI_API_KEY: Optional[str] = None
@@ -35,7 +49,7 @@ class Settings(BaseSettings):
     ]
 
     model_config = SettingsConfigDict(
-        env_file="../../.env",
+        env_file=central_env,
         env_file_encoding="utf-8",
         extra="ignore",
     )

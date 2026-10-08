@@ -4,18 +4,17 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.core.config import settings
+from app.core.logging_config import setup_logging
+from app.core.telemetry import setup_telemetry
 from app.api.v1.router import api_v1_router
 from app.schemas.response import APIResponse
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-)
-logger = logging.getLogger("learniox.ai-service")
+logger = setup_logging("ai-service", log_level="DEBUG" if settings.DEBUG else "INFO")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    setup_telemetry(app, "ai-service")
     logger.info(f"Starting LearnioX AI Microservice on port {settings.AI_SERVICE_PORT}...")
     logger.info(f"Environment: {settings.ENVIRONMENT} | AI Model: {settings.AI_MODEL_NAME}")
     if settings.GEMINI_API_KEY:

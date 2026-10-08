@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 from typing import List, Optional, Tuple
 from uuid import UUID
@@ -11,9 +12,18 @@ from app.models.member import InstitutionMember, MemberStatus
 from app.models.user import User
 
 
+def _clean_search_term(term: str) -> str:
+    """Strip special syntax characters (&, |, !, etc.) to prevent query parser exceptions."""
+    if not term:
+        return ""
+    cleaned = re.sub(r"[&|!<>():*'\"]", " ", term).strip()
+    return cleaned if cleaned else term.strip()
+
+
 def _fts_query(term: str):
-    """Build a plainto_tsquery expression for full-text search."""
-    return func.plainto_tsquery("english", term)
+    """Build a plainto_tsquery expression for full-text search with cleaned query."""
+    clean = _clean_search_term(term)
+    return func.plainto_tsquery("english", clean or term)
 
 
 def _ts_rank(vector_col, query):
@@ -68,12 +78,17 @@ class SearchRepository:
         )
 
         if q:
+            clean_q = _clean_search_term(q)
             # GAP-02 FIX: Full-text search with GIN index.
             # Primary: tsvector @@ tsquery (uses GIN index, sub-20ms)
-            # Fallback: pg_trgm similarity for typo tolerance
+            # Fallback: pg_trgm similarity for typo tolerance + substring ILIKE safety
             fts_match = Course.search_vector.op("@@")(ts_query)
-            trgm_match = Course.title.op("%%")(q)  # pg_trgm similarity
-            query = query.where(or_(fts_match, trgm_match))
+            trgm_match = Course.title.op("%%")(clean_q)
+            ilike_match = or_(
+                Course.title.ilike(f"%{clean_q}%"),
+                Course.description.ilike(f"%{clean_q}%"),
+            )
+            query = query.where(or_(fts_match, trgm_match, ilike_match))
 
         if category_id:
             query = query.where(Course.category_id == category_id)
@@ -189,11 +204,16 @@ class SearchRepository:
         )
 
         if q:
-            # GAP-02 FIX: Use institution FTS vector when available, with pg_trgm fallback
-            ts_query = _fts_query(q)
+            # GAP-02 FIX: Use institution FTS vector when available, with pg_trgm fallback + ilike
+            clean_q = _clean_search_term(q)
+            ts_query = _fts_query(clean_q)
             fts_match = Institution.search_vector.op("@@")(ts_query)
-            trgm_match = Institution.name.op("%%")(q)
-            query = query.where(or_(fts_match, trgm_match))
+            trgm_match = Institution.name.op("%%")(clean_q)
+            ilike_match = or_(
+                Institution.name.ilike(f"%{clean_q}%"),
+                Institution.tagline.ilike(f"%{clean_q}%"),
+            )
+            query = query.where(or_(fts_match, trgm_match, ilike_match))
 
         count_stmt = select(func.count()).select_from(query.subquery())
         total = (await self.db.execute(count_stmt)).scalar_one()
@@ -283,8 +303,9 @@ class SearchRepository:
         return items, total
 
     async def get_suggestions(self, q: str) -> dict:
-        term = f"%{q.strip()}%"
-        ts_query = _fts_query(q)
+        clean_q = _clean_search_term(q)
+        term = f"%{clean_q}%"
+        ts_query = _fts_query(clean_q)
 
         # Course titles — FTS with trgm fallback
         c_res = await self.db.execute(

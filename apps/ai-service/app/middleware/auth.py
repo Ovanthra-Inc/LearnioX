@@ -6,12 +6,12 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from app.schemas.response import APIResponse
 
+from app.core.config import settings
+
 logger = logging.getLogger("learniox.ai-service.auth")
 
 # In-memory sliding window rate limiter: user_id -> (timestamp, count)
-# Max 30 AI requests per minute per user
 _user_rate_limits: Dict[str, Tuple[float, int]] = {}
-MAX_AI_REQUESTS_PER_MINUTE = 30
 WINDOW_SECONDS = 60.0
 
 EXEMPT_PATHS = {"/health", "/docs", "/openapi.json", "/redoc", "/"}
@@ -48,7 +48,7 @@ class AIAuthRateLimitMiddleware(BaseHTTPMiddleware):
         if now - window_start > WINDOW_SECONDS:
             _user_rate_limits[user_id] = (now, 1)
         else:
-            if count >= MAX_AI_REQUESTS_PER_MINUTE:
+            if count >= settings.AI_RATE_LIMIT_PER_MINUTE:
                 logger.warning(f"Rate limit exceeded for user {user_id} on {path}")
                 return JSONResponse(
                     status_code=429,

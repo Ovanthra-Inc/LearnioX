@@ -27,6 +27,18 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     API_V1_STR: str = "/api/v1"
 
+    # Logging & Observability
+    LOG_LEVEL: str = "INFO"
+    LEARNIOX_LOG_DIR: str = "/var/log/learniox"
+    LOG_FILE_MAX_BYTES: int = 26214400
+    LOG_FILE_BACKUP_COUNT: int = 10
+    APPLICATIONINSIGHTS_CONNECTION_STRING: Optional[str] = None
+
+    # Microservice Endpoints
+    AI_SERVICE_URL: str = "http://ai-service:8001"
+    LIVE_SERVICE_URL: str = "http://live-service:8003"
+    MARKETING_SERVICE_URL: str = "http://marketing-service:8002"
+
     # Security & JWT — NO default for SECRET_KEY; must come from .env
     SECRET_KEY: str
     ALGORITHM: str = "HS256"

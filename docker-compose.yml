@@ -66,6 +66,7 @@ services:
     volumes:
       - ./apps/server-service:/app
       - uploads_data:/app/uploads
+      - app_logs:/var/log/learniox
     networks:
       - learniox-network
 
@@ -86,6 +87,7 @@ services:
       - redis
     volumes:
       - ./apps/api-gateway:/app
+      - app_logs:/var/log/learniox
     networks:
       - learniox-network
 
@@ -105,6 +107,7 @@ services:
     volumes:
       - ./apps/ai-service:/app
       - ai_storage_data:/app/storage
+      - app_logs:/var/log/learniox
     networks:
       - learniox-network
 
@@ -126,6 +129,7 @@ services:
         condition: service_healthy
     volumes:
       - ./apps/live-service:/app
+      - app_logs:/var/log/learniox
     networks:
       - learniox-network
 
@@ -191,3 +195,4 @@ volumes:
   redis_data:
   uploads_data:
   ai_storage_data:
+  app_logs:

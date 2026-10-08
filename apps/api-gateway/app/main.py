@@ -8,12 +8,14 @@ from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
 from app.core.config import settings
+from app.core.logging_config import setup_logging
+from app.core.telemetry import setup_telemetry
 from app.middleware.request_id import GatewayRequestIDMiddleware
 from app.middleware.auth_claims import GatewayAuthClaimsMiddleware
 from app.registry.routes import SERVICE_REGISTRY
 from app.router.proxy import router as proxy_router
 
-logger = logging.getLogger("gateway")
+logger = setup_logging("api-gateway", log_level="DEBUG" if settings.DEBUG else "INFO")
 
 
 def rate_limit_key(request: Request) -> str:
@@ -31,16 +33,17 @@ def rate_limit_key(request: Request) -> str:
 try:
     limiter = Limiter(
         key_func=rate_limit_key,
-        default_limits=["300/minute"],
+        default_limits=[settings.GATEWAY_RATE_LIMIT_DEFAULT],
         storage_uri=settings.REDIS_URL,
     )
 except Exception as e:
     logger.warning(f"Could not connect slowapi to Redis ({e}); falling back to memory.")
-    limiter = Limiter(key_func=rate_limit_key, default_limits=["300/minute"])
+    limiter = Limiter(key_func=rate_limit_key, default_limits=[settings.GATEWAY_RATE_LIMIT_DEFAULT])
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    setup_telemetry(app, "api-gateway")
     logger.info("Initializing LearnioX BFF API Gateway...")
     yield
     logger.info("Shutting down API Gateway...")
