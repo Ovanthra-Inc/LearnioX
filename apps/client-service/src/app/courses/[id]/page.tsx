@@ -347,6 +347,11 @@ export default function CourseDetailPage() {
             theme: {
               color: "#000000",
             },
+            modal: {
+              ondismiss: () => {
+                toast.info("Payment cancelled. You can complete your enrollment at any time.");
+              },
+            },
           }
           const rzp = new (window as any).Razorpay(options)
           rzp.open()

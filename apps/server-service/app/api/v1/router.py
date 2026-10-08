@@ -35,8 +35,10 @@ from app.api.v1.endpoints.reviews import router as reviews_router
 from app.api.v1.endpoints.certificates import router as certificates_router
 from app.api.v1.endpoints.discussions import router as discussions_router
 from app.api.v1.endpoints.analytics import router as analytics_router
+from app.api.v1.endpoints.assessment_tasks import router as assessment_tasks_router
 
 api_v1_router = APIRouter()
+api_v1_router.include_router(assessment_tasks_router)
 api_v1_router.include_router(auth_router)
 api_v1_router.include_router(users_router)
 api_v1_router.include_router(storage_router)

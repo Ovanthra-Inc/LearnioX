@@ -21,17 +21,31 @@ class ClassroomConnectionManager:
     def __init__(self):
         # session_id (str) -> dict of connection_id -> (WebSocket, user_info dict)
         self.active_rooms: Dict[str, Dict[str, tuple[WebSocket, Dict[str, Any]]]] = {}
+        # connection_id -> { "session_id": str, "last_seen": float }
+        self.connection_meta: Dict[str, Dict[str, Any]] = {}
         # session_id -> background redis subscription task
         self.pubsub_tasks: Dict[str, asyncio.Task] = {}
         self.redis_pool: Optional[ConnectionPool] = None
         # Ephemeral reaction buffer for storm mitigation: session_id -> { reaction_type: count }
         self.reaction_buffer: Dict[str, Dict[str, int]] = {}
         self.reaction_batch_task: Optional[asyncio.Task] = None
+        self.heartbeat_task: Optional[asyncio.Task] = None
+
+    def _ensure_background_loops(self):
+        """Ensures that the reaction flusher and heartbeat loops are running."""
+        if self.reaction_batch_task is None or self.reaction_batch_task.done():
+            self.reaction_batch_task = asyncio.create_task(self._reaction_flusher_loop())
+        if self.heartbeat_task is None or self.heartbeat_task.done():
+            self.heartbeat_task = asyncio.create_task(self._heartbeat_loop())
 
     def initialize_redis(self, pool: ConnectionPool):
         self.redis_pool = pool
-        if self.reaction_batch_task is None or self.reaction_batch_task.done():
-            self.reaction_batch_task = asyncio.create_task(self._reaction_flusher_loop())
+        self._ensure_background_loops()
+
+    def update_activity(self, connection_id: str):
+        """Updates last_seen heartbeat timestamp for active connection."""
+        if connection_id in self.connection_meta:
+            self.connection_meta[connection_id]["last_seen"] = asyncio.get_event_loop().time()
 
     def get_redis(self) -> Optional[Redis]:
         if self.redis_pool:
@@ -43,6 +57,7 @@ class ClassroomConnectionManager:
         self, session_id: str, connection_id: str, websocket: WebSocket, user_info: Dict[str, Any]
     ):
         await websocket.accept()
+        self._ensure_background_loops()
 
         if session_id not in self.active_rooms:
             self.active_rooms[session_id] = {}
@@ -58,6 +73,10 @@ class ClassroomConnectionManager:
                     logger.warning(f"Redis subscription wait timed out for session {session_id}")
 
         self.active_rooms[session_id][connection_id] = (websocket, user_info)
+        self.connection_meta[connection_id] = {
+            "session_id": session_id,
+            "last_seen": asyncio.get_event_loop().time(),
+        }
         logger.info(
             f"WS Client connected: conn={connection_id} user={user_info.get('display_name')} "
             f"role={user_info.get('role')} session={session_id} (Local total: {len(self.active_rooms[session_id])})"
@@ -93,6 +112,7 @@ class ClassroomConnectionManager:
         )
 
     async def disconnect(self, session_id: str, connection_id: str):
+        self.connection_meta.pop(connection_id, None)
         if session_id in self.active_rooms and connection_id in self.active_rooms[session_id]:
             _, user_info = self.active_rooms[session_id].pop(connection_id)
             logger.info(f"WS Client disconnected: conn={connection_id} session={session_id}")
@@ -219,6 +239,59 @@ class ClassroomConnectionManager:
                     }
                     await self.publish_event(session_id, event)
             self.reaction_buffer.clear()
+
+    # ─── Heartbeats & Automated Stale Socket Pruning (20s interval) ───────────
+    async def _heartbeat_loop(self):
+        """
+        Periodically pings all active WebSocket connections every 20s.
+        Automated pruning of stale/disconnected sockets to prevent leakages
+        and socket exhaustion under 1,000 concurrent learners.
+        """
+        while True:
+            await asyncio.sleep(20.0)
+            if not self.active_rooms:
+                continue
+
+            now = asyncio.get_event_loop().time()
+            stale_entries: List[tuple[str, str]] = []  # (session_id, connection_id)
+            ping_payload = json.dumps({
+                "type": "PING",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            })
+
+            # 1. Iterate over active rooms and send Ping
+            for session_id, conns in list(self.active_rooms.items()):
+                for conn_id, (ws, _) in list(conns.items()):
+                    meta = self.connection_meta.get(conn_id, {})
+                    last_seen = meta.get("last_seen", now)
+
+                    # Prune connection if completely inactive for > 45s
+                    if now - last_seen > 45.0:
+                        logger.warning(
+                            f"WS socket inactive for {now - last_seen:.1f}s, marking for pruning: {conn_id} in {session_id}"
+                        )
+                        stale_entries.append((session_id, conn_id))
+                        continue
+
+                    try:
+                        await ws.send_text(ping_payload)
+                    except Exception:
+                        logger.info(f"Ping delivery failed for socket {conn_id}, marking stale")
+                        stale_entries.append((session_id, conn_id))
+
+            # 2. Prune and clean up stale connections
+            for session_id, conn_id in stale_entries:
+                try:
+                    await self.disconnect(session_id, conn_id)
+                except Exception as exc:
+                    logger.warning(f"Error disconnecting stale socket {conn_id}: {exc}")
+
+    def stop(self):
+        """Cancels background batch and heartbeat loops."""
+        if self.reaction_batch_task and not self.reaction_batch_task.done():
+            self.reaction_batch_task.cancel()
+        if self.heartbeat_task and not self.heartbeat_task.done():
+            self.heartbeat_task.cancel()
 
 
 ws_manager = ClassroomConnectionManager()

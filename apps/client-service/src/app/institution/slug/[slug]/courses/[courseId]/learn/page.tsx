@@ -773,7 +773,7 @@ Execution time: 42ms`);
                 <div className="space-y-3">
                   <h3 className="text-sm font-bold text-foreground font-sans">Lecture Transcript</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed italic bg-background/50 p-4 rounded-xl border border-border/60">
-                    "{currentLesson.transcript || 'Welcome to this lesson module. In the following interactive session, we examine mathematical foundations, verify circuit state amplitudes, and explore multi-tenant execution bounds...'}"
+                    "{(currentLesson as any)?.transcript || 'Welcome to this lesson module. In the following interactive session, we examine mathematical foundations, verify circuit state amplitudes, and explore multi-tenant execution bounds...'}"
                   </p>
                 </div>
               </div>

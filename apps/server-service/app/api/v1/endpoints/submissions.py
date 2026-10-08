@@ -7,6 +7,7 @@ from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.assessment import (
     AIGradeSubmissionResponse,
+    AssessmentTaskStatusResponse,
     GradeSubmissionRequest,
     SubmissionResponse,
     SubmitAssignmentRequest,
@@ -115,8 +116,9 @@ async def review_submission(
 
 @router.post(
     "/submissions/{submission_id}/evaluate-ai",
-    summary="Evaluate Submission with AI Model",
-    response_model=APIResponse[AIGradeSubmissionResponse],
+    summary="Evaluate Submission with AI Model (Async Task Queue)",
+    response_model=APIResponse[AssessmentTaskStatusResponse],
+    status_code=status.HTTP_202_ACCEPTED,
 )
 async def evaluate_submission_with_ai(
     submission_id: UUID,
@@ -124,12 +126,16 @@ async def evaluate_submission_with_ai(
     service: AssessmentService = Depends(get_assessment_service),
 ):
     """
-    Evaluates the student's submission using the AI Assessment Engine and records the score and rubric feedback.
+    Queues student submission for asynchronous evaluation using the AI Assessment Engine.
+    Returns HTTP 202 Accepted with a task_id for client polling.
     """
-    result = await service.evaluate_submission_with_ai(
+    result = await service.queue_submission_ai_evaluation(
         submission_id=submission_id, user_id=current_user.id
     )
-    return APIResponse.ok(data=result, message="Submission evaluated and graded by AI successfully")
+    return APIResponse.ok(
+        data=result,
+        message="AI assessment evaluation task queued successfully",
+    )
 
 
 @router.get(

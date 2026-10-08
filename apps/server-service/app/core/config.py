@@ -45,10 +45,10 @@ class Settings(BaseSettings):
     POSTGRES_DB: str = "learniox"
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/learniox"
 
-    # Database Connection Pool
-    DB_POOL_SIZE: int = 10
-    DB_MAX_OVERFLOW: int = 20
-    DB_POOL_RECYCLE: int = 3600
+    # Database Connection Pool (Tuned for 1k concurrent users scale)
+    DB_POOL_SIZE: int = 25
+    DB_MAX_OVERFLOW: int = 15
+    DB_POOL_RECYCLE: int = 1800
 
     # ─── Redis Cache ──────────────────────────────────────────────────────────
     REDIS_HOST: str = "redis"

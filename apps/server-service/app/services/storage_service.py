@@ -207,15 +207,19 @@ class StorageService:
         # CRIT-03: Sanitize folder path before any disk operation
         folder = self._sanitize_folder(folder)
 
-        original_name = upload_file.filename or "unnamed"
+        # HIGH-02: Stream the file to disk/cloud storage in 1MB chunks (memory bounded <50MB)
+        rel_path = None
+        try:
+            (
+                orig_name, stored_name, size, rel_path, checksum, mime_type, ext,
+            ) = await self._save_upload_to_disk(upload_file, folder=folder)
 
-        # HIGH-02: Stream the file to disk — no full-read into RAM
-        (
-            orig_name, stored_name, size, rel_path, checksum, mime_type, ext,
-        ) = await self._save_upload_to_disk(upload_file, folder=folder)
-
-        # Validate extension and size limits (size now known from streaming)
-        self._validate_file(orig_name, size, category=category)
+            # Validate extension and size limits (size now known from streaming)
+            self._validate_file(orig_name, size, category=category)
+        except Exception:
+            if rel_path:
+                await self.provider.delete_file(rel_path)
+            raise
 
         record = await self.repo.create_file(
             original_name=orig_name,
@@ -324,10 +328,12 @@ class StorageService:
             else:
                 raise ForbiddenException(message="Access denied to file", error_code="FILE_ACCESS_DENIED")
 
-        if settings.STORAGE_PROVIDER.lower() in ("r2", "s3"):
-            remote_url = await self.provider.get_download_url(record.path, filename=record.original_name)
-            if remote_url:
-                return RedirectResponse(url=remote_url, status_code=307)
+        # Zero-RAM offload: HTTP 307 Redirect to Cloudflare R2 / S3 presigned URL or Nginx static alias
+        redirect_url = await self.provider.get_download_url(
+            record.path, filename=record.original_name, disposition="attachment"
+        )
+        if redirect_url:
+            return RedirectResponse(url=redirect_url, status_code=307)
 
         full_path = self.base_upload_dir / record.path
         if not full_path.exists():
@@ -374,10 +380,12 @@ class StorageService:
             else:
                 raise ForbiddenException(message="Access denied to file", error_code="FILE_ACCESS_DENIED")
 
-        if settings.STORAGE_PROVIDER.lower() in ("r2", "s3"):
-            remote_url = await self.provider.get_download_url(record.path, filename=record.original_name)
-            if remote_url:
-                return RedirectResponse(url=remote_url, status_code=307)
+        # Zero-RAM offload: HTTP 307 Redirect to Cloudflare R2 / S3 presigned URL or Nginx static alias
+        redirect_url = await self.provider.get_download_url(
+            record.path, filename=record.original_name, disposition="inline"
+        )
+        if redirect_url:
+            return RedirectResponse(url=redirect_url, status_code=307)
 
         full_path = self.base_upload_dir / record.path
         if not full_path.exists():

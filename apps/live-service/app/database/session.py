@@ -16,10 +16,15 @@ if "sqlite" in db_url:
     engine_kwargs["connect_args"] = {"check_same_thread": False}
     engine_kwargs["poolclass"] = StaticPool
 else:
-    engine_kwargs["pool_size"] = 10
-    engine_kwargs["max_overflow"] = 20
-    engine_kwargs["pool_recycle"] = 3600
+    engine_kwargs["pool_size"] = getattr(settings, "DB_POOL_SIZE", 25)
+    engine_kwargs["max_overflow"] = getattr(settings, "DB_MAX_OVERFLOW", 15)
+    engine_kwargs["pool_recycle"] = getattr(settings, "DB_POOL_RECYCLE", 1800)
     engine_kwargs["pool_pre_ping"] = True
+    engine_kwargs["connect_args"] = {
+        "server_settings": {
+            "statement_timeout": "15000",  # 15s query timeout to prevent pool starvation
+        }
+    }
 
 engine = create_async_engine(db_url, **engine_kwargs)
 

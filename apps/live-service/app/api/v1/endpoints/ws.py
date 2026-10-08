@@ -51,6 +51,7 @@ async def classroom_websocket_endpoint(
     try:
         while True:
             raw_text = await websocket.receive_text()
+            ws_manager.update_activity(connection_id)
             try:
                 data = json.loads(raw_text)
             except json.JSONDecodeError:
@@ -58,9 +59,12 @@ async def classroom_websocket_endpoint(
 
             event_type = data.get("type")
 
-            # 1. Ephemeral Keepalive Ping
+            # 1. Ephemeral Keepalive Ping & Pong
             if event_type == "PING":
                 await websocket.send_text(json.dumps({"type": "PONG"}))
+                continue
+            elif event_type == "PONG":
+                continue
 
             # 2. Ephemeral Reaction (Buffer & Batch for storm mitigation)
             elif event_type == "REACTION":

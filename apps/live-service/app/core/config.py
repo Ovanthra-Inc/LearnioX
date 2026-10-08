@@ -34,6 +34,9 @@ class LiveSettings(BaseSettings):
     POSTGRES_PASSWORD: str = "postgres"
     POSTGRES_DB: str = "learniox"
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@postgres:5432/learniox"
+    DB_POOL_SIZE: int = 25
+    DB_MAX_OVERFLOW: int = 15
+    DB_POOL_RECYCLE: int = 1800
 
     # Redis Cache & Realtime Pub/Sub
     REDIS_HOST: str = "redis"

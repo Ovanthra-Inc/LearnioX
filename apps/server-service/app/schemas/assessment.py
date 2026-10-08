@@ -262,3 +262,16 @@ class AssignmentStatisticsResponse(BaseModel):
     graded: int
     pending: int
     average_marks: float
+
+
+# Async Task Queue Schemas (Redis-backed for 1k concurrency)
+class AssessmentTaskStatusResponse(BaseModel):
+    task_id: str
+    task_type: str = "EVALUATION"
+    status: str = "QUEUED"  # QUEUED | PROCESSING | COMPLETED | FAILED
+    progress: int = 0
+    result: Optional[dict] = None
+    error: Optional[str] = None
+    created_at: Optional[str] = None
+    completed_at: Optional[str] = None
+

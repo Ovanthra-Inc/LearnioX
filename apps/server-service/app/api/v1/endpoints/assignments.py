@@ -6,6 +6,7 @@ from app.api.deps import get_current_active_user, get_assessment_service
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.assessment import (
+    AssessmentTaskStatusResponse,
     AssignmentResponse,
     AssignmentStatisticsResponse,
     CreateAssignmentRequest,
@@ -19,9 +20,9 @@ router = APIRouter(tags=["Assignments"])
 
 @router.post(
     "/lessons/{lesson_id}/assignments/generate-ai",
-    summary="Generate & Create Assignment in Lesson with AI (All 14 Types)",
-    response_model=APIResponse[AssignmentResponse],
-    status_code=status.HTTP_201_CREATED,
+    summary="Generate & Create Assignment in Lesson with AI (Async Task Queue)",
+    response_model=APIResponse[AssessmentTaskStatusResponse],
+    status_code=status.HTTP_202_ACCEPTED,
 )
 async def generate_assignment_with_ai(
     lesson_id: UUID,
@@ -31,14 +32,14 @@ async def generate_assignment_with_ai(
 ):
     """
     Synthesizes an assessment using the AI Question Generator engine across any of the 14
-    assessment types and persists it to the lesson.
+    assessment types asynchronously. Returns HTTP 202 with task_id for client polling.
     """
-    result = await service.generate_and_create_assignment_with_ai(
+    result = await service.queue_assignment_generation_with_ai(
         lesson_id=lesson_id, user_id=current_user.id, payload=body
     )
     return APIResponse.ok(
         data=result,
-        message=f"Assignment generated with AI as {result.assessment_type} and added to lesson",
+        message="AI assignment generation task queued successfully",
     )
 
 

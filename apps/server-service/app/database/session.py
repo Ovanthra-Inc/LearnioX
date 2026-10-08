@@ -18,11 +18,16 @@ if "sqlite" in db_url:
     engine_kwargs["connect_args"] = {"check_same_thread": False}
     engine_kwargs["poolclass"] = StaticPool
 else:
-    # PostgreSQL: apply production-grade connection pool settings
-    engine_kwargs["pool_size"] = settings.DB_POOL_SIZE
-    engine_kwargs["max_overflow"] = settings.DB_MAX_OVERFLOW
-    engine_kwargs["pool_recycle"] = settings.DB_POOL_RECYCLE
+    # PostgreSQL: apply production-grade connection pool settings tuned for 1k concurrency
+    engine_kwargs["pool_size"] = getattr(settings, "DB_POOL_SIZE", 25)
+    engine_kwargs["max_overflow"] = getattr(settings, "DB_MAX_OVERFLOW", 15)
+    engine_kwargs["pool_recycle"] = getattr(settings, "DB_POOL_RECYCLE", 1800)
     engine_kwargs["pool_pre_ping"] = True  # Drop stale connections automatically
+    engine_kwargs["connect_args"] = {
+        "server_settings": {
+            "statement_timeout": "15000",  # 15s query timeout to prevent pool starvation
+        }
+    }
 
 engine = create_async_engine(db_url, **engine_kwargs)
 

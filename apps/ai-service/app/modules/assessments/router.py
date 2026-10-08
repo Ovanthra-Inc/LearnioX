@@ -62,3 +62,35 @@ async def grade_assessment(request: GradeAssessmentRequest):
         data=result,
         message=f"Assessment evaluated successfully as {request.assessment_type.value}",
     )
+
+
+@router.get(
+    "/tasks/{task_id}",
+    summary="Poll Async Assessment Task Status",
+    response_model=APIResponse[Dict[str, Any]],
+    status_code=status.HTTP_200_OK,
+)
+async def get_assessment_task(task_id: str):
+    """
+    Polls task state for asynchronous assessment generation or evaluation.
+    """
+    from redis.asyncio import Redis
+    from app.core.config import settings
+
+    key = f"assessment:task:{task_id}"
+    data = None
+    try:
+        redis_client = Redis.from_url(settings.REDIS_URL, decode_responses=True)
+        raw = await redis_client.get(key)
+        await redis_client.aclose()
+        if raw:
+            import json
+            data = json.loads(raw)
+    except Exception:
+        pass
+
+    if not data:
+        return APIResponse.fail(message="Task not found", code="TASK_NOT_FOUND")
+
+    return APIResponse.ok(data=data, message=f"Task is {data.get('status')}")
+
