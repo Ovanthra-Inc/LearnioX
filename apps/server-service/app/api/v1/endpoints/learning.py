@@ -2,7 +2,8 @@ from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, Query, status
 
-from app.api.deps import get_current_active_user, get_enrollment_service
+from app.api.deps import get_current_active_user, get_enrollment_service, get_optional_user
+from app.core.exceptions import NotFoundException
 from app.core.response import APIResponse
 from app.models.user import User
 from app.schemas.enrollment import (
@@ -39,12 +40,19 @@ async def start_lesson(
     summary="Update Lesson Video Progress (Watch Time & Position)",
     response_model=APIResponse[LessonProgressResponse],
 )
+@router.post(
+    "/lessons/{lesson_id}/progress",
+    summary="Update Lesson Video Progress (Watch Time & Position) [POST alias]",
+    response_model=APIResponse[LessonProgressResponse],
+)
 async def update_progress(
     lesson_id: UUID,
     body: UpdateProgressRequest,
-    current_user: User = Depends(get_current_active_user),
+    current_user: Optional[User] = Depends(get_optional_user),
     service: EnrollmentService = Depends(get_enrollment_service),
 ):
+    if not current_user:
+        raise NotFoundException(message="Enrollment or lesson progress not found", error_code="NOT_FOUND")
     result = await service.update_progress(user_id=current_user.id, lesson_id=lesson_id, payload=body)
     return APIResponse.ok(data=result, message="Lesson progress updated successfully")
 

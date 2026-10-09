@@ -88,9 +88,11 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-# Health check on root
+# Health check on root & ingress prefix
 @app.get("/health", tags=["Health"])
 @app.get("/ready", tags=["Health"])
+@app.get("/api/v1/ai/health", tags=["Health"])
+@app.get("/api/v1/ai/ready", tags=["Health"])
 async def root_health():
     return APIResponse.ok(
         data={"service": "ai-service", "status": "healthy"},

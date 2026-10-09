@@ -5,6 +5,7 @@ from typing import Dict
 import httpx
 from fastapi import APIRouter, Request, Response
 from fastapi.responses import StreamingResponse, JSONResponse
+from app.core.config import settings
 from app.registry.routes import resolve_target_service
 
 logger = logging.getLogger("gateway.proxy")
@@ -74,13 +75,20 @@ SERVICE_TIMEOUTS = {
 DEFAULT_TIMEOUT = httpx.Timeout(30.0, connect=5.0)
 UPLOAD_TIMEOUT = httpx.Timeout(300.0, connect=10.0)
 
-# Global async client with pooled connections
-client = httpx.AsyncClient(timeout=httpx.Timeout(180.0, connect=10.0), follow_redirects=False)
+# Global async client with high-concurrency pooled connections
+client = httpx.AsyncClient(
+    limits=httpx.Limits(max_connections=2000, max_keepalive_connections=500, keepalive_expiry=30.0),
+    timeout=httpx.Timeout(60.0, connect=5.0),
+    follow_redirects=False,
+)
 
 
 def get_breaker(service_name: str) -> CircuitBreaker:
     if service_name not in _circuit_breakers:
-        _circuit_breakers[service_name] = CircuitBreaker(failure_threshold=5, recovery_timeout=30.0)
+        _circuit_breakers[service_name] = CircuitBreaker(
+            failure_threshold=settings.CIRCUIT_BREAKER_FAILURE_THRESHOLD,
+            recovery_timeout=settings.CIRCUIT_BREAKER_RECOVERY_TIMEOUT,
+        )
     return _circuit_breakers[service_name]
 
 

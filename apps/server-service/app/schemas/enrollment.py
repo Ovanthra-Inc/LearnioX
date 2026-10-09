@@ -40,9 +40,20 @@ class StartLessonRequest(BaseModel):
 
 
 class UpdateProgressRequest(BaseModel):
-    watch_time: int = Field(..., ge=0)
-    last_position: int = Field(..., ge=0)
-    progress_percentage: int = Field(..., ge=0, le=100)
+    watch_time: Optional[int] = Field(0, ge=0)
+    last_position: Optional[int] = Field(0, ge=0)
+    progress_percentage: Optional[float] = Field(0.0, ge=0, le=100)
+    playback_seconds: Optional[float] = None
+    lesson_id: Optional[UUID] = None
+    completed: Optional[bool] = False
+
+    def model_post_init(self, __context):
+        if self.playback_seconds is not None and not self.last_position:
+            self.last_position = int(self.playback_seconds)
+        if self.playback_seconds is not None and not self.watch_time:
+            self.watch_time = int(self.playback_seconds)
+        if isinstance(self.progress_percentage, float):
+            self.progress_percentage = int(self.progress_percentage)
 
 
 class LessonProgressResponse(BaseModel):

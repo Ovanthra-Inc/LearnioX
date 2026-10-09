@@ -197,16 +197,15 @@ async def download_file(
 
 @router.get(
     "/files/{id}/preview",
-    summary="Inline File Preview Stream (Auth Required)",
+    summary="Inline File Preview Stream (Public previews & Authenticated)",
 )
 async def preview_file(
     id: UUID,
-    # Auth required: prevents anonymous probing of file IDs.
-    # The service layer additionally enforces ownership checks.
-    current_user: User = Depends(get_current_active_user),
+    current_user: Optional[User] = Depends(get_optional_user),
     service: StorageService = Depends(get_storage_service),
 ):
-    return await service.preview_file(file_id=id, user_id=current_user.id)
+    user_id = current_user.id if current_user else None
+    return await service.preview_file(file_id=id, user_id=user_id)
 
 
 @router.patch(

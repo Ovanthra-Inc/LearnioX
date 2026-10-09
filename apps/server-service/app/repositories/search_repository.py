@@ -58,7 +58,7 @@ class SearchRepository:
 
         # Build relevance rank expression (only when q is provided)
         ts_query = _fts_query(q) if q else None
-        rank_col = _ts_rank(Course.search_vector, ts_query).label("rank") if ts_query else None
+        rank_col = _ts_rank(Course.search_vector, ts_query).label("rank") if q else None
 
         select_cols = [
             Course,
@@ -83,7 +83,7 @@ class SearchRepository:
             # Primary: tsvector @@ tsquery (uses GIN index, sub-20ms)
             # Fallback: pg_trgm similarity for typo tolerance + substring ILIKE safety
             fts_match = Course.search_vector.op("@@")(ts_query)
-            trgm_match = Course.title.op("%%")(clean_q)
+            trgm_match = Course.title.op("%")(clean_q)
             ilike_match = or_(
                 Course.title.ilike(f"%{clean_q}%"),
                 Course.description.ilike(f"%{clean_q}%"),
@@ -208,7 +208,7 @@ class SearchRepository:
             clean_q = _clean_search_term(q)
             ts_query = _fts_query(clean_q)
             fts_match = Institution.search_vector.op("@@")(ts_query)
-            trgm_match = Institution.name.op("%%")(clean_q)
+            trgm_match = Institution.name.op("%")(clean_q)
             ilike_match = or_(
                 Institution.name.ilike(f"%{clean_q}%"),
                 Institution.tagline.ilike(f"%{clean_q}%"),

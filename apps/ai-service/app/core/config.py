@@ -2,8 +2,13 @@ from pathlib import Path
 from typing import List, Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-parents = Path(__file__).resolve().parents
-central_env = str(parents[3] / ".env") if len(parents) > 3 and (parents[3] / ".env").exists() else ".env"
+central_env = ".env"
+for parent_dir in Path(__file__).resolve().parents:
+    candidate = parent_dir / ".env"
+    if candidate.exists():
+        central_env = str(candidate)
+        break
+
 
 
 class Settings(BaseSettings):
@@ -24,7 +29,46 @@ class Settings(BaseSettings):
     # Rate Limiting
     AI_RATE_LIMIT_PER_MINUTE: int = 30
 
-    # Google Gemini AI Settings
+    # AI Engine Provider Toggle ("azure" | "gemini" | "mock")
+    AI_PROVIDER: str = "azure"
+
+    # Azure AI Foundry / Azure OpenAI Settings
+    AZURE_AI_ENDPOINT: Optional[str] = None
+    AZURE_OPENAI_ENDPOINT: Optional[str] = None
+    AZURE_OPENAI_RESOURCE_ENDPOINT: Optional[str] = None
+    AZURE_AI_PROJECT_ENDPOINT: Optional[str] = None
+    AZURE_AI_API_KEY: Optional[str] = None
+    AZURE_OPENAI_API_KEY: Optional[str] = None
+    AZURE_AI_DEPLOYMENT_NAME: str = "gpt-5-mini"
+    AZURE_OPENAI_DEPLOYMENT_NAME: Optional[str] = None
+    AZURE_OPENAI_MODEL_NAME: Optional[str] = None
+    AZURE_AI_API_VERSION: str = "2024-08-01-preview"
+
+    # Tavily AI Search (Real-time web search for AI agents & RAG)
+    TAVILY_API_KEY: Optional[str] = None
+
+    @property
+    def effective_azure_api_key(self) -> Optional[str]:
+        return self.AZURE_OPENAI_API_KEY or self.AZURE_AI_API_KEY
+
+    @property
+    def effective_azure_endpoint(self) -> Optional[str]:
+        return (
+            self.AZURE_OPENAI_RESOURCE_ENDPOINT
+            or self.AZURE_OPENAI_ENDPOINT
+            or self.AZURE_AI_ENDPOINT
+        )
+
+    @property
+    def effective_azure_deployment(self) -> str:
+        return (
+            self.AZURE_OPENAI_DEPLOYMENT_NAME
+            or self.AZURE_OPENAI_MODEL_NAME
+            or self.AZURE_AI_DEPLOYMENT_NAME
+            or "gpt-5-mini"
+        )
+
+    # Google Gemini AI Settings (Alternative)
     GEMINI_API_KEY: Optional[str] = None
     AI_MODEL_NAME: str = "gemini-1.5-flash"
     AI_TEMPERATURE: float = 0.2

@@ -34,3 +34,6 @@ opentelemetry-instrumentation-httpx>=0.45b0
 opentelemetry-instrumentation-sqlalchemy>=0.45b0
 opentelemetry-instrumentation-redis>=0.45b0
 concurrent-log-handler>=0.9.24
+# Testing
+pytest>=8.0.0
+pytest-asyncio>=0.23.0

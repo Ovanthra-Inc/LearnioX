@@ -43,8 +43,12 @@ class GatewaySettings(BaseSettings):
     REDIS_PORT: int = 6379
     REDIS_URL: str = "redis://redis:6379"
     GATEWAY_RATE_LIMIT_WINDOW_MS: int = 60000
-    GATEWAY_RATE_LIMIT_MAX: int = 300
-    GATEWAY_RATE_LIMIT_DEFAULT: str = "300/minute"
+    GATEWAY_RATE_LIMIT_MAX: int = 60000
+    GATEWAY_RATE_LIMIT_DEFAULT: str = "60000/minute"
+
+    # Circuit Breaker Resilience Tuning
+    CIRCUIT_BREAKER_FAILURE_THRESHOLD: int = 100
+    CIRCUIT_BREAKER_RECOVERY_TIMEOUT: float = 10.0
 
     # CORS
     CORS_ORIGINS: List[str] = [

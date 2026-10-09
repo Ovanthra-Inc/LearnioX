@@ -14,7 +14,16 @@ logger = logging.getLogger("learniox.ai-service.auth")
 _user_rate_limits: Dict[str, Tuple[float, int]] = {}
 WINDOW_SECONDS = 60.0
 
-EXEMPT_PATHS = {"/health", "/docs", "/openapi.json", "/redoc", "/"}
+EXEMPT_PATHS = {
+    "/health",
+    "/ready",
+    "/api/v1/ai/health",
+    "/api/v1/ai/ready",
+    "/docs",
+    "/openapi.json",
+    "/redoc",
+    "/",
+}
 
 
 class AIAuthRateLimitMiddleware(BaseHTTPMiddleware):

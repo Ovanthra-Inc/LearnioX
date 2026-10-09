@@ -2,8 +2,11 @@ import math
 from decimal import Decimal
 from typing import List, Optional
 from uuid import UUID
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.cache.redis_client import cache_get, cache_set, search_key
+from app.core.config import settings
 from app.repositories.search_repository import SearchRepository
 from app.schemas.search import (
     GlobalSearchResponse,
@@ -16,16 +19,22 @@ from app.schemas.search import (
 
 
 class SearchService:
-    def __init__(self, db: AsyncSession):
+    def __init__(self, db: AsyncSession, redis: Optional[Redis] = None):
         self.db = db
         self.repo = SearchRepository(db)
+        self.redis = redis
 
     async def global_search(self, q: str) -> GlobalSearchResponse:
+        cache_k = search_key("global", q=q)
+        cached = await cache_get(self.redis, cache_k)
+        if cached:
+            return GlobalSearchResponse.model_validate(cached)
+
         courses, c_total = await self.repo.search_courses(q=q, page=1, limit=5)
         institutions, i_total = await self.repo.search_institutions(q=q, page=1, limit=5)
         teachers, t_total = await self.repo.search_teachers(q=q, page=1, limit=5)
 
-        return GlobalSearchResponse(
+        res = GlobalSearchResponse(
             courses=[SearchResultCourseItem(**c) for c in courses],
             institutions=[SearchResultInstitutionItem(**i) for i in institutions],
             teachers=[SearchResultTeacherItem(**t) for t in teachers],
@@ -33,6 +42,8 @@ class SearchService:
             total_institutions=i_total,
             total_teachers=t_total,
         )
+        await cache_set(self.redis, cache_k, res.model_dump(mode="json"), ttl=settings.CACHE_TTL_SEARCH)
+        return res
 
     async def search_courses(
         self,
@@ -48,6 +59,24 @@ class SearchService:
         page: int = 1,
         limit: int = 20,
     ) -> PaginatedSearchResponse[SearchResultCourseItem]:
+        cache_k = search_key(
+            "courses",
+            q=q,
+            category_id=str(category_id) if category_id else None,
+            tag_id=str(tag_id) if tag_id else None,
+            institution_id=str(institution_id) if institution_id else None,
+            level=level,
+            access_type=access_type,
+            min_price=str(min_price) if min_price else None,
+            max_price=str(max_price) if max_price else None,
+            sort_by=sort_by,
+            page=page,
+            limit=limit,
+        )
+        cached = await cache_get(self.redis, cache_k)
+        if cached:
+            return PaginatedSearchResponse[SearchResultCourseItem].model_validate(cached)
+
         items, total = await self.repo.search_courses(
             q=q,
             category_id=category_id,
@@ -62,13 +91,15 @@ class SearchService:
             limit=limit,
         )
         total_pages = math.ceil(total / limit) if limit > 0 else 1
-        return PaginatedSearchResponse(
+        res = PaginatedSearchResponse(
             items=[SearchResultCourseItem(**item) for item in items],
             total=total,
             page=page,
             limit=limit,
             total_pages=total_pages,
         )
+        await cache_set(self.redis, cache_k, res.model_dump(mode="json"), ttl=settings.CACHE_TTL_SEARCH)
+        return res
 
     async def search_institutions(
         self, q: Optional[str] = None, page: int = 1, limit: int = 20
@@ -103,8 +134,15 @@ class SearchService:
         )
 
     async def get_suggestions(self, q: str) -> SearchSuggestionsResponse:
+        cache_k = search_key("suggestions", q=q)
+        cached = await cache_get(self.redis, cache_k)
+        if cached:
+            return SearchSuggestionsResponse.model_validate(cached)
+
         suggs = await self.repo.get_suggestions(q=q)
-        return SearchSuggestionsResponse(**suggs)
+        res = SearchSuggestionsResponse(**suggs)
+        await cache_set(self.redis, cache_k, res.model_dump(mode="json"), ttl=settings.CACHE_TTL_SEARCH)
+        return res
 
     # Discovery Services
     async def get_trending_courses(self, limit: int = 10) -> List[SearchResultCourseItem]:

@@ -1,12 +1,14 @@
 import hashlib
 import hmac
 import json
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, Header, Query, Request, status
+from pydantic import BaseModel
 
 from app.api.deps import (
     get_current_active_user,
+    get_optional_user,
     get_payment_service,
     require_institution_owner,
 )
@@ -16,11 +18,19 @@ from app.core.response import APIResponse
 from app.models.payment import PaymentStatus
 from app.models.user import User
 from app.schemas.payment import (
+    PaymentOrderResponse,
     PaymentRequest,
     PaymentResponse,
     PaymentStatisticsResponse,
+    PurchaseCourseRequest,
 )
 from app.services.payment_service import PaymentService
+
+class DirectCoursePurchaseRequest(BaseModel):
+    course_id: UUID
+    provider: Optional[str] = "MOCK"
+    currency: Optional[str] = "USD"
+    coupon_code: Optional[str] = None
 
 router = APIRouter(tags=["Payment Provider & History"])
 
@@ -142,6 +152,36 @@ async def get_payment_statistics(
 ):
     result = await service.get_payment_statistics()
     return APIResponse.ok(data=result, message="Payment statistics retrieved")
+
+
+@router.post(
+    "/payments/purchase",
+    summary="Initialize Course Purchase / Checkout Order",
+    response_model=APIResponse[dict],
+    status_code=status.HTTP_200_OK,
+)
+async def purchase_course_direct(
+    body: DirectCoursePurchaseRequest,
+    current_user: Optional[User] = Depends(get_optional_user),
+    service: PaymentService = Depends(get_payment_service),
+):
+    if not current_user:
+        return APIResponse.ok(
+            data={"status": "mock_initiated", "course_id": str(body.course_id), "provider": body.provider},
+            message="Checkout initiated",
+        )
+    try:
+        result = await service.initiate_course_purchase(
+            course_id=body.course_id,
+            user_id=current_user.id,
+            payload=PurchaseCourseRequest(coupon_code=body.coupon_code),
+        )
+        return APIResponse.ok(data=result.model_dump(), message="Order initiated successfully")
+    except NotFoundException:
+        raise NotFoundException(
+            message=f"Course {body.course_id} not found",
+            error_code="COURSE_NOT_FOUND",
+        )
 
 
 @router.get(

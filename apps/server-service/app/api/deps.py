@@ -371,9 +371,9 @@ def get_payment_service(db: AsyncSession = Depends(get_db), redis=Depends(get_re
     return PaymentService(db, redis=redis)
 
 
-def get_search_service(db: AsyncSession = Depends(get_db)):
+def get_search_service(db: AsyncSession = Depends(get_db), redis=Depends(get_redis)):
     from app.services.search_service import SearchService
-    return SearchService(db)
+    return SearchService(db, redis=redis)
 
 
 def get_access_service(db: AsyncSession = Depends(get_db)):

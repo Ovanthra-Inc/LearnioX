@@ -34,7 +34,10 @@ async def test_mock_llm_fallback_when_gemini_unset(monkeypatch):
     """Ensures deterministic MockLLMProvider is active when GEMINI_API_KEY is empty."""
     from app.core.config import settings
 
+    monkeypatch.setattr(settings, "AI_PROVIDER", "mock")
     monkeypatch.setattr(settings, "GEMINI_API_KEY", "")
+    monkeypatch.setattr(settings, "AZURE_OPENAI_API_KEY", None)
+    monkeypatch.setattr(settings, "AZURE_AI_API_KEY", None)
     provider = get_llm_provider()
     assert isinstance(provider, MockLLMProvider)
     assert provider.provider_name == "mock"
@@ -197,3 +200,67 @@ async def test_redis_task_status_polling_success(async_client: AsyncClient):
         assert res_data["success"] is True
         assert res_data["data"]["status"] == "COMPLETED"
         assert res_data["data"]["score"] == 92
+
+
+@pytest.mark.asyncio
+async def test_azure_foundry_factory_selection(monkeypatch):
+    """Verifies that AzureAIFoundryProvider is selected when AI_PROVIDER is azure and credentials are set."""
+    from app.core.config import settings
+    from app.providers.azure_foundry import AzureAIFoundryProvider
+
+    monkeypatch.setattr(settings, "AI_PROVIDER", "azure")
+    monkeypatch.setattr(settings, "AZURE_AI_API_KEY", "test_secret_key")
+    monkeypatch.setattr(settings, "AZURE_AI_ENDPOINT", "https://test-foundry.openai.azure.com/")
+
+    provider = get_llm_provider()
+    assert isinstance(provider, AzureAIFoundryProvider)
+    assert provider.provider_name == "azure"
+    assert provider.is_configured is True
+
+
+@pytest.mark.asyncio
+async def test_azure_foundry_unconfigured_error():
+    """Verifies that AzureAIFoundryProvider raises AIProviderException when credentials are missing."""
+    from app.core.exceptions import AIProviderException
+    from app.providers.azure_foundry import AzureAIFoundryProvider
+
+    unconfigured_provider = AzureAIFoundryProvider(endpoint="", api_key="")
+    assert unconfigured_provider.is_configured is False
+
+    with pytest.raises(AIProviderException):
+        await unconfigured_provider.generate_text("Hello Azure")
+
+
+@pytest.mark.asyncio
+async def test_azure_foundry_mocked_generation():
+    """Verifies AzureAIFoundryProvider generate_text and generate_json with an instrumented mock client."""
+    from app.providers.azure_foundry import AzureAIFoundryProvider
+    from unittest.mock import MagicMock
+
+    provider = AzureAIFoundryProvider(
+        endpoint="https://test.openai.azure.com",
+        api_key="valid_test_key",
+        deployment_name="gpt-4o-mini",
+    )
+
+    # Mock client completions
+    mock_chat_completion = MagicMock()
+    mock_choice = MagicMock()
+    mock_choice.message.content = '{"question": "What is Raft?", "type": "MCQ"}'
+    mock_chat_completion.choices = [mock_choice]
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create = AsyncMock(return_value=mock_chat_completion)
+    provider._client = mock_client
+    provider._configured = True
+
+    # Test generate_text
+    text_result = await provider.generate_text("Explain Raft")
+    assert '{"question": "What is Raft?", "type": "MCQ"}' in text_result
+
+    # Test generate_json
+    json_result = await provider.generate_json("Generate MCQ JSON")
+    assert isinstance(json_result, dict)
+    assert json_result["question"] == "What is Raft?"
+    assert json_result["type"] == "MCQ"
+

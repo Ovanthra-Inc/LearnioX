@@ -19,9 +19,10 @@ class AssessmentModuleService:
     """
 
     def __init__(self, provider: Optional[BaseLLMProvider] = None):
-        self._provider = provider or get_llm_provider()
-        self._generator = AssessmentGeneratorService(self._provider)
-        self._grader = AssessmentGraderService(self._provider)
+        self._explicit_provider = provider
+
+    def _get_active_provider(self) -> BaseLLMProvider:
+        return self._explicit_provider or get_llm_provider()
 
     def get_supported_types(self) -> List[Dict[str, Any]]:
         """Returns descriptive metadata for all 14 assessment types."""
@@ -31,14 +32,17 @@ class AssessmentModuleService:
         self, request: GenerateAssessmentRequest
     ) -> GenerateAssessmentResponse:
         """Synthesizes assessment items based on topic, type, and difficulty."""
-        return await self._generator.generate(request)
+        generator = AssessmentGeneratorService(self._get_active_provider())
+        return await generator.generate(request)
 
     async def grade_assessment(
         self, request: GradeAssessmentRequest
     ) -> GradeAssessmentResponse:
         """Evaluates student submission against specialized rubrics."""
-        return await self._grader.grade(request)
+        grader = AssessmentGraderService(self._get_active_provider())
+        return await grader.grade(request)
 
 
 # Default singleton instance for dependency injection
 assessment_module_service = AssessmentModuleService()
+

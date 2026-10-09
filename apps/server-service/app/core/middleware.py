@@ -45,8 +45,11 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request: Request, call_next) -> Response:
-        # Always generate server-side — never trust client-supplied value
-        request_id = str(uuid.uuid4())
+        request_id = (
+            request.headers.get("X-Request-ID")
+            or request.headers.get("x-request-id")
+            or str(uuid.uuid4())
+        )
         request.state.request_id = request_id
 
         response = await call_next(request)
@@ -89,7 +92,12 @@ class AccessLogMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next) -> Response:
         start = time.perf_counter()
-        request_id = getattr(request.state, "request_id", "-")
+        request_id = (
+            getattr(request.state, "request_id", None)
+            or request.headers.get("X-Request-ID")
+            or request.headers.get("x-request-id")
+            or "-"
+        )
 
         response = await call_next(request)
 

@@ -56,6 +56,8 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      - GUNICORN_WORKERS=4
     ports:
       - "8000:8000"
     depends_on:
@@ -79,6 +81,7 @@ services:
     restart: always
     env_file:
       - .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080 --workers 4
     ports:
       - "8080:8080"
     depends_on:
@@ -100,6 +103,7 @@ services:
     restart: always
     env_file:
       - .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --workers 4
     ports:
       - "8001:8001"
     depends_on:
@@ -120,6 +124,7 @@ services:
     restart: always
     env_file:
       - .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8003 --workers 4
     ports:
       - "8003:8003"
     depends_on:

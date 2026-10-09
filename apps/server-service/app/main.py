@@ -226,6 +226,8 @@ app.include_router(api_v1_router, prefix=settings.API_V1_STR)
 
 @app.get("/health", tags=["Health"])
 @app.get("/ready", tags=["Health"])
+@app.get("/api/v1/health", tags=["Health"])
+@app.get("/api/v1/ready", tags=["Health"])
 async def health_check():
     """Lightweight health check for Docker/Kubernetes liveness and readiness probes."""
     return APIResponse.ok(

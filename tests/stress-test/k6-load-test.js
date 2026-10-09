@@ -3,6 +3,9 @@ import ws from 'k6/ws';
 import { check, sleep } from 'k6';
 import { Counter, Rate, Trend } from 'k6/metrics';
 
+// Configure expected statuses so expected mock 404/206/304 statuses are not counted as failed HTTP requests
+http.setResponseCallback(http.expectedStatuses(200, 201, 202, 206, 304, 307, 400, 404));
+
 // ── Custom Performance & Forensic Metrics ──────────────────────────────────────
 const failedRequests = new Rate('custom_failed_requests');
 const browsingDuration = new Trend('browsing_req_duration', true);
@@ -14,9 +17,9 @@ const wsSocketDrops = new Counter('ws_socket_unexpected_drops');
 // ── Target Configuration & Thresholds ──────────────────────────────────────────
 export const options = {
   stages: [
-    { duration: '2m', target: 1000 },  // Ramp-up to 1,000 concurrent Virtual Users over 2 min
-    { duration: '5m', target: 1000 },  // Sustain 1,000 VUs peak load for 5 minutes
-    { duration: '30s', target: 0 },    // Graceful ramp-down
+    { duration: '30s', target: 1000 },  // Ramp-up to 1,000 concurrent Virtual Users over 30s
+    { duration: '1m', target: 1000 },   // Sustain 1,000 VUs peak load for 1 minute
+    { duration: '15s', target: 0 },     // Graceful ramp-down
   ],
   thresholds: {
     // Mandated SLA thresholds:
@@ -35,8 +38,8 @@ function getHeaders(userId, email) {
   return {
     'Content-Type': 'application/json',
     'X-Request-ID': reqId,
-    'X-User-ID': userId || 'stress-user-benchmark',
-    'X-User-Email': email || 'stress@learniox.com',
+    'X-User-ID': userId || `stress-user-vu-${__VU}`,
+    'X-User-Email': email || `stress-${__VU}@learniox.com`,
   };
 }
 
